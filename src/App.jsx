@@ -5,6 +5,8 @@ import Header from './components/Header';
 import FloatingButton from './components/FloatingButton';
 import ConsultationFooter from './components/ConsultationFooter';
 import HomePage from './pages/HomePage';
+import GreetingPage from './pages/about/GreetingPage';
+import FeaturesPage from './pages/about/FeaturesPage';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -34,6 +36,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about/greeting" element={<GreetingPage />} />
+        <Route path="/about/features" element={<FeaturesPage />} />
         {/* Add more routes here as needed */}
       </Routes>
       <ConsultationFooter />
