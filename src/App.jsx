@@ -7,6 +7,10 @@ import ConsultationFooter from './components/ConsultationFooter';
 import HomePage from './pages/HomePage';
 import GreetingPage from './pages/about/GreetingPage';
 import FeaturesPage from './pages/about/FeaturesPage';
+import InstructorsPage from './pages/about/InstructorsPage';
+import FacilitiesPage from './pages/about/FacilitiesPage';
+import AdmissionPage from './pages/curriculum/AdmissionPage';
+import PreAdmissionPage from './pages/curriculum/PreAdmissionPage';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -38,6 +42,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about/greeting" element={<GreetingPage />} />
         <Route path="/about/features" element={<FeaturesPage />} />
+        <Route path="/about/instructors" element={<InstructorsPage />} />
+        <Route path="/about/facilities" element={<FacilitiesPage />} />
+        <Route path="/curriculum/admission" element={<AdmissionPage />} />
+        <Route path="/curriculum/pre-admission" element={<PreAdmissionPage />} />
         {/* Add more routes here as needed */}
       </Routes>
       <ConsultationFooter />
