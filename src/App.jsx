@@ -9,6 +9,7 @@ import GreetingPage from './pages/about/GreetingPage';
 import FeaturesPage from './pages/about/FeaturesPage';
 import InstructorsPage from './pages/about/InstructorsPage';
 import FacilitiesPage from './pages/about/FacilitiesPage';
+import LocationPage from './pages/about/LocationPage';
 import AdmissionPage from './pages/curriculum/AdmissionPage';
 import PreAdmissionPage from './pages/curriculum/PreAdmissionPage';
 
@@ -44,6 +45,7 @@ function App() {
         <Route path="/about/features" element={<FeaturesPage />} />
         <Route path="/about/instructors" element={<InstructorsPage />} />
         <Route path="/about/facilities" element={<FacilitiesPage />} />
+        <Route path="/about/location" element={<LocationPage />} />
         <Route path="/curriculum/admission" element={<AdmissionPage />} />
         <Route path="/curriculum/pre-admission" element={<PreAdmissionPage />} />
         {/* Add more routes here as needed */}
