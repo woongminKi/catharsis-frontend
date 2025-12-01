@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection';
 import SchoolPassersSection from '../components/SchoolPassersSection';
 import AutoScrollSlider from '../components/AutoScrollSlider';
 import ThreeColumnSection from '../components/ThreeColumnSection';
+import RealTimeConsultSection from '../components/RealTimeConsultSection';
 
 const HomePage = () => {
   const youtubeVideos = [
@@ -95,6 +96,7 @@ const HomePage = () => {
         passers={passersData}
         instagramPosts={instagramPosts}
       />
+      <RealTimeConsultSection />
     </>
   );
 };

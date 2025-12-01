@@ -13,6 +13,11 @@ import LocationPage from './pages/about/LocationPage';
 import AdmissionPage from './pages/curriculum/AdmissionPage';
 import PreAdmissionPage from './pages/curriculum/PreAdmissionPage';
 
+// Inquiry pages
+import InquiryListPage from './pages/inquiry/InquiryListPage';
+import InquiryDetailPage from './pages/inquiry/InquiryDetailPage';
+import InquiryWritePage from './pages/inquiry/InquiryWritePage';
+
 const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
@@ -48,7 +53,11 @@ function App() {
         <Route path="/about/location" element={<LocationPage />} />
         <Route path="/curriculum/admission" element={<AdmissionPage />} />
         <Route path="/curriculum/pre-admission" element={<PreAdmissionPage />} />
-        {/* Add more routes here as needed */}
+
+        {/* Inquiry routes */}
+        <Route path="/inquiries" element={<InquiryListPage />} />
+        <Route path="/inquiries/write" element={<InquiryWritePage />} />
+        <Route path="/inquiries/:id" element={<InquiryDetailPage />} />
       </Routes>
       <ConsultationFooter />
       <FloatingButton />
