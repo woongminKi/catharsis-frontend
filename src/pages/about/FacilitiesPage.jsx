@@ -1,71 +1,43 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { getS3ImageUrl } from "../../services/imageService";
 
-// 강남점 별관 시설 사진
-import byulgwanBokdo from "../../images/강남점 별관 시설 사진/별관 복도.jpg";
-import byulgwanB from "../../images/강남점 별관 시설 사진/별관B.jpg";
-import byulgwanA from "../../images/강남점 별관 시설 사진/별관 A.jpg";
-
-// 강남점 본관 시설 사진
-import bongwan2floorLobby from "../../images/강남점 본관 시설 사진/2층 로비.PNG";
-import bongwanSangdamsil from "../../images/강남점 본관 시설 사진/본관 상담실.jpg";
-import bongwan2floorA from "../../images/강남점 본관 시설 사진/본관 2층A.jpg";
-import bongwan2floorB from "../../images/강남점 본관 시설 사진/본관 2층B.jpg";
-import bongwan2floorC from "../../images/강남점 본관 시설 사진/본관 2층C.jpg";
-import bongwan3floorMuyongsil from "../../images/강남점 본관 시설 사진/본관 3층 무용실.jpg";
-import bongwan3floorC from "../../images/강남점 본관 시설 사진/3층C강의실.jpg";
-import bongwan3floorB from "../../images/강남점 본관 시설 사진/3층B강의실.jpg";
-import bongwan2floorDesk from "../../images/강남점 본관 시설 사진/2층 안내데스크.jpg";
-
-// 강남점 신관 시설 사진
-import singwanMuyongsil from "../../images/강남점 신관 시설 사진/신관 무용실.png";
-import singwanBokdo from "../../images/강남점 신관 시설 사진/신관 복도.png";
-import singwanYeongiYeonseupsil from "../../images/강남점 신관 시설 사진/신관 연기연습실.png";
-
-// 홍대점 시설 사진
-import hongdaeUmjikimRoom from "../../images/홍대점 시설 사진/카타르시스_홍대점_움직임룸.jpg";
-import hongdaeVocalRoom from "../../images/홍대점 시설 사진/카타르시스_홍대점_보컬룸.jpg";
-import hongdaeActingRoom2 from "../../images/홍대점 시설 사진/카타르시스_홍대점_연기룸2.jpg";
-import hongdaeActingRoom1 from "../../images/홍대점 시설 사진/카타르시스_홍대점_연기룸1.jpg";
-import hongdaeUmjikimRoom2 from "../../images/홍대점 시설 사진/카타르시슷_홍대점_움직임룸2.jpg";
-import hongdaeActingRoom5 from "../../images/홍대점 시설 사진/카타르시스홍대 연기룸5.jpg";
-import hongdaeActingRoom3 from "../../images/홍대점 시설 사진/카타르시스홍대 연기룸3.jpg";
-import hongdaeUmjikimRoom3 from "../../images/홍대점 시설 사진/카타르시스홍대점 움직임룸3.jpg";
-import hongdaeActingRoom4 from "../../images/홍대점 시설 사진/카타르시스홍대 연기룸4.jpg";
+// 시설 이미지 URL 생성 헬퍼 함수
+const getFacilityImage = (folder, filename) => getS3ImageUrl(`${folder}/${filename}`);
 
 // 시설 데이터 정의
 const facilitiesData = {
   "강남점 별관": [
-    { id: 1, name: "별관 복도", image: byulgwanBokdo },
-    { id: 2, name: "별관 B", image: byulgwanB },
-    { id: 3, name: "별관 A", image: byulgwanA },
+    { id: 1, name: "별관 복도", image: getFacilityImage("강남점 별관 시설 사진", "별관 복도.jpg") },
+    { id: 2, name: "별관 B", image: getFacilityImage("강남점 별관 시설 사진", "별관B.jpg") },
+    { id: 3, name: "별관 A", image: getFacilityImage("강남점 별관 시설 사진", "별관 A.jpg") },
   ],
   "강남점 본관": [
-    { id: 4, name: "2층 로비", image: bongwan2floorLobby },
-    { id: 5, name: "본관 상담실", image: bongwanSangdamsil },
-    { id: 6, name: "본관 2층A", image: bongwan2floorA },
-    { id: 7, name: "본관 2층B", image: bongwan2floorB },
-    { id: 8, name: "본관 2층C", image: bongwan2floorC },
-    { id: 9, name: "본관 3층 무용실", image: bongwan3floorMuyongsil },
-    { id: 10, name: "3층C 강의실", image: bongwan3floorC },
-    { id: 11, name: "3층B 강의실", image: bongwan3floorB },
-    { id: 12, name: "2층 안내데스크", image: bongwan2floorDesk },
+    { id: 4, name: "2층 로비", image: getFacilityImage("강남점 본관 시설 사진", "2층 로비.PNG") },
+    { id: 5, name: "본관 상담실", image: getFacilityImage("강남점 본관 시설 사진", "본관 상담실.jpg") },
+    { id: 6, name: "본관 2층A", image: getFacilityImage("강남점 본관 시설 사진", "본관 2층A.jpg") },
+    { id: 7, name: "본관 2층B", image: getFacilityImage("강남점 본관 시설 사진", "본관 2층B.jpg") },
+    { id: 8, name: "본관 2층C", image: getFacilityImage("강남점 본관 시설 사진", "본관 2층C.jpg") },
+    { id: 9, name: "본관 3층 무용실", image: getFacilityImage("강남점 본관 시설 사진", "본관 3층 무용실.jpg") },
+    { id: 10, name: "3층C 강의실", image: getFacilityImage("강남점 본관 시설 사진", "3층C강의실.jpg") },
+    { id: 11, name: "3층B 강의실", image: getFacilityImage("강남점 본관 시설 사진", "3층B강의실.jpg") },
+    { id: 12, name: "2층 안내데스크", image: getFacilityImage("강남점 본관 시설 사진", "2층 안내데스크.jpg") },
   ],
   "강남점 신관": [
-    { id: 13, name: "신관 무용실", image: singwanMuyongsil },
-    { id: 14, name: "신관 복도", image: singwanBokdo },
-    { id: 15, name: "신관 연기연습실", image: singwanYeongiYeonseupsil },
+    { id: 13, name: "신관 무용실", image: getFacilityImage("강남점 신관 시설 사진", "신관 무용실.png") },
+    { id: 14, name: "신관 복도", image: getFacilityImage("강남점 신관 시설 사진", "신관 복도.png") },
+    { id: 15, name: "신관 연기연습실", image: getFacilityImage("강남점 신관 시설 사진", "신관 연기연습실.png") },
   ],
   "홍대점": [
-    { id: 16, name: "움직임룸", image: hongdaeUmjikimRoom },
-    { id: 17, name: "보컬룸", image: hongdaeVocalRoom },
-    { id: 18, name: "연기룸 2", image: hongdaeActingRoom2 },
-    { id: 19, name: "연기룸 1", image: hongdaeActingRoom1 },
-    { id: 20, name: "움직임룸 2", image: hongdaeUmjikimRoom2 },
-    { id: 21, name: "연기룸 5", image: hongdaeActingRoom5 },
-    { id: 22, name: "연기룸 3", image: hongdaeActingRoom3 },
-    { id: 23, name: "움직임룸 3", image: hongdaeUmjikimRoom3 },
-    { id: 24, name: "연기룸 4", image: hongdaeActingRoom4 },
+    { id: 16, name: "움직임룸", image: getFacilityImage("홍대점 시설 사진", "카타르시스_홍대점_움직임룸.jpg") },
+    { id: 17, name: "보컬룸", image: getFacilityImage("홍대점 시설 사진", "카타르시스_홍대점_보컬룸.jpg") },
+    { id: 18, name: "연기룸 2", image: getFacilityImage("홍대점 시설 사진", "카타르시스_홍대점_연기룸2.jpg") },
+    { id: 19, name: "연기룸 1", image: getFacilityImage("홍대점 시설 사진", "카타르시스_홍대점_연기룸1.jpg") },
+    { id: 20, name: "움직임룸 2", image: getFacilityImage("홍대점 시설 사진", "카타르시슷_홍대점_움직임룸2.jpg") },
+    { id: 21, name: "연기룸 5", image: getFacilityImage("홍대점 시설 사진", "카타르시스홍대 연기룸5.jpg") },
+    { id: 22, name: "연기룸 3", image: getFacilityImage("홍대점 시설 사진", "카타르시스홍대 연기룸3.jpg") },
+    { id: 23, name: "움직임룸 3", image: getFacilityImage("홍대점 시설 사진", "카타르시스홍대점 움직임룸3.jpg") },
+    { id: 24, name: "연기룸 4", image: getFacilityImage("홍대점 시설 사진", "카타르시스홍대 연기룸4.jpg") },
   ],
 };
 
