@@ -1,76 +1,81 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
-// 시설 데이터 (이미지는 나중에 추가 예정)
-const facilitiesData = [
-  {
-    id: 1,
-    name: "카타르시스",
-    image: null,
-  },
-  {
-    id: 2,
-    name: "신관 복도",
-    image: null,
-  },
-  {
-    id: 3,
-    name: "신관 뮤지컬실",
-    image: null,
-  },
-  {
-    id: 4,
-    name: "신관 대연습실",
-    image: null,
-  },
-  {
-    id: 5,
-    name: "출차량 음악임실",
-    image: null,
-  },
-  {
-    id: 6,
-    name: "출차량 뮤지컬실",
-    image: null,
-  },
-  {
-    id: 7,
-    name: "출차량 연기2",
-    image: null,
-  },
-  {
-    id: 8,
-    name: "출차량 연기1",
-    image: null,
-  },
-  {
-    id: 9,
-    name: "출차량 음악임실",
-    image: null,
-  },
-  {
-    id: 10,
-    name: "2층 로비",
-    image: null,
-  },
-  {
-    id: 11,
-    name: "상담실",
-    image: null,
-  },
-  {
-    id: 12,
-    name: "3층 뮤지컬실",
-    image: null,
-  },
-];
+// 강남점 별관 시설 사진
+import byulgwanBokdo from "../../images/강남점 별관 시설 사진/별관 복도.jpg";
+import byulgwanB from "../../images/강남점 별관 시설 사진/별관B.jpg";
+import byulgwanA from "../../images/강남점 별관 시설 사진/별관 A.jpg";
+
+// 강남점 본관 시설 사진
+import bongwan2floorLobby from "../../images/강남점 본관 시설 사진/2층 로비.PNG";
+import bongwanSangdamsil from "../../images/강남점 본관 시설 사진/본관 상담실.jpg";
+import bongwan2floorA from "../../images/강남점 본관 시설 사진/본관 2층A.jpg";
+import bongwan2floorB from "../../images/강남점 본관 시설 사진/본관 2층B.jpg";
+import bongwan2floorC from "../../images/강남점 본관 시설 사진/본관 2층C.jpg";
+import bongwan3floorMuyongsil from "../../images/강남점 본관 시설 사진/본관 3층 무용실.jpg";
+import bongwan3floorC from "../../images/강남점 본관 시설 사진/3층C강의실.jpg";
+import bongwan3floorB from "../../images/강남점 본관 시설 사진/3층B강의실.jpg";
+import bongwan2floorDesk from "../../images/강남점 본관 시설 사진/2층 안내데스크.jpg";
+
+// 강남점 신관 시설 사진
+import singwanMuyongsil from "../../images/강남점 신관 시설 사진/신관 무용실.png";
+import singwanBokdo from "../../images/강남점 신관 시설 사진/신관 복도.png";
+import singwanYeongiYeonseupsil from "../../images/강남점 신관 시설 사진/신관 연기연습실.png";
+
+// 홍대점 시설 사진
+import hongdaeUmjikimRoom from "../../images/홍대점 시설 사진/카타르시스_홍대점_움직임룸.jpg";
+import hongdaeVocalRoom from "../../images/홍대점 시설 사진/카타르시스_홍대점_보컬룸.jpg";
+import hongdaeActingRoom2 from "../../images/홍대점 시설 사진/카타르시스_홍대점_연기룸2.jpg";
+import hongdaeActingRoom1 from "../../images/홍대점 시설 사진/카타르시스_홍대점_연기룸1.jpg";
+import hongdaeUmjikimRoom2 from "../../images/홍대점 시설 사진/카타르시슷_홍대점_움직임룸2.jpg";
+import hongdaeActingRoom5 from "../../images/홍대점 시설 사진/카타르시스홍대 연기룸5.jpg";
+import hongdaeActingRoom3 from "../../images/홍대점 시설 사진/카타르시스홍대 연기룸3.jpg";
+import hongdaeUmjikimRoom3 from "../../images/홍대점 시설 사진/카타르시스홍대점 움직임룸3.jpg";
+import hongdaeActingRoom4 from "../../images/홍대점 시설 사진/카타르시스홍대 연기룸4.jpg";
+
+// 시설 데이터 정의
+const facilitiesData = {
+  "강남점 별관": [
+    { id: 1, name: "별관 복도", image: byulgwanBokdo },
+    { id: 2, name: "별관 B", image: byulgwanB },
+    { id: 3, name: "별관 A", image: byulgwanA },
+  ],
+  "강남점 본관": [
+    { id: 4, name: "2층 로비", image: bongwan2floorLobby },
+    { id: 5, name: "본관 상담실", image: bongwanSangdamsil },
+    { id: 6, name: "본관 2층A", image: bongwan2floorA },
+    { id: 7, name: "본관 2층B", image: bongwan2floorB },
+    { id: 8, name: "본관 2층C", image: bongwan2floorC },
+    { id: 9, name: "본관 3층 무용실", image: bongwan3floorMuyongsil },
+    { id: 10, name: "3층C 강의실", image: bongwan3floorC },
+    { id: 11, name: "3층B 강의실", image: bongwan3floorB },
+    { id: 12, name: "2층 안내데스크", image: bongwan2floorDesk },
+  ],
+  "강남점 신관": [
+    { id: 13, name: "신관 무용실", image: singwanMuyongsil },
+    { id: 14, name: "신관 복도", image: singwanBokdo },
+    { id: 15, name: "신관 연기연습실", image: singwanYeongiYeonseupsil },
+  ],
+  "홍대점": [
+    { id: 16, name: "움직임룸", image: hongdaeUmjikimRoom },
+    { id: 17, name: "보컬룸", image: hongdaeVocalRoom },
+    { id: 18, name: "연기룸 2", image: hongdaeActingRoom2 },
+    { id: 19, name: "연기룸 1", image: hongdaeActingRoom1 },
+    { id: 20, name: "움직임룸 2", image: hongdaeUmjikimRoom2 },
+    { id: 21, name: "연기룸 5", image: hongdaeActingRoom5 },
+    { id: 22, name: "연기룸 3", image: hongdaeActingRoom3 },
+    { id: 23, name: "움직임룸 3", image: hongdaeUmjikimRoom3 },
+    { id: 24, name: "연기룸 4", image: hongdaeActingRoom4 },
+  ],
+};
+
+const locationOptions = Object.keys(facilitiesData);
 
 const FacilitiesPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedLocation, setSelectedLocation] = useState("강남점 본관");
   const [isVisible, setIsVisible] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
   const contentRef = useRef(null);
-
-  const itemsPerPage = 12;
 
   // Intersection Observer for scroll animation
   useEffect(() => {
@@ -96,19 +101,40 @@ const FacilitiesPage = () => {
     };
   }, []);
 
-  // 페이지네이션 계산
-  const totalPages = Math.ceil(facilitiesData.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentFacilities = facilitiesData.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  // Reset animation when location changes
+  useEffect(() => {
+    setIsVisible(false);
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, [selectedLocation]);
 
-  // 페이지 변경
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setModalImage(null);
+      }
+    };
+
+    if (modalImage) {
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "unset";
+    };
+  }, [modalImage]);
+
+  const currentFacilities = facilitiesData[selectedLocation] || [];
+
+  const handleImageClick = (facility) => {
+    setModalImage(facility);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
   };
 
   return (
@@ -120,37 +146,46 @@ const FacilitiesPage = () => {
       </HeroSection>
 
       <ContentSection ref={contentRef}>
+        <SelectWrapper>
+          <SelectBox
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+          >
+            {locationOptions.map((location) => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </SelectBox>
+        </SelectWrapper>
+
         <FacilitiesGrid $isVisible={isVisible}>
           {currentFacilities.map((facility, index) => (
-            <FacilityCard key={facility.id} $delay={index * 0.05}>
+            <FacilityCard
+              key={facility.id}
+              $delay={index * 0.05}
+              $isVisible={isVisible}
+              onClick={() => handleImageClick(facility)}
+            >
               <ImageWrapper>
-                {facility.image ? (
-                  <FacilityImage src={facility.image} alt={facility.name} />
-                ) : (
-                  <ImagePlaceholder>이미지 준비중</ImagePlaceholder>
-                )}
+                <FacilityImage src={facility.image} alt={facility.name} />
+                <FacilityName>{facility.name}</FacilityName>
               </ImageWrapper>
-              <FacilityName>{facility.name}</FacilityName>
             </FacilityCard>
           ))}
         </FacilitiesGrid>
-
-        {totalPages > 1 && (
-          <Pagination>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-              (pageNumber) => (
-                <PageButton
-                  key={pageNumber}
-                  $active={currentPage === pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                >
-                  {pageNumber}
-                </PageButton>
-              )
-            )}
-          </Pagination>
-        )}
       </ContentSection>
+
+      {/* Image Modal */}
+      {modalImage && (
+        <ModalOverlay onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <CloseButton onClick={closeModal}>&times;</CloseButton>
+            <ModalImage src={modalImage.image} alt={modalImage.name} />
+            <ModalCaption>{modalImage.name}</ModalCaption>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </Container>
   );
 };
@@ -165,8 +200,7 @@ const Container = styled.div`
 const HeroSection = styled.section`
   width: 100%;
   height: 400px;
-  background: #888;
-  border: 1px solid black;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -192,122 +226,220 @@ const Title = styled.h1`
 `;
 
 const ContentSection = styled.section`
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: 60px 40px 80px;
 
   @media (max-width: 768px) {
-    padding: 60px 20px;
+    padding: 40px 20px 60px;
+  }
+`;
+
+const SelectWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 40px;
+`;
+
+const SelectBox = styled.select`
+  padding: 14px 48px 14px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 0;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  transition: all 0.2s ease;
+  min-width: 200px;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #333;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 44px 12px 16px;
   }
 `;
 
 const FacilitiesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
-  margin-bottom: 80px;
-  opacity: ${(props) => (props.$isVisible ? 1 : 0)};
-  transform: ${(props) =>
-    props.$isVisible ? "translateY(0)" : "translateY(50px)"};
-  transition: all 0.8s ease-out;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-`;
-
-const FacilityCard = styled.div`
-  display: flex;
-  flex-direction: column;
+  gap: 0;
   opacity: ${(props) => (props.$isVisible ? 1 : 0)};
   transform: ${(props) =>
     props.$isVisible ? "translateY(0)" : "translateY(30px)"};
   transition: all 0.6s ease-out;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const FacilityCard = styled.div`
+  position: relative;
+  opacity: ${(props) => (props.$isVisible ? 1 : 0)};
+  transform: ${(props) =>
+    props.$isVisible ? "translateY(0)" : "translateY(20px)"};
+  transition: all 0.5s ease-out;
   transition-delay: ${(props) => props.$delay}s;
   cursor: pointer;
-
-  &:hover img {
-    transform: scale(1.05);
-  }
 `;
 
 const ImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: #f5f5f5;
-  margin-bottom: 16px;
-  border: 1px solid black;
+  background: #f0f0f0;
 `;
 
 const FacilityImage = styled.img`
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.4s ease;
+  transform: scale(1);
+  transition: transform 0.6s ease-in-out;
+
+  ${ImageWrapper}:hover & {
+    transform: scale(1.2);
+  }
 `;
 
-const ImagePlaceholder = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f5f5;
-  color: #999;
-  font-size: 14px;
-`;
-
-const FacilityName = styled.h3`
-  font-size: 16px;
-  font-weight: 500;
-  color: #000000;
-  margin: 0;
-  text-align: left;
+const FacilityName = styled.div`
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 
   @media (max-width: 768px) {
-    font-size: 15px;
+    font-size: 13px;
+    padding: 6px 10px;
+    bottom: 12px;
+    right: 12px;
   }
 `;
 
-const Pagination = styled.div`
+// Modal Styles
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-top: 40px;
+  justify-content: center;
+  z-index: 10000;
+  padding: 40px;
+  animation: fadeIn 0.3s ease;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 
-const PageButton = styled.button`
-  min-width: 40px;
-  height: 40px;
-  padding: 0 12px;
+const ModalContent = styled.div`
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: scaleIn 0.3s ease;
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: -50px;
+  right: -10px;
+  background: none;
   border: none;
-  background: ${(props) => (props.$active ? "#000000" : "transparent")};
-  color: ${(props) => (props.$active ? "#ffffff" : "#000000")};
-  font-size: 15px;
-  font-weight: ${(props) => (props.$active ? "700" : "400")};
+  color: white;
+  font-size: 48px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  line-height: 1;
+  transition: all 0.2s ease;
+  z-index: 10001;
 
   &:hover {
-    background: ${(props) => (props.$active ? "#000000" : "#f5f5f5")};
+    color: #ccc;
+    transform: scale(1.1);
   }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  @media (max-width: 768px) {
+    top: -40px;
+    right: 0;
+    font-size: 36px;
+  }
+`;
+
+const ModalImage = styled.img`
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+`;
+
+const ModalCaption = styled.div`
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 20px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin-top: 16px;
   }
 `;
