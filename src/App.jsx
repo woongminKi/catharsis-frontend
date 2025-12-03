@@ -55,9 +55,9 @@ function App() {
         <Route path="/curriculum/pre-admission" element={<PreAdmissionPage />} />
 
         {/* Inquiry routes */}
-        <Route path="/inquiries" element={<InquiryListPage />} />
-        <Route path="/inquiries/write" element={<InquiryWritePage />} />
-        <Route path="/inquiries/:id" element={<InquiryDetailPage />} />
+        <Route path="/consultation/inquiry" element={<InquiryListPage />} />
+        <Route path="/consultation/inquiry/write" element={<InquiryWritePage />} />
+        <Route path="/consultation/inquiry/:id" element={<InquiryDetailPage />} />
       </Routes>
       <ConsultationFooter />
       <FloatingButton />

@@ -7,7 +7,7 @@ import { formatDate } from '../../utils/dateFormat';
 const PageContainer = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 120px 20px 40px;
   min-height: calc(100vh - 200px);
 `;
 
@@ -40,17 +40,80 @@ const WriteButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   padding: 10px 20px;
-  background: #7c3aed;
+  background: #333;
   color: white;
-  border-radius: 6px;
+  border-radius: 4px;
+  border: 1px solid #333;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #555;
+    border-color: #555;
+  }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0;
+`;
+
+const SearchSelect = styled.select`
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #333;
+  }
+`;
+
+const SearchInput = styled.input`
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 300px;
+
+  &:focus {
+    outline: none;
+    border-color: #333;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    flex: 1;
+  }
+`;
+
+const SearchButton = styled.button`
+  padding: 10px 20px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
   transition: background 0.2s;
 
   &:hover {
-    background: #6d28d9;
+    background: #555;
   }
+`;
+
+const BottomBar = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 `;
 
 const Table = styled.table`
@@ -115,20 +178,21 @@ const SecretIcon = styled.span`
 
 const StatusBadge = styled.span`
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
+  padding: 6px 14px;
+  border-radius: 4px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
 
   ${({ $status }) =>
     $status === 'ANSWERED'
       ? `
-    background: #d4edda;
-    color: #155724;
+    background: #333;
+    color: white;
   `
       : `
-    background: #fff3cd;
-    color: #856404;
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
   `}
 `;
 
@@ -223,18 +287,34 @@ const InquiryListPage = () => {
     totalItems: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [searchType, setSearchType] = useState('title');
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const currentPage = parseInt(searchParams.get('page')) || 1;
+  const urlSearchType = searchParams.get('searchType') || '';
+  const urlSearchKeyword = searchParams.get('keyword') || '';
+
+  useEffect(() => {
+    if (urlSearchType) setSearchType(urlSearchType);
+    if (urlSearchKeyword) setSearchKeyword(urlSearchKeyword);
+  }, [urlSearchType, urlSearchKeyword]);
 
   useEffect(() => {
     const fetchConsultations = async () => {
       setLoading(true);
       try {
-        const response = await consultationAPI.getAll({
+        const params = {
           page: currentPage,
-          limit: 15,
+          limit: 10,
           boardType: 'INQUIRY',
-        });
+        };
+
+        if (urlSearchKeyword) {
+          params.searchType = urlSearchType || 'title';
+          params.keyword = urlSearchKeyword;
+        }
+
+        const response = await consultationAPI.getAll(params);
         setConsultations(response.data.data);
         setPagination(response.data.pagination);
       } catch (error) {
@@ -245,14 +325,37 @@ const InquiryListPage = () => {
     };
 
     fetchConsultations();
-  }, [currentPage]);
+  }, [currentPage, urlSearchType, urlSearchKeyword]);
 
   const handlePageChange = (page) => {
-    setSearchParams({ page: page.toString() });
+    const params = { page: page.toString() };
+    if (urlSearchKeyword) {
+      params.searchType = urlSearchType;
+      params.keyword = urlSearchKeyword;
+    }
+    setSearchParams(params);
+  };
+
+  const handleSearch = () => {
+    if (searchKeyword.trim()) {
+      setSearchParams({
+        page: '1',
+        searchType,
+        keyword: searchKeyword.trim()
+      });
+    } else {
+      setSearchParams({ page: '1' });
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   const handleRowClick = (id) => {
-    navigate(`/inquiries/${id}`);
+    navigate(`/consultation/inquiry/${id}`);
   };
 
   const renderPagination = () => {
@@ -300,7 +403,7 @@ const InquiryListPage = () => {
   if (loading) {
     return (
       <PageContainer>
-        <PageTitle>수강 문의</PageTitle>
+        <PageTitle>수강문의 게시판</PageTitle>
         <LoadingMessage>로딩 중...</LoadingMessage>
       </PageContainer>
     );
@@ -308,12 +411,7 @@ const InquiryListPage = () => {
 
   return (
     <PageContainer>
-      <PageTitle>수강 문의</PageTitle>
-
-      <TopBar>
-        <TotalCount>총 {pagination.totalItems}개의 게시글</TotalCount>
-        <WriteButton to="/inquiries/write">글쓰기</WriteButton>
-      </TopBar>
+      <PageTitle>수강문의 게시판</PageTitle>
 
       {consultations.length === 0 ? (
         <EmptyMessage>등록된 게시글이 없습니다.</EmptyMessage>
@@ -323,45 +421,40 @@ const InquiryListPage = () => {
             <Table>
               <thead>
                 <tr>
-                  <Th $align="center" style={{ width: '60px' }}>
-                    번호
+                  <Th $align="center" style={{ width: '80px' }}>
+                    NO.
                   </Th>
                   <Th>제목</Th>
                   <Th $align="center" style={{ width: '100px' }}>
                     작성자
                   </Th>
-                  <Th $align="center" style={{ width: '80px' }}>
-                    상태
+                  <Th $align="center" style={{ width: '120px' }}>
+                    작성일
                   </Th>
                   <Th $align="center" style={{ width: '100px' }}>
-                    작성일
+                    상태
                   </Th>
                 </tr>
               </thead>
               <tbody>
                 {consultations.map((item, index) => (
                   <Tr key={item._id} onClick={() => handleRowClick(item._id)}>
-                    <Td $align="center">
-                      {pagination.totalItems - (currentPage - 1) * 15 - index}
+                    <Td $align="center" style={{ color: '#999' }}>
+                      NO. {pagination.totalItems - (currentPage - 1) * 10 - index}
                     </Td>
                     <Td className="title-cell">
                       <TitleLink>
                         {item.isSecret && <SecretIcon>🔒</SecretIcon>}
                         {item.title}
-                        {item.commentsCount > 0 && (
-                          <span style={{ color: '#7c3aed', fontSize: '12px' }}>
-                            [{item.commentsCount}]
-                          </span>
-                        )}
                       </TitleLink>
                     </Td>
                     <Td $align="center">{item.writerId}</Td>
+                    <Td $align="center" style={{ color: '#999' }}>{formatDate(item.createdAt)}</Td>
                     <Td $align="center">
                       <StatusBadge $status={item.status}>
                         {item.status === 'ANSWERED' ? '답변완료' : '답변대기'}
                       </StatusBadge>
                     </Td>
-                    <Td $align="center">{formatDate(item.createdAt)}</Td>
                   </Tr>
                 ))}
               </tbody>
@@ -374,9 +467,6 @@ const InquiryListPage = () => {
               <MobileTitle>
                 {item.isSecret && <SecretIcon>🔒</SecretIcon>}
                 {item.title}
-                {item.commentsCount > 0 && (
-                  <span style={{ color: '#7c3aed', fontSize: '12px' }}>[{item.commentsCount}]</span>
-                )}
               </MobileTitle>
               <MobileMeta>
                 <span>{item.writerId}</span>
@@ -387,10 +477,35 @@ const InquiryListPage = () => {
               </MobileMeta>
             </MobileCard>
           ))}
-
-          {pagination.totalPages > 1 && <Pagination>{renderPagination()}</Pagination>}
         </>
       )}
+
+      {/* Search Area */}
+      <SearchContainer>
+        <SearchSelect
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
+        >
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="writerId">작성자</option>
+        </SearchSelect>
+        <SearchInput
+          type="text"
+          placeholder="검색어를 입력하세요"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      </SearchContainer>
+
+      {/* Pagination */}
+      {pagination.totalPages > 1 && <Pagination>{renderPagination()}</Pagination>}
+
+      {/* Write Button */}
+      <BottomBar>
+        <WriteButton to="/consultation/inquiry/write">글쓰기</WriteButton>
+      </BottomBar>
     </PageContainer>
   );
 };

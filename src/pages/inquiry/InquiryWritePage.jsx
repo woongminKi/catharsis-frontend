@@ -1,31 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { consultationAPI } from '../../utils/api';
 
 const PageContainer = styled.div`
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 120px 20px 40px;
   min-height: calc(100vh - 200px);
 `;
 
-const BackLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: #666;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 20px;
-
-  &:hover {
-    color: #7c3aed;
-  }
-`;
-
 const PageTitle = styled.h1`
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   margin-bottom: 30px;
   color: #1a1a1a;
@@ -33,9 +21,6 @@ const PageTitle = styled.h1`
 
 const FormContainer = styled.form`
   background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
 `;
 
 const InputRow = styled.div`
@@ -53,69 +38,40 @@ const InputGroup = styled.div`
   flex: ${({ $flex }) => $flex || 1};
 `;
 
-const Label = styled.label`
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #333;
-`;
-
 const Input = styled.input`
   width: 100%;
-  padding: 12px 15px;
+  padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 8px;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s;
   box-sizing: border-box;
+  background: #fafafa;
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    border-color: #333;
   }
 
   &::placeholder {
-    color: #aaa;
+    color: #999;
   }
 `;
 
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  min-height: 250px;
-  resize: vertical;
-  font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-  }
-
-  &::placeholder {
-    color: #aaa;
-  }
+const TitleInput = styled(Input)`
+  margin-bottom: 15px;
 `;
 
 const CheckboxGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 20px;
+  margin-bottom: 15px;
 `;
 
 const Checkbox = styled.input`
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
-  accent-color: #7c3aed;
 `;
 
 const CheckboxLabel = styled.label`
@@ -124,41 +80,91 @@ const CheckboxLabel = styled.label`
   cursor: pointer;
 `;
 
+const EditorWrapper = styled.div`
+  margin-bottom: 20px;
+
+  .ql-container {
+    min-height: 400px;
+    font-size: 14px;
+  }
+
+  .ql-editor {
+    min-height: 400px;
+  }
+
+  .ql-toolbar {
+    border: 1px solid #ddd;
+    border-bottom: none;
+  }
+
+  .ql-container {
+    border: 1px solid #ddd;
+  }
+`;
+
+const FileInputRow = styled.div`
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 15px;
+  }
+`;
+
+const FileInputGroup = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  background: #fafafa;
+`;
+
+const FileInputButton = styled.label`
+  padding: 10px 15px;
+  background: #f0f0f0;
+  border-right: 1px solid #ddd;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+
+  &:hover {
+    background: #e5e5e5;
+  }
+`;
+
+const FileInputText = styled.span`
+  padding: 10px 15px;
+  color: #999;
+  font-size: 13px;
+`;
+
+const HiddenFileInput = styled.input`
+  display: none;
+`;
+
 const ButtonGroup = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 10px;
-  margin-top: 30px;
+  margin-top: 20px;
 `;
 
 const Button = styled.button`
-  padding: 12px 32px;
-  border-radius: 6px;
+  padding: 10px 24px;
+  border-radius: 4px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
 
-  ${({ $variant }) =>
-    $variant === 'primary'
-      ? `
-    background: #7c3aed;
-    color: white;
-    border: none;
-
-    &:hover:not(:disabled) {
-      background: #6d28d9;
-    }
-  `
-      : `
-    background: white;
-    color: #333;
-    border: 1px solid #ddd;
-
-    &:hover:not(:disabled) {
-      border-color: #999;
-    }
-  `}
+  &:hover:not(:disabled) {
+    border-color: #999;
+  }
 
   &:disabled {
     opacity: 0.5;
@@ -173,14 +179,6 @@ const ErrorText = styled.span`
   display: block;
 `;
 
-const CharCount = styled.span`
-  font-size: 12px;
-  color: ${({ $over }) => ($over ? '#dc3545' : '#999')};
-  display: block;
-  text-align: right;
-  margin-top: 4px;
-`;
-
 const InquiryWritePage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -190,8 +188,35 @@ const InquiryWritePage = () => {
     content: '',
     isSecret: false,
   });
+  const [files, setFiles] = useState({ file1: null, file2: null });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const quillModules = useMemo(() => ({
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'script': 'sub' }, { 'script': 'super' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
+      ['blockquote'],
+      [{ 'align': [] }],
+      [{ 'color': [] }, { 'background': [] }],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+  }), []);
+
+  const quillFormats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'script',
+    'list', 'bullet', 'indent',
+    'blockquote',
+    'align',
+    'color', 'background',
+    'link', 'image', 'video',
+  ];
 
   const validate = () => {
     const newErrors = {};
@@ -200,19 +225,22 @@ const InquiryWritePage = () => {
       newErrors.writerId = 'ID를 입력해주세요';
     }
 
-    if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해주세요';
-    } else if (formData.password.length < 4) {
-      newErrors.password = '비밀번호는 4자 이상이어야 합니다';
+    if (formData.isSecret) {
+      if (!formData.password) {
+        newErrors.password = '비밀번호를 입력해주세요';
+      } else if (formData.password.length < 4) {
+        newErrors.password = '비밀번호는 4자 이상이어야 합니다';
+      }
     }
 
     if (!formData.title.trim()) {
       newErrors.title = '제목을 입력해주세요';
     }
 
-    if (!formData.content.trim()) {
+    const plainContent = formData.content.replace(/<[^>]*>/g, '').trim();
+    if (!plainContent) {
       newErrors.content = '내용을 입력해주세요';
-    } else if (formData.content.trim().length < 10) {
+    } else if (plainContent.length < 10) {
       newErrors.content = '내용은 10자 이상 입력해주세요';
     }
 
@@ -232,6 +260,18 @@ const InquiryWritePage = () => {
     }
   };
 
+  const handleContentChange = (value) => {
+    setFormData((prev) => ({ ...prev, content: value }));
+    if (errors.content) {
+      setErrors((prev) => ({ ...prev, content: '' }));
+    }
+  };
+
+  const handleFileChange = (e, fileKey) => {
+    const file = e.target.files[0];
+    setFiles((prev) => ({ ...prev, [fileKey]: file }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -246,7 +286,7 @@ const InquiryWritePage = () => {
       });
 
       alert('게시글이 등록되었습니다.');
-      navigate('/inquiries');
+      navigate('/consultation/inquiry');
     } catch (error) {
       alert(error.response?.data?.message || '등록 중 오류가 발생했습니다.');
     } finally {
@@ -256,69 +296,47 @@ const InquiryWritePage = () => {
 
   return (
     <PageContainer>
-      <BackLink to="/inquiries">← 목록으로</BackLink>
-      <PageTitle>수강 문의 글쓰기</PageTitle>
+      <PageTitle>수강문의 게시판</PageTitle>
 
       <FormContainer onSubmit={handleSubmit}>
         <InputRow>
           <InputGroup>
-            <Label htmlFor="writerId">ID *</Label>
             <Input
               type="text"
               id="writerId"
               name="writerId"
               value={formData.writerId}
               onChange={handleChange}
-              placeholder="아이디를 입력해주세요"
+              placeholder="작성자"
               maxLength={50}
             />
             {errors.writerId && <ErrorText>{errors.writerId}</ErrorText>}
           </InputGroup>
 
           <InputGroup>
-            <Label htmlFor="password">비밀번호 *</Label>
             <Input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="비밀번호 (4자 이상)"
+              placeholder="비밀번호"
               maxLength={20}
             />
             {errors.password && <ErrorText>{errors.password}</ErrorText>}
           </InputGroup>
         </InputRow>
 
-        <InputGroup style={{ marginBottom: '20px' }}>
-          <Label htmlFor="title">제목 *</Label>
-          <Input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="제목을 입력해주세요"
-            maxLength={200}
-          />
-          {errors.title && <ErrorText>{errors.title}</ErrorText>}
-        </InputGroup>
-
-        <InputGroup>
-          <Label htmlFor="content">내용 *</Label>
-          <TextArea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            placeholder="문의 내용을 입력해주세요 (10자 이상)"
-            maxLength={5000}
-          />
-          {errors.content && <ErrorText>{errors.content}</ErrorText>}
-          <CharCount $over={formData.content.length > 4800}>
-            {formData.content.length} / 5000
-          </CharCount>
-        </InputGroup>
+        <TitleInput
+          type="text"
+          id="title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          placeholder="제목"
+          maxLength={200}
+        />
+        {errors.title && <ErrorText>{errors.title}</ErrorText>}
 
         <CheckboxGroup>
           <Checkbox
@@ -328,15 +346,53 @@ const InquiryWritePage = () => {
             checked={formData.isSecret}
             onChange={handleChange}
           />
-          <CheckboxLabel htmlFor="isSecret">비밀글로 등록</CheckboxLabel>
+          <CheckboxLabel htmlFor="isSecret">비밀글</CheckboxLabel>
         </CheckboxGroup>
 
+        <EditorWrapper>
+          <ReactQuill
+            theme="snow"
+            value={formData.content}
+            onChange={handleContentChange}
+            modules={quillModules}
+            formats={quillFormats}
+            placeholder="내용을 입력해주세요"
+          />
+        </EditorWrapper>
+        {errors.content && <ErrorText>{errors.content}</ErrorText>}
+
+        <FileInputRow>
+          <FileInputGroup>
+            <FileInputButton htmlFor="file1">파일 선택</FileInputButton>
+            <FileInputText>
+              {files.file1 ? files.file1.name : '선택된 파일 없음'}
+            </FileInputText>
+            <HiddenFileInput
+              type="file"
+              id="file1"
+              onChange={(e) => handleFileChange(e, 'file1')}
+            />
+          </FileInputGroup>
+
+          <FileInputGroup>
+            <FileInputButton htmlFor="file2">파일 선택</FileInputButton>
+            <FileInputText>
+              {files.file2 ? files.file2.name : '선택된 파일 없음'}
+            </FileInputText>
+            <HiddenFileInput
+              type="file"
+              id="file2"
+              onChange={(e) => handleFileChange(e, 'file2')}
+            />
+          </FileInputGroup>
+        </FileInputRow>
+
         <ButtonGroup>
-          <Button type="button" onClick={() => navigate('/inquiries')}>
-            취소
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? '등록 중...' : '작성완료'}
           </Button>
-          <Button type="submit" $variant="primary" disabled={isSubmitting}>
-            {isSubmitting ? '등록 중...' : '등록하기'}
+          <Button type="button" onClick={() => navigate('/consultation/inquiry')}>
+            목록
           </Button>
         </ButtonGroup>
       </FormContainer>

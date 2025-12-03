@@ -2,185 +2,104 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { consultationAPI } from '../../utils/api';
-import { formatDateTime } from '../../utils/dateFormat';
+import { formatDate } from '../../utils/dateFormat';
 
 const PageContainer = styled.div`
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 120px 20px 40px;
   min-height: calc(100vh - 200px);
 `;
 
-const BackLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: #666;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 20px;
-
-  &:hover {
-    color: #7c3aed;
-  }
+const PageTitle = styled.h1`
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #1a1a1a;
 `;
 
 const PostContainer = styled.div`
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 `;
 
 const PostHeader = styled.div`
-  padding: 25px;
-  border-bottom: 1px solid #eee;
+  padding: 20px 0;
+  border-bottom: 1px solid #333;
 `;
 
-const PostTitle = styled.h1`
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
+const PostTitle = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
   color: #1a1a1a;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const SecretIcon = styled.span`
-  color: #999;
 `;
 
 const PostMeta = styled.div`
   display: flex;
-  gap: 20px;
-  font-size: 14px;
-  color: #666;
-`;
-
-const MetaItem = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const StatusBadge = styled.span`
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-
-  ${({ $status }) =>
-    $status === 'ANSWERED'
-      ? `
-    background: #d4edda;
-    color: #155724;
-  `
-      : `
-    background: #fff3cd;
-    color: #856404;
-  `}
-`;
-
-const PostContent = styled.div`
-  padding: 25px;
-  min-height: 200px;
-  white-space: pre-wrap;
-  line-height: 1.8;
-  color: #333;
-`;
-
-const CommentsSection = styled.div`
-  border-top: 1px solid #eee;
-  padding: 25px;
-  background: #f8f9fa;
-`;
-
-const CommentsTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #333;
-`;
-
-const Comment = styled.div`
-  background: white;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-left: 3px solid #7c3aed;
-`;
-
-const CommentHeader = styled.div`
-  display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 13px;
-`;
-
-const CommentAuthor = styled.span`
-  font-weight: 600;
-  color: #7c3aed;
-`;
-
-const CommentDate = styled.span`
+  font-size: 14px;
   color: #999;
 `;
 
-const CommentContent = styled.div`
+const MetaLeft = styled.div`
+  display: flex;
+  gap: 15px;
+`;
+
+const PostContent = styled.div`
+  padding: 30px 0;
+  min-height: 150px;
   white-space: pre-wrap;
-  line-height: 1.6;
+  line-height: 1.8;
   color: #333;
+  border-bottom: 1px solid #eee;
+`;
+
+const AdminAnswerSection = styled.div`
+  margin-top: 30px;
+  padding: 20px;
+  border: 2px solid #bfbfbf;
+  background: #fcfcfc;
+`;
+
+const AdminAnswerTitle = styled.div`
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #ddd;
+`;
+
+const AdminAnswerContent = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.8;
+  color: #333;
+  font-size: 14px;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 10px;
-  padding: 25px;
-  border-top: 1px solid #eee;
+  margin-top: 30px;
 `;
 
 const Button = styled.button`
   padding: 10px 24px;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
 
-  ${({ $variant }) =>
-    $variant === 'primary'
-      ? `
-    background: #7c3aed;
-    color: white;
-    border: none;
-
-    &:hover {
-      background: #6d28d9;
-    }
-  `
-      : $variant === 'danger'
-        ? `
-    background: white;
-    color: #dc3545;
-    border: 1px solid #dc3545;
-
-    &:hover {
-      background: #dc3545;
-      color: white;
-    }
-  `
-        : `
-    background: white;
-    color: #333;
-    border: 1px solid #ddd;
-
-    &:hover {
-      border-color: #999;
-    }
-  `}
+  &:hover {
+    border-color: #999;
+  }
 `;
 
 // Password Modal
@@ -190,7 +109,7 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,68 +118,58 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  border-radius: 12px;
-  padding: 30px;
+  border: 2px solid #999;
+  padding: 40px 50px;
   width: 90%;
   max-width: 400px;
 `;
 
-const ModalTitle = styled.h3`
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  text-align: center;
+const ModalRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+`;
+
+const ModalLabel = styled.label`
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid #333;
   font-size: 14px;
-  margin-bottom: 15px;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-bottom-color: #000;
   }
 `;
 
 const ModalButtons = styled.div`
   display: flex;
+  justify-content: center;
   gap: 10px;
 `;
 
 const ModalButton = styled.button`
-  flex: 1;
-  padding: 12px;
-  border-radius: 6px;
+  padding: 8px 20px;
   font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 
-  ${({ $primary }) =>
-    $primary
-      ? `
-    background: #7c3aed;
-    color: white;
-    border: none;
-
-    &:hover {
-      background: #6d28d9;
-    }
-  `
-      : `
-    background: white;
-    color: #333;
-    border: 1px solid #ddd;
-
-    &:hover {
-      border-color: #999;
-    }
-  `}
+  &:hover {
+    border-color: #999;
+  }
 
   &:disabled {
     opacity: 0.5;
@@ -310,7 +219,7 @@ const InquiryDetailPage = () => {
       } catch (error) {
         if (error.response?.status === 404) {
           alert('게시글을 찾을 수 없습니다.');
-          navigate('/inquiries');
+          navigate('/consultation/inquiry');
         }
       } finally {
         setLoading(false);
@@ -353,7 +262,7 @@ const InquiryDetailPage = () => {
     try {
       await consultationAPI.delete(id, deletePassword);
       alert('삭제되었습니다.');
-      navigate('/inquiries');
+      navigate('/consultation/inquiry');
     } catch (error) {
       alert(error.response?.data?.message || '삭제에 실패했습니다.');
     }
@@ -362,6 +271,7 @@ const InquiryDetailPage = () => {
   if (loading) {
     return (
       <PageContainer>
+        <PageTitle>수강문의 게시판</PageTitle>
         <LoadingMessage>로딩 중...</LoadingMessage>
       </PageContainer>
     );
@@ -370,6 +280,7 @@ const InquiryDetailPage = () => {
   if (!post) {
     return (
       <PageContainer>
+        <PageTitle>수강문의 게시판</PageTitle>
         <LoadingMessage>게시글을 찾을 수 없습니다.</LoadingMessage>
       </PageContainer>
     );
@@ -377,72 +288,64 @@ const InquiryDetailPage = () => {
 
   return (
     <PageContainer>
-      <BackLink to="/inquiries">← 목록으로</BackLink>
+      <PageTitle>수강문의 게시판</PageTitle>
 
       <PostContainer>
         <PostHeader>
-          <PostTitle>
-            {post.isSecret && <SecretIcon>🔒</SecretIcon>}
-            {post.title}
-          </PostTitle>
+          <PostTitle>{post.title}</PostTitle>
           <PostMeta>
-            <MetaItem>작성자: {post.writerId}</MetaItem>
-            <MetaItem>작성일: {formatDateTime(post.createdAt)}</MetaItem>
-            {post.viewCount !== undefined && <MetaItem>조회: {post.viewCount}</MetaItem>}
-            <StatusBadge $status={post.status}>
-              {post.status === 'ANSWERED' ? '답변완료' : '답변대기'}
-            </StatusBadge>
+            <MetaLeft>
+              <span>{post.writerId}</span>
+              <span>{formatDate(post.createdAt)}</span>
+            </MetaLeft>
+            {post.viewCount !== undefined && <span>{post.viewCount}</span>}
           </PostMeta>
         </PostHeader>
 
         {!needPassword && post.content && <PostContent>{post.content}</PostContent>}
 
         {!needPassword && post.comments && post.comments.length > 0 && (
-          <CommentsSection>
-            <CommentsTitle>관리자 답변 ({post.comments.length})</CommentsTitle>
+          <AdminAnswerSection>
+            <AdminAnswerTitle>답변</AdminAnswerTitle>
             {post.comments.map((comment) => (
-              <Comment key={comment._id}>
-                <CommentHeader>
-                  <CommentAuthor>{comment.author}</CommentAuthor>
-                  <CommentDate>{formatDateTime(comment.createdAt)}</CommentDate>
-                </CommentHeader>
-                <CommentContent>{comment.content}</CommentContent>
-              </Comment>
+              <AdminAnswerContent key={comment._id}>
+                {comment.content}
+              </AdminAnswerContent>
             ))}
-          </CommentsSection>
+          </AdminAnswerSection>
         )}
 
         <ButtonGroup>
-          <Button onClick={() => navigate('/inquiries')}>목록</Button>
+          <Button onClick={() => navigate('/consultation/inquiry')}>목록</Button>
           {!needPassword && (
-            <Button $variant="danger" onClick={handleDelete}>
-              삭제
-            </Button>
+            <>
+              <Button onClick={() => navigate(`/consultation/inquiry/edit/${id}`)}>수정</Button>
+              <Button onClick={handleDelete}>삭제</Button>
+            </>
           )}
+          <Button onClick={() => navigate('/consultation/inquiry/write')}>글쓰기</Button>
         </ButtonGroup>
       </PostContainer>
 
       {showPasswordModal && (
-        <ModalOverlay onClick={() => navigate('/inquiries')}>
+        <ModalOverlay>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>비밀글입니다</ModalTitle>
-            <p style={{ textAlign: 'center', marginBottom: '20px', color: '#666' }}>
-              비밀번호를 입력해주세요
-            </p>
             {passwordError && <ErrorText>{passwordError}</ErrorText>}
-            <Input
-              type="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
-              autoFocus
-            />
+            <ModalRow>
+              <ModalLabel>비밀번호</ModalLabel>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
+                autoFocus
+              />
+            </ModalRow>
             <ModalButtons>
-              <ModalButton onClick={() => navigate('/inquiries')}>취소</ModalButton>
-              <ModalButton $primary onClick={handlePasswordSubmit} disabled={isSubmitting}>
+              <ModalButton onClick={handlePasswordSubmit} disabled={isSubmitting}>
                 {isSubmitting ? '확인 중...' : '확인'}
               </ModalButton>
+              <ModalButton onClick={() => navigate('/consultation/inquiry')}>취소</ModalButton>
             </ModalButtons>
           </ModalContent>
         </ModalOverlay>
