@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { consultationAPI } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+
+interface Comment {
+  _id: string;
+  content: string;
+}
+
+interface Post {
+  _id: string;
+  title: string;
+  content?: string;
+  writerId: string;
+  isSecret: boolean;
+  status: 'PENDING' | 'ANSWERED';
+  viewCount?: number;
+  comments?: Comment[];
+  needPassword?: boolean;
+  createdAt: string;
+}
 
 const PageContainer = styled.div`
   max-width: 1000px;
@@ -190,22 +208,22 @@ const LoadingMessage = styled.div`
   color: #666;
 `;
 
-const InquiryDetailPage = () => {
-  const { id } = useParams();
+const InquiryDetailPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [needPassword, setNeedPassword] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [needPassword, setNeedPassword] = useState<boolean>(false);
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPost = async (): Promise<void> => {
       try {
-        const response = await consultationAPI.getOne(id);
+        const response = await consultationAPI.getOne(id!);
         const data = response.data.data;
 
         if (data.needPassword) {
@@ -216,7 +234,7 @@ const InquiryDetailPage = () => {
           setPost(data);
           setNeedPassword(false);
         }
-      } catch (error) {
+      } catch (error: any) {
         if (error.response?.status === 404) {
           alert('게시글을 찾을 수 없습니다.');
           navigate('/consultation/inquiry');
@@ -229,7 +247,7 @@ const InquiryDetailPage = () => {
     fetchPost();
   }, [id, navigate]);
 
-  const handlePasswordSubmit = async () => {
+  const handlePasswordSubmit = async (): Promise<void> => {
     if (!password.trim()) {
       setPasswordError('비밀번호를 입력해주세요');
       return;
@@ -239,31 +257,31 @@ const InquiryDetailPage = () => {
     setPasswordError('');
 
     try {
-      const response = await consultationAPI.checkPassword(id, password);
+      const response = await consultationAPI.checkPassword(id!, password);
       setPost(response.data.data);
       setNeedPassword(false);
       setShowPasswordModal(false);
-    } catch (error) {
+    } catch (error: any) {
       setPasswordError(error.response?.data?.message || '비밀번호가 일치하지 않습니다');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
 
     let deletePassword = password;
     if (!deletePassword) {
-      deletePassword = prompt('비밀번호를 입력해주세요');
+      deletePassword = prompt('비밀번호를 입력해주세요') || '';
       if (!deletePassword) return;
     }
 
     try {
-      await consultationAPI.delete(id, deletePassword);
+      await consultationAPI.delete(id!, deletePassword);
       alert('삭제되었습니다.');
       navigate('/consultation/inquiry');
-    } catch (error) {
+    } catch (error: any) {
       alert(error.response?.data?.message || '삭제에 실패했습니다.');
     }
   };
@@ -329,15 +347,15 @@ const InquiryDetailPage = () => {
 
       {showPasswordModal && (
         <ModalOverlay>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
+          <ModalContent onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             {passwordError && <ErrorText>{passwordError}</ErrorText>}
             <ModalRow>
               <ModalLabel>비밀번호</ModalLabel>
               <Input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                onKeyDown={(e: React.KeyboardEvent) => e.key === 'Enter' && handlePasswordSubmit()}
                 autoFocus
               />
             </ModalRow>

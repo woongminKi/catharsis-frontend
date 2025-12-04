@@ -2,6 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+interface PasserData {
+  school: string;
+  count: number;
+  link: string;
+}
+
 const SectionContainer = styled.section`
   padding: 80px 20px;
   background: #f9fafb;
@@ -108,8 +114,8 @@ const PasserCount = styled.p`
   color: #666;
 `;
 
-const SchoolPassersSection = () => {
-  const passersData = [
+const SchoolPassersSection: React.FC = () => {
+  const passersData: PasserData[] = [
     { school: '한국예술종합학교', count: 25, link: '/passers/karts' },
     { school: '서울예술대학교', count: 18, link: '/passers/sau' },
     { school: '중앙대학교', count: 15, link: '/passers/cau' },

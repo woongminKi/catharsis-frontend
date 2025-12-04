@@ -2,6 +2,31 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { consultationAPI } from '../utils/api';
 
+interface FormData {
+  writerId: string;
+  password: string;
+  content: string;
+}
+
+interface Errors {
+  writerId?: string;
+  password?: string;
+  content?: string;
+}
+
+interface Message {
+  type: 'success' | 'error';
+  text: string;
+}
+
+interface MessageProps {
+  $type: 'success' | 'error';
+}
+
+interface CharCountProps {
+  $over: boolean;
+}
+
 const SectionContainer = styled.section`
   background: #f8f9fa;
   padding: 60px 20px;
@@ -144,7 +169,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const Message = styled.div`
+const MessageBox = styled.div<MessageProps>`
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -172,7 +197,7 @@ const ErrorText = styled.span`
   display: block;
 `;
 
-const CharCount = styled.span`
+const CharCount = styled.span<CharCountProps>`
   font-size: 12px;
   color: ${({ $over }) => ($over ? '#dc3545' : '#999')};
   display: block;
@@ -180,18 +205,18 @@ const CharCount = styled.span`
   margin-top: 4px;
 `;
 
-const RealTimeConsultSection = () => {
-  const [formData, setFormData] = useState({
+const RealTimeConsultSection: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     writerId: '',
     password: '',
     content: '',
   });
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [errors, setErrors] = useState<Errors>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [message, setMessage] = useState<Message | null>(null);
 
-  const validate = () => {
-    const newErrors = {};
+  const validate = (): boolean => {
+    const newErrors: Errors = {};
 
     if (!formData.writerId.trim()) {
       newErrors.writerId = 'ID를 입력해주세요';
@@ -213,17 +238,17 @@ const RealTimeConsultSection = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Clear error when user starts typing
-    if (errors[name]) {
+    if (errors[name as keyof Errors]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
     if (!validate()) return;
@@ -238,12 +263,12 @@ const RealTimeConsultSection = () => {
         writerId: formData.writerId,
         password: formData.password,
         isSecret: true,
-        boardType: 'REALTIME',
+        boardType: 'REALTIME' as any,
       });
 
       setMessage({ type: 'success', text: '상담 문의가 등록되었습니다. 빠른 시일 내에 답변드리겠습니다.' });
       setFormData({ writerId: '', password: '', content: '' });
-    } catch (error) {
+    } catch (error: any) {
       setMessage({
         type: 'error',
         text: error.response?.data?.message || '등록 중 오류가 발생했습니다. 다시 시도해주세요.',
@@ -262,7 +287,7 @@ const RealTimeConsultSection = () => {
         </SectionSubtitle>
 
         <FormContainer onSubmit={handleSubmit}>
-          {message && <Message $type={message.type}>{message.text}</Message>}
+          {message && <MessageBox $type={message.type}>{message.text}</MessageBox>}
 
           <InputRow>
             <InputGroup>

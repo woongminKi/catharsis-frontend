@@ -2,6 +2,42 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 
+interface Instructor {
+  title: string;
+  description: string;
+  link: string;
+}
+
+interface Passer {
+  name: string;
+  school: string;
+  year: string;
+  link: string;
+}
+
+interface InstagramPost {
+  title: string;
+  link: string;
+}
+
+interface ThreeColumnSectionProps {
+  instructors: Instructor[];
+  passers: Passer[];
+  instagramPosts: InstagramPost[];
+}
+
+interface CarouselTrackProps {
+  $currentIndex: number;
+}
+
+interface CarouselButtonProps {
+  $direction: 'prev' | 'next';
+}
+
+interface IndicatorProps {
+  $active: boolean;
+}
+
 const scrollUp = keyframes`
   0% {
     transform: translateY(0);
@@ -77,7 +113,7 @@ const CarouselWrapper = styled.div`
   overflow: hidden;
 `;
 
-const CarouselTrack = styled.div`
+const CarouselTrack = styled.div<CarouselTrackProps>`
   height: 100%;
   display: flex;
   transition: transform 0.5s ease-in-out;
@@ -90,7 +126,7 @@ const CarouselSlide = styled.div`
   flex-shrink: 0;
 `;
 
-const CarouselButton = styled.button`
+const CarouselButton = styled.button<CarouselButtonProps>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -129,7 +165,7 @@ const CarouselIndicators = styled.div`
   z-index: 2;
 `;
 
-const Indicator = styled.button`
+const Indicator = styled.button<IndicatorProps>`
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -279,9 +315,9 @@ const Overlay = styled.div`
   font-weight: 600;
 `;
 
-const ThreeColumnSection = ({ instructors, passers, instagramPosts }) => {
-  const [instructorIndex, setInstructorIndex] = useState(0);
-  const [instagramIndex, setInstagramIndex] = useState(0);
+const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({ instructors, passers, instagramPosts }) => {
+  const [instructorIndex, setInstructorIndex] = useState<number>(0);
+  const [instagramIndex, setInstagramIndex] = useState<number>(0);
 
   // 강사진 자동 슬라이드
   useEffect(() => {
@@ -299,19 +335,19 @@ const ThreeColumnSection = ({ instructors, passers, instagramPosts }) => {
     return () => clearInterval(interval);
   }, [instagramPosts.length]);
 
-  const handleInstructorPrev = () => {
+  const handleInstructorPrev = (): void => {
     setInstructorIndex(prev => (prev - 1 + instructors.length) % instructors.length);
   };
 
-  const handleInstructorNext = () => {
+  const handleInstructorNext = (): void => {
     setInstructorIndex(prev => (prev + 1) % instructors.length);
   };
 
-  const handleInstagramPrev = () => {
+  const handleInstagramPrev = (): void => {
     setInstagramIndex(prev => (prev - 1 + instagramPosts.length) % instagramPosts.length);
   };
 
-  const handleInstagramNext = () => {
+  const handleInstagramNext = (): void => {
     setInstagramIndex(prev => (prev + 1) % instagramPosts.length);
   };
 

@@ -1,3 +1,5 @@
+import { ImageUploadResult, ImageListItem } from '../types';
+
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 const S3_BASE_URL = process.env.REACT_APP_S3_URL || 'https://catharsis-image.s3.ap-northeast-2.amazonaws.com';
 
@@ -7,7 +9,7 @@ const S3_BASE_URL = process.env.REACT_APP_S3_URL || 'https://catharsis-image.s3.
  * @param {string} str - 변환할 문자열
  * @returns {string} NFD로 변환된 문자열
  */
-const toNFD = (str) => {
+const toNFD = (str: string): string => {
   return str.normalize('NFD');
 };
 
@@ -16,7 +18,7 @@ const toNFD = (str) => {
  * @param {string} path - 이미지 경로 (예: '강사 사진/김동길 연기.jpg')
  * @returns {string} 전체 S3 URL
  */
-export const getS3ImageUrl = (path) => {
+export const getS3ImageUrl = (path: string): string => {
   if (path.startsWith('http')) {
     return path;
   }
@@ -31,7 +33,7 @@ export const getS3ImageUrl = (path) => {
  * @param {string} folder - S3 폴더 경로
  * @returns {Promise<{key: string, url: string}>}
  */
-export const uploadImage = async (file, folder = 'images') => {
+export const uploadImage = async (file: File, folder: string = 'images'): Promise<ImageUploadResult> => {
   const formData = new FormData();
   formData.append('image', file);
   formData.append('folder', folder);
@@ -55,7 +57,7 @@ export const uploadImage = async (file, folder = 'images') => {
  * @param {string} folder - S3 폴더 경로
  * @returns {Promise<Array<{key: string, url: string}>>}
  */
-export const uploadMultipleImages = async (files, folder = 'images') => {
+export const uploadMultipleImages = async (files: File[], folder: string = 'images'): Promise<ImageUploadResult[]> => {
   const formData = new FormData();
   files.forEach((file) => {
     formData.append('images', file);
@@ -81,7 +83,7 @@ export const uploadMultipleImages = async (files, folder = 'images') => {
  * @param {number} maxKeys - 최대 개수
  * @returns {Promise<Array<{key: string, url: string, size: number, lastModified: string}>>}
  */
-export const getImageList = async (folder = 'images', maxKeys = 100) => {
+export const getImageList = async (folder: string = 'images', maxKeys: number = 100): Promise<ImageListItem[]> => {
   const response = await fetch(
     `${API_BASE_URL}/api/images/list?folder=${encodeURIComponent(toNFD(folder))}&maxKeys=${maxKeys}`
   );
@@ -99,7 +101,7 @@ export const getImageList = async (folder = 'images', maxKeys = 100) => {
  * @param {string} key - S3 이미지 키
  * @returns {Promise<void>}
  */
-export const deleteImage = async (key) => {
+export const deleteImage = async (key: string): Promise<void> => {
   const response = await fetch(`${API_BASE_URL}/api/images?key=${encodeURIComponent(toNFD(key))}`, {
     method: 'DELETE',
   });

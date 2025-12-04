@@ -88,7 +88,7 @@ const CTAButton = styled(Link)`
   }
 `;
 
-const HeroSection = () => {
+const HeroSection: React.FC = () => {
   return (
     <HeroContainer>
       <HeroContent>

@@ -2,11 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { getS3ImageUrl } from "../../services/imageService";
 
+interface Facility {
+  id: number;
+  name: string;
+  image: string;
+}
+
+interface FacilitiesData {
+  [key: string]: Facility[];
+}
+
+interface FacilitiesGridProps {
+  $isVisible: boolean;
+}
+
+interface FacilityCardProps {
+  $delay: number;
+  $isVisible: boolean;
+}
+
 // 시설 이미지 URL 생성 헬퍼 함수
-const getFacilityImage = (folder, filename) => getS3ImageUrl(`${folder}/${filename}`);
+const getFacilityImage = (folder: string, filename: string): string => getS3ImageUrl(`${folder}/${filename}`);
 
 // 시설 데이터 정의
-const facilitiesData = {
+const facilitiesData: FacilitiesData = {
   "강남점 별관": [
     { id: 1, name: "별관 복도", image: getFacilityImage("강남점 별관 시설 사진", "별관 복도.jpg") },
     { id: 2, name: "별관 B", image: getFacilityImage("강남점 별관 시설 사진", "별관B.jpg") },
@@ -41,13 +60,13 @@ const facilitiesData = {
   ],
 };
 
-const locationOptions = Object.keys(facilitiesData);
+const locationOptions: string[] = Object.keys(facilitiesData);
 
-const FacilitiesPage = () => {
-  const [selectedLocation, setSelectedLocation] = useState("강남점 본관");
-  const [isVisible, setIsVisible] = useState(false);
-  const [modalImage, setModalImage] = useState(null);
-  const contentRef = useRef(null);
+const FacilitiesPage: React.FC = () => {
+  const [selectedLocation, setSelectedLocation] = useState<string>("강남점 본관");
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<Facility | null>(null);
+  const contentRef = useRef<HTMLElement>(null);
 
   // Intersection Observer for scroll animation
   useEffect(() => {
@@ -82,7 +101,7 @@ const FacilitiesPage = () => {
 
   // Handle ESC key to close modal
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
       if (e.key === "Escape") {
         setModalImage(null);
       }
@@ -99,13 +118,13 @@ const FacilitiesPage = () => {
     };
   }, [modalImage]);
 
-  const currentFacilities = facilitiesData[selectedLocation] || [];
+  const currentFacilities: Facility[] = facilitiesData[selectedLocation] || [];
 
-  const handleImageClick = (facility) => {
+  const handleImageClick = (facility: Facility): void => {
     setModalImage(facility);
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setModalImage(null);
   };
 
@@ -121,7 +140,7 @@ const FacilitiesPage = () => {
         <SelectWrapper>
           <SelectBox
             value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedLocation(e.target.value)}
           >
             {locationOptions.map((location) => (
               <option key={location} value={location}>
@@ -151,7 +170,7 @@ const FacilitiesPage = () => {
       {/* Image Modal */}
       {modalImage && (
         <ModalOverlay onClick={closeModal}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
+          <ModalContent onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             <CloseButton onClick={closeModal}>&times;</CloseButton>
             <ModalImage src={modalImage.image} alt={modalImage.name} />
             <ModalCaption>{modalImage.name}</ModalCaption>
@@ -246,7 +265,7 @@ const SelectBox = styled.select`
   }
 `;
 
-const FacilitiesGrid = styled.div`
+const FacilitiesGrid = styled.div<FacilitiesGridProps>`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
@@ -268,7 +287,7 @@ const FacilitiesGrid = styled.div`
   }
 `;
 
-const FacilityCard = styled.div`
+const FacilityCard = styled.div<FacilityCardProps>`
   position: relative;
   opacity: ${(props) => (props.$isVisible ? 1 : 0)};
   transform: ${(props) =>

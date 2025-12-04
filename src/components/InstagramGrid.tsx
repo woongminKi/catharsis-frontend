@@ -1,6 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
+interface InstagramPost {
+  id: number;
+  title: string;
+  link: string;
+}
+
 const SectionContainer = styled.section`
   padding: 80px 20px;
   background: white;
@@ -82,8 +88,8 @@ const Overlay = styled.div`
   font-weight: 600;
 `;
 
-const InstagramGrid = () => {
-  const instagramPosts = [
+const InstagramGrid: React.FC = () => {
+  const instagramPosts: InstagramPost[] = [
     { id: 1, title: '포스트 1', link: 'https://instagram.com/post1' },
     { id: 2, title: '포스트 2', link: 'https://instagram.com/post2' },
     { id: 3, title: '포스트 3', link: 'https://instagram.com/post3' },

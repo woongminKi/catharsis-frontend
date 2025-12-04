@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const PreAdmissionPage = () => {
-  const [isHeroVisible, setIsHeroVisible] = useState(false);
-  const sectionsRef = useRef([]);
+interface HeroSectionProps {
+  $isVisible: boolean;
+}
+
+const PreAdmissionPage: React.FC = () => {
+  const [isHeroVisible, setIsHeroVisible] = useState<boolean>(false);
+  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
     setIsHeroVisible(true);
 
-    const observers = sectionsRef.current.map((section, index) => {
+    const observers = sectionsRef.current.map((section) => {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && section) {
             section.style.opacity = '1';
             section.style.transform = 'translateY(0)';
           }
@@ -44,7 +48,7 @@ const PreAdmissionPage = () => {
 
       <ContentWrapper>
         {/* 메인 메시지 섹션 */}
-        <IntroSection ref={(el) => (sectionsRef.current[0] = el)}>
+        <IntroSection ref={(el) => { sectionsRef.current[0] = el; }}>
           <IntroTitle>
             연기의 첫 걸음마 누구와 함께 하느냐가 정말 중요합니다
           </IntroTitle>
@@ -64,7 +68,7 @@ const PreAdmissionPage = () => {
         </IntroSection>
 
         {/* 모집대상 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[1] = el)}>
+        <Section ref={(el) => { sectionsRef.current[1] = el; }}>
           <SectionHeader>
             <SectionTitle>모집대상</SectionTitle>
           </SectionHeader>
@@ -79,7 +83,7 @@ const PreAdmissionPage = () => {
         </Section>
 
         {/* 예비입시반 수업 정보 */}
-        <Section ref={(el) => (sectionsRef.current[2] = el)}>
+        <Section ref={(el) => { sectionsRef.current[2] = el; }}>
           <SectionHeader>
             <SectionTitle>예비입시반</SectionTitle>
           </SectionHeader>
@@ -112,7 +116,7 @@ const PreAdmissionPage = () => {
         </Section>
 
         {/* 커리큘럼 상세 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[3] = el)}>
+        <Section ref={(el) => { sectionsRef.current[3] = el; }}>
           <SectionHeader>
             <SectionTitle>커리큘럼</SectionTitle>
           </SectionHeader>
@@ -210,7 +214,7 @@ const PreAdmissionPage = () => {
         </Section>
 
         {/* 예비입시반의 특징 */}
-        <Section ref={(el) => (sectionsRef.current[4] = el)}>
+        <Section ref={(el) => { sectionsRef.current[4] = el; }}>
           <SectionHeader>
             <SectionTitle>카타르시스 예비입시반의 특징</SectionTitle>
           </SectionHeader>
@@ -287,7 +291,7 @@ const PreAdmissionPage = () => {
         </Section>
 
         {/* 예비입시반 학습 목표 */}
-        <Section ref={(el) => (sectionsRef.current[5] = el)}>
+        <Section ref={(el) => { sectionsRef.current[5] = el; }}>
           <SectionHeader>
             <SectionTitle>학습 목표</SectionTitle>
           </SectionHeader>
@@ -332,7 +336,7 @@ const PreAdmissionPage = () => {
         </Section>
 
         {/* 문의 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[6] = el)}>
+        <Section ref={(el) => { sectionsRef.current[6] = el; }}>
           <SectionHeader>
             <SectionTitle>수강 문의</SectionTitle>
           </SectionHeader>
@@ -371,7 +375,7 @@ const PageWrapper = styled.div`
   background: #ffffff;
 `;
 
-const HeroSection = styled.section`
+const HeroSection = styled.section<HeroSectionProps>`
   width: 100%;
   height: 400px;
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),

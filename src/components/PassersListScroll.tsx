@@ -2,6 +2,13 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 
+interface PasserData {
+  name: string;
+  school: string;
+  year: string;
+  link: string;
+}
+
 const scrollUp = keyframes`
   0% {
     transform: translateY(0);
@@ -79,8 +86,8 @@ const PasserYear = styled.span`
   color: rgba(255, 255, 255, 0.6);
 `;
 
-const PassersListScroll = () => {
-  const passersData = [
+const PassersListScroll: React.FC = () => {
+  const passersData: PasserData[] = [
     { name: '김영현', school: '한국예술종합학교', year: '25학년도', link: '/passer/1' },
     { name: '배하람', school: '한국예술종합학교', year: '25학년도', link: '/passer/2' },
     { name: '최예원', school: '한국예술종합학교', year: '25학년도', link: '/passer/3' },

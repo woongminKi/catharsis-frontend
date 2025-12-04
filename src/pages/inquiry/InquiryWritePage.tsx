@@ -5,6 +5,30 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { consultationAPI } from '../../utils/api';
 
+interface FormData {
+  writerId: string;
+  password: string;
+  title: string;
+  content: string;
+  isSecret: boolean;
+}
+
+interface Files {
+  file1: File | null;
+  file2: File | null;
+}
+
+interface Errors {
+  writerId?: string;
+  password?: string;
+  title?: string;
+  content?: string;
+}
+
+interface InputGroupProps {
+  $flex?: number;
+}
+
 const PageContainer = styled.div`
   max-width: 1000px;
   margin: 0 auto;
@@ -34,7 +58,7 @@ const InputRow = styled.div`
   }
 `;
 
-const InputGroup = styled.div`
+const InputGroup = styled.div<InputGroupProps>`
   flex: ${({ $flex }) => $flex || 1};
 `;
 
@@ -179,18 +203,18 @@ const ErrorText = styled.span`
   display: block;
 `;
 
-const InquiryWritePage = () => {
+const InquiryWritePage: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     writerId: '',
     password: '',
     title: '',
     content: '',
     isSecret: false,
   });
-  const [files, setFiles] = useState({ file1: null, file2: null });
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [files, setFiles] = useState<Files>({ file1: null, file2: null });
+  const [errors, setErrors] = useState<Errors>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const quillModules = useMemo(() => ({
     toolbar: [
@@ -207,7 +231,7 @@ const InquiryWritePage = () => {
     ],
   }), []);
 
-  const quillFormats = [
+  const quillFormats: string[] = [
     'header',
     'bold', 'italic', 'underline', 'strike',
     'script',
@@ -218,8 +242,8 @@ const InquiryWritePage = () => {
     'link', 'image', 'video',
   ];
 
-  const validate = () => {
-    const newErrors = {};
+  const validate = (): boolean => {
+    const newErrors: Errors = {};
 
     if (!formData.writerId.trim()) {
       newErrors.writerId = 'ID를 입력해주세요';
@@ -248,31 +272,31 @@ const InquiryWritePage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
 
-    if (errors[name]) {
+    if (errors[name as keyof Errors]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
-  const handleContentChange = (value) => {
+  const handleContentChange = (value: string): void => {
     setFormData((prev) => ({ ...prev, content: value }));
     if (errors.content) {
       setErrors((prev) => ({ ...prev, content: '' }));
     }
   };
 
-  const handleFileChange = (e, fileKey) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fileKey: keyof Files): void => {
+    const file = e.target.files?.[0] || null;
     setFiles((prev) => ({ ...prev, [fileKey]: file }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     if (!validate()) return;
@@ -287,7 +311,7 @@ const InquiryWritePage = () => {
 
       alert('게시글이 등록되었습니다.');
       navigate('/consultation/inquiry');
-    } catch (error) {
+    } catch (error: any) {
       alert(error.response?.data?.message || '등록 중 오류가 발생했습니다.');
     } finally {
       setIsSubmitting(false);

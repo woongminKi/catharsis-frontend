@@ -1,8 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+interface BranchInfo {
+  name: string;
+  address: string;
+  phone: string;
+  hours: string;
+  lat: number;
+  lng: number;
+}
+
+interface BranchData {
+  [key: string]: BranchInfo;
+}
+
+interface ContentWrapperProps {
+  $isVisible: boolean;
+}
+
+declare global {
+  interface Window {
+    naver: any;
+  }
+}
+
 // 지점 데이터
-const branchData = {
+const branchData: BranchData = {
   gangnam: {
     name: '카타르시스 연기학원 강남',
     address: '서울시 서초구 신반포로47길 19 2,3층',
@@ -21,14 +44,14 @@ const branchData = {
   },
 };
 
-const LocationPage = () => {
-  const [selectedBranch, setSelectedBranch] = useState('gangnam');
-  const [isVisible, setIsVisible] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const contentRef = useRef(null);
-  const mapRef = useRef(null);
-  const mapInstanceRef = useRef(null);
-  const markerRef = useRef(null);
+const LocationPage: React.FC = () => {
+  const [selectedBranch, setSelectedBranch] = useState<string>('gangnam');
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const contentRef = useRef<HTMLElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
 
   const currentBranch = branchData[selectedBranch];
 
@@ -58,7 +81,7 @@ const LocationPage = () => {
 
   // 네이버 지도 스크립트 로드 확인
   useEffect(() => {
-    const checkNaverMaps = () => {
+    const checkNaverMaps = (): boolean => {
       if (window.naver && window.naver.maps) {
         setMapLoaded(true);
         return true;
@@ -107,11 +130,11 @@ const LocationPage = () => {
     }
   }, [mapLoaded, selectedBranch, currentBranch.lat, currentBranch.lng]);
 
-  const handleBranchChange = e => {
+  const handleBranchChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setSelectedBranch(e.target.value);
   };
 
-  const handleShareLocation = () => {
+  const handleShareLocation = (): void => {
     // 네이버 지도 앱/웹으로 공유
     const naverMapUrl = `https://map.naver.com/v5/search/${encodeURIComponent(currentBranch.address)}`;
     window.open(naverMapUrl, '_blank');
@@ -217,7 +240,7 @@ const ContentSection = styled.section`
   }
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled.div<ContentWrapperProps>`
   opacity: ${props => (props.$isVisible ? 1 : 0)};
   transform: ${props => (props.$isVisible ? 'translateY(0)' : 'translateY(50px)')};
   transition: all 0.8s ease-out;

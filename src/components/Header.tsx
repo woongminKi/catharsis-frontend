@@ -2,6 +2,36 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+interface MenuItem {
+  title: string;
+  path: string;
+  submenu?: { title: string; path: string }[];
+}
+
+interface DropdownMenuProps {
+  $show: boolean;
+}
+
+interface HamburgerButtonProps {
+  $isOpen: boolean;
+}
+
+interface MobileSidebarProps {
+  $isOpen: boolean;
+}
+
+interface MobileOverlayProps {
+  $isOpen: boolean;
+}
+
+interface ArrowProps {
+  $isOpen: boolean;
+}
+
+interface MobileSubMenuProps {
+  $isOpen: boolean;
+}
+
 const HeaderContainer = styled.header`
   position: fixed;
   top: 0;
@@ -119,7 +149,7 @@ const NavLink = styled(Link)`
   }
 `;
 
-const DropdownMenu = styled.ul`
+const DropdownMenu = styled.ul<DropdownMenuProps>`
   position: absolute;
   top: 100%;
   left: 0;
@@ -156,7 +186,7 @@ const DropdownItem = styled.li`
 `;
 
 // 모바일 햄버거 버튼
-const HamburgerButton = styled.button`
+const HamburgerButton = styled.button<HamburgerButtonProps>`
   display: none;
   flex-direction: column;
   justify-content: space-around;
@@ -197,7 +227,7 @@ const HamburgerButton = styled.button`
 `;
 
 // 모바일 사이드바
-const MobileSidebar = styled.div`
+const MobileSidebar = styled.div<MobileSidebarProps>`
   position: fixed;
   top: 0;
   right: ${props => (props.$isOpen ? '0' : '-100%')};
@@ -216,7 +246,7 @@ const MobileSidebar = styled.div`
   }
 `;
 
-const MobileOverlay = styled.div`
+const MobileOverlay = styled.div<MobileOverlayProps>`
   display: ${props => (props.$isOpen ? 'block' : 'none')};
   position: fixed;
   top: 0;
@@ -277,12 +307,12 @@ const MobileMenuButton = styled.button`
   }
 `;
 
-const Arrow = styled.span`
+const Arrow = styled.span<ArrowProps>`
   transition: transform 0.3s;
   transform: ${props => (props.$isOpen ? 'rotate(180deg)' : 'rotate(0)')};
 `;
 
-const MobileSubMenu = styled.ul`
+const MobileSubMenu = styled.ul<MobileSubMenuProps>`
   list-style: none;
   padding: 0;
   margin: 0;
@@ -308,12 +338,12 @@ const MobileSubMenuItem = styled.li`
   }
 `;
 
-const Header = () => {
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState({});
+const Header: React.FC = () => {
+  const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState<{ [key: number]: boolean }>({});
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       title: '학원 소개',
       path: '/about',
@@ -358,21 +388,21 @@ const Header = () => {
     },
   ];
 
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = (): void => {
     setMobileMenuOpen(!mobileMenuOpen);
     if (mobileMenuOpen) {
       setMobileSubmenuOpen({});
     }
   };
 
-  const toggleMobileSubmenu = index => {
+  const toggleMobileSubmenu = (index: number): void => {
     setMobileSubmenuOpen(prev => ({
       ...prev,
       [index]: !prev[index],
     }));
   };
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = (): void => {
     setMobileMenuOpen(false);
     setMobileSubmenuOpen({});
   };

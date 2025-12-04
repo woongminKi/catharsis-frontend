@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+interface VisibilityProps {
+  $isVisible: boolean;
+}
+
 const PageContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
@@ -55,7 +59,7 @@ const ContentGrid = styled.div`
   }
 `;
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.div<VisibilityProps>`
   width: 100%;
   opacity: ${props => (props.$isVisible ? 1 : 0)};
   transform: ${props => (props.$isVisible ? 'translateY(0)' : 'translateY(50px)')};
@@ -69,7 +73,7 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const TextContent = styled.div`
+const TextContent = styled.div<VisibilityProps>`
   opacity: ${props => (props.$isVisible ? 1 : 0)};
   transform: ${props => (props.$isVisible ? 'translateY(0)' : 'translateY(50px)')};
   transition: all 0.8s ease-out;
@@ -134,9 +138,9 @@ const Signature = styled.div`
   font-weight: 600;
 `;
 
-const GreetingPage = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const contentRef = useRef(null);
+const GreetingPage: React.FC = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const contentRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

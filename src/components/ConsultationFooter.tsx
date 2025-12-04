@@ -143,7 +143,7 @@ const Logo = styled.div`
   letter-spacing: 3px;
 `;
 
-const ConsultationFooter = () => {
+const ConsultationFooter: React.FC = () => {
   return (
     <FooterContainer>
       <Container>

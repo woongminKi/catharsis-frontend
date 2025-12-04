@@ -1,6 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+interface FeatureData {
+  title: string;
+  content: string[];
+}
+
+interface FeatureBoxProps {
+  $isVisible: boolean;
+  $delay: number;
+}
+
 const PageContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
@@ -112,7 +122,7 @@ const FeaturesGrid = styled.div`
   margin-top: 60px;
 `;
 
-const FeatureBox = styled.div`
+const FeatureBox = styled.div<FeatureBoxProps>`
   border: 2px solid #e7e7e7;
   padding: 40px;
   background: #ffffff;
@@ -163,9 +173,9 @@ const FeatureContent = styled.div`
   }
 `;
 
-const FeaturesPage = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const contentRef = useRef(null);
+const FeaturesPage: React.FC = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -190,7 +200,7 @@ const FeaturesPage = () => {
     };
   }, []);
 
-  const features = [
+  const features: FeatureData[] = [
     {
       title: "중앙대학교 출신 선생님들의 특별한 교육",
       content: [

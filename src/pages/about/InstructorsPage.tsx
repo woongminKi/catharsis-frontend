@@ -2,13 +2,28 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { getS3ImageUrl } from '../../services/imageService';
 
-// 강사 이미지 경로 헬퍼 함수
-const getInstructorImage = (filename) => getS3ImageUrl(`강사 사진/${filename}`);
+interface Instructor {
+  name: string;
+  role: string;
+  education: string;
+  image: string;
+}
 
-const InstructorsPage = () => {
-  const [isHeroVisible, setIsHeroVisible] = useState(false);
-  const [visibleImages, setVisibleImages] = useState(new Set());
-  const imageRefs = useRef([]);
+interface HeroSectionProps {
+  $isVisible: boolean;
+}
+
+interface InstructorImageProps {
+  $visible: boolean;
+}
+
+// 강사 이미지 경로 헬퍼 함수
+const getInstructorImage = (filename: string): string => getS3ImageUrl(`강사 사진/${filename}`);
+
+const InstructorsPage: React.FC = () => {
+  const [isHeroVisible, setIsHeroVisible] = useState<boolean>(false);
+  const [visibleImages, setVisibleImages] = useState<Set<number>>(new Set());
+  const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     setIsHeroVisible(true);
@@ -18,7 +33,7 @@ const InstructorsPage = () => {
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            const index = imageRefs.current.indexOf(entry.target);
+            const index = imageRefs.current.indexOf(entry.target as HTMLDivElement);
             setVisibleImages(prev => new Set([...prev, index]));
           }
         });
@@ -36,7 +51,7 @@ const InstructorsPage = () => {
   }, []);
 
   // Instructor data organized by role - following the screenshot order
-  const leaders = [
+  const leaders: Instructor[] = [
     {
       name: '김동길',
       role: '대표원장',
@@ -57,7 +72,7 @@ const InstructorsPage = () => {
     },
   ];
 
-  const actingInstructors = [
+  const actingInstructors: Instructor[] = [
     {
       name: '장서아',
       role: '액팅파트 뮤지컬강사',
@@ -186,7 +201,7 @@ const InstructorsPage = () => {
     },
   ];
 
-  const musicalInstructors = [
+  const musicalInstructors: Instructor[] = [
     {
       name: '임혜란',
       role: '뮤지컬 파트',
@@ -280,7 +295,7 @@ const InstructorsPage = () => {
     },
   ];
 
-  const danceInstructors = [
+  const danceInstructors: Instructor[] = [
     {
       name: '유은비',
       role: '움직임파트',
@@ -393,7 +408,7 @@ const InstructorsPage = () => {
           <SectionTitle>Leader & Head Coach</SectionTitle>
           <LeaderGrid>
             {leaders.map((instructor, index) => (
-              <LeaderCard key={index} ref={el => (imageRefs.current[index] = el)}>
+              <LeaderCard key={index} ref={el => { imageRefs.current[index] = el; }}>
                 <InstructorImage
                   src={instructor.image}
                   alt={instructor.name}
@@ -417,7 +432,7 @@ const InstructorsPage = () => {
             {actingInstructors.map((instructor, index) => (
               <InstructorCard
                 key={index}
-                ref={el => (imageRefs.current[leaders.length + index] = el)}
+                ref={el => { imageRefs.current[leaders.length + index] = el; }}
               >
                 <InstructorImage
                   src={instructor.image}
@@ -442,9 +457,9 @@ const InstructorsPage = () => {
             {musicalInstructors.map((instructor, index) => (
               <InstructorCard
                 key={index}
-                ref={el =>
-                  (imageRefs.current[leaders.length + actingInstructors.length + index] = el)
-                }
+                ref={el => {
+                  imageRefs.current[leaders.length + actingInstructors.length + index] = el;
+                }}
               >
                 <InstructorImage
                   src={instructor.image}
@@ -469,11 +484,11 @@ const InstructorsPage = () => {
             {danceInstructors.map((instructor, index) => (
               <InstructorCard
                 key={index}
-                ref={el =>
-                  (imageRefs.current[
+                ref={el => {
+                  imageRefs.current[
                     leaders.length + actingInstructors.length + musicalInstructors.length + index
-                  ] = el)
-                }
+                  ] = el;
+                }}
               >
                 <InstructorImage
                   src={instructor.image}
@@ -506,7 +521,7 @@ const PageWrapper = styled.div`
   background: #ffffff;
 `;
 
-const HeroSection = styled.section`
+const HeroSection = styled.section<HeroSectionProps>`
   width: 100%;
   padding: 120px 40px;
   background: #fafafa;
@@ -647,7 +662,7 @@ const InstructorCard = styled.div`
   }
 `;
 
-const InstructorImage = styled.img`
+const InstructorImage = styled.img<InstructorImageProps>`
   width: 100%;
   aspect-ratio: 3/4;
   object-fit: cover;

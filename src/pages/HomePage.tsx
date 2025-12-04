@@ -5,8 +5,33 @@ import AutoScrollSlider from '../components/AutoScrollSlider';
 import ThreeColumnSection from '../components/ThreeColumnSection';
 import RealTimeConsultSection from '../components/RealTimeConsultSection';
 
-const HomePage = () => {
-  const youtubeVideos = [
+interface Video {
+  title: string;
+  description: string;
+  link: string;
+}
+
+interface Instructor {
+  title: string;
+  description: string;
+  link: string;
+}
+
+interface Passer {
+  name: string;
+  school: string;
+  year: string;
+  link: string;
+}
+
+interface InstagramPost {
+  id: number;
+  title: string;
+  link: string;
+}
+
+const HomePage: React.FC = () => {
+  const youtubeVideos: Video[] = [
     {
       title: '합격생 인터뷰 1',
       description: '2024 합격생의 솔직한 이야기',
@@ -34,7 +59,7 @@ const HomePage = () => {
     },
   ];
 
-  const instructors = [
+  const instructors: Instructor[] = [
     {
       title: '김민수 강사',
       description: '한국예술종합학교 출신',
@@ -62,7 +87,7 @@ const HomePage = () => {
     },
   ];
 
-  const passersData = [
+  const passersData: Passer[] = [
     { name: '김영현', school: '한국예술종합학교', year: '25학년도', link: '/passer/1' },
     { name: '배하람', school: '한국예술종합학교', year: '25학년도', link: '/passer/2' },
     { name: '최예원', school: '한국예술종합학교', year: '25학년도', link: '/passer/3' },
@@ -77,7 +102,7 @@ const HomePage = () => {
     { name: '공원우', school: '한국예술종합학교', year: '24학년도', link: '/passer/12' },
   ];
 
-  const instagramPosts = [
+  const instagramPosts: InstagramPost[] = [
     { id: 1, title: '포스트 1', link: 'https://instagram.com/post1' },
     { id: 2, title: '포스트 2', link: 'https://instagram.com/post2' },
     { id: 3, title: '포스트 3', link: 'https://instagram.com/post3' },

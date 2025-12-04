@@ -3,7 +3,7 @@
  * @param {string|Date} date - Date to format
  * @returns {string} Formatted date string
  */
-export const formatDateTime = (date) => {
+export const formatDateTime = (date: string | Date): string => {
   if (!date) return '';
   const d = new Date(date);
   const year = d.getFullYear();
@@ -19,7 +19,7 @@ export const formatDateTime = (date) => {
  * @param {string|Date} date - Date to format
  * @returns {string} Formatted date string
  */
-export const formatDate = (date) => {
+export const formatDate = (date: string | Date): string => {
   if (!date) return '';
   const d = new Date(date);
   const year = d.getFullYear();
@@ -33,11 +33,11 @@ export const formatDate = (date) => {
  * @param {string|Date} date - Date to compare
  * @returns {string} Relative time string
  */
-export const getRelativeTime = (date) => {
+export const getRelativeTime = (date: string | Date): string => {
   if (!date) return '';
   const now = new Date();
   const d = new Date(date);
-  const diff = Math.floor((now - d) / 1000);
+  const diff = Math.floor((now.getTime() - d.getTime()) / 1000);
 
   if (diff < 60) return '방금 전';
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;

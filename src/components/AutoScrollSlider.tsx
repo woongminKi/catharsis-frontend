@@ -2,6 +2,17 @@ import React, { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 
+interface SliderItem {
+  title: string;
+  description: string;
+  link: string;
+}
+
+interface AutoScrollSliderProps {
+  title: string;
+  items: SliderItem[];
+}
+
 const scroll = keyframes`
   0% {
     transform: translateX(0);
@@ -86,14 +97,14 @@ const SlideDescription = styled.p`
   color: #666;
 `;
 
-const AutoScrollSlider = ({ title, items }) => {
-  const trackRef = useRef(null);
+const AutoScrollSlider: React.FC<AutoScrollSliderProps> = ({ title, items }) => {
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (trackRef.current) {
       const track = trackRef.current;
       const clone = track.cloneNode(true);
-      track.parentElement.appendChild(clone);
+      track.parentElement?.appendChild(clone);
     }
   }, []);
 

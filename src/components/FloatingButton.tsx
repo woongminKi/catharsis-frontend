@@ -56,7 +56,7 @@ const ButtonText = styled.div`
   }
 `;
 
-const FloatingButton = () => {
+const FloatingButton: React.FC = () => {
   return (
     <FloatingBtn to="/consultation">
       <ButtonContent>

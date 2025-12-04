@@ -39,7 +39,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-function App() {
+const App: React.FC = () => {
   return (
     <BrowserRouter>
       <GlobalStyle />

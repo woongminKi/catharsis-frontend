@@ -4,6 +4,37 @@ import styled from 'styled-components';
 import { consultationAPI } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
 
+interface Consultation {
+  _id: string;
+  title: string;
+  writerId: string;
+  isSecret: boolean;
+  status: 'PENDING' | 'ANSWERED';
+  createdAt: string;
+}
+
+interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+}
+
+interface ThProps {
+  $align?: string;
+}
+
+interface TdProps {
+  $align?: string;
+}
+
+interface StatusBadgeProps {
+  $status: string;
+}
+
+interface PageButtonProps {
+  $active?: boolean;
+}
+
 const PageContainer = styled.div`
   max-width: 1000px;
   margin: 0 auto;
@@ -125,7 +156,7 @@ const Table = styled.table`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 `;
 
-const Th = styled.th`
+const Th = styled.th<ThProps>`
   padding: 15px 10px;
   background: #f8f9fa;
   border-bottom: 2px solid #eee;
@@ -136,7 +167,7 @@ const Th = styled.th`
   white-space: nowrap;
 `;
 
-const Td = styled.td`
+const Td = styled.td<TdProps>`
   padding: 15px 10px;
   border-bottom: 1px solid #eee;
   text-align: ${({ $align }) => $align || 'left'};
@@ -176,7 +207,7 @@ const SecretIcon = styled.span`
   font-size: 14px;
 `;
 
-const StatusBadge = styled.span`
+const StatusBadge = styled.span<StatusBadgeProps>`
   display: inline-block;
   padding: 6px 14px;
   border-radius: 4px;
@@ -203,7 +234,7 @@ const Pagination = styled.div`
   margin-top: 30px;
 `;
 
-const PageButton = styled.button`
+const PageButton = styled.button<PageButtonProps>`
   padding: 8px 14px;
   border: 1px solid ${({ $active }) => ($active ? '#7c3aed' : '#ddd')};
   background: ${({ $active }) => ($active ? '#7c3aed' : 'white')};
@@ -277,20 +308,20 @@ const DesktopTable = styled.div`
   }
 `;
 
-const InquiryListPage = () => {
+const InquiryListPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [consultations, setConsultations] = useState([]);
-  const [pagination, setPagination] = useState({
+  const [consultations, setConsultations] = useState<Consultation[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
   });
-  const [loading, setLoading] = useState(true);
-  const [searchType, setSearchType] = useState('title');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [searchType, setSearchType] = useState<string>('title');
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const currentPage = parseInt(searchParams.get('page')) || 1;
+  const currentPage = parseInt(searchParams.get('page') || '1');
   const urlSearchType = searchParams.get('searchType') || '';
   const urlSearchKeyword = searchParams.get('keyword') || '';
 
@@ -300,10 +331,10 @@ const InquiryListPage = () => {
   }, [urlSearchType, urlSearchKeyword]);
 
   useEffect(() => {
-    const fetchConsultations = async () => {
+    const fetchConsultations = async (): Promise<void> => {
       setLoading(true);
       try {
-        const params = {
+        const params: Record<string, string | number> = {
           page: currentPage,
           limit: 10,
           boardType: 'INQUIRY',
@@ -316,7 +347,9 @@ const InquiryListPage = () => {
 
         const response = await consultationAPI.getAll(params);
         setConsultations(response.data.data);
-        setPagination(response.data.pagination);
+        if (response.data.pagination) {
+          setPagination(response.data.pagination);
+        }
       } catch (error) {
         console.error('Failed to fetch consultations:', error);
       } finally {
@@ -327,8 +360,8 @@ const InquiryListPage = () => {
     fetchConsultations();
   }, [currentPage, urlSearchType, urlSearchKeyword]);
 
-  const handlePageChange = (page) => {
-    const params = { page: page.toString() };
+  const handlePageChange = (page: number): void => {
+    const params: Record<string, string> = { page: page.toString() };
     if (urlSearchKeyword) {
       params.searchType = urlSearchType;
       params.keyword = urlSearchKeyword;
@@ -336,7 +369,7 @@ const InquiryListPage = () => {
     setSearchParams(params);
   };
 
-  const handleSearch = () => {
+  const handleSearch = (): void => {
     if (searchKeyword.trim()) {
       setSearchParams({
         page: '1',
@@ -348,18 +381,18 @@ const InquiryListPage = () => {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
 
-  const handleRowClick = (id) => {
+  const handleRowClick = (id: string): void => {
     navigate(`/consultation/inquiry/${id}`);
   };
 
-  const renderPagination = () => {
-    const pages = [];
+  const renderPagination = (): React.ReactNode[] => {
+    const pages: React.ReactNode[] = [];
     const { totalPages } = pagination;
 
     let startPage = Math.max(1, currentPage - 2);
@@ -484,7 +517,7 @@ const InquiryListPage = () => {
       <SearchContainer>
         <SearchSelect
           value={searchType}
-          onChange={(e) => setSearchType(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSearchType(e.target.value)}
         >
           <option value="title">제목</option>
           <option value="content">내용</option>
@@ -494,7 +527,7 @@ const InquiryListPage = () => {
           type="text"
           placeholder="검색어를 입력하세요"
           value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyword(e.target.value)}
           onKeyDown={handleKeyDown}
         />
       </SearchContainer>

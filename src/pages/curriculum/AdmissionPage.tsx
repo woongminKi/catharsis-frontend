@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const AdmissionPage = () => {
-  const [isHeroVisible, setIsHeroVisible] = useState(false);
-  const sectionsRef = useRef([]);
+interface HeroSectionProps {
+  $isVisible: boolean;
+}
+
+const AdmissionPage: React.FC = () => {
+  const [isHeroVisible, setIsHeroVisible] = useState<boolean>(false);
+  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
     setIsHeroVisible(true);
 
-    const observers = sectionsRef.current.map((section, index) => {
+    const observers = sectionsRef.current.map((section) => {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && section) {
             section.style.opacity = '1';
             section.style.transform = 'translateY(0)';
           }
@@ -44,7 +48,7 @@ const AdmissionPage = () => {
 
       <ContentWrapper>
         {/* 개요 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[0] = el)}>
+        <Section ref={(el) => { sectionsRef.current[0] = el; }}>
           <SectionHeader>
             <SectionTitle>입시반 개요</SectionTitle>
           </SectionHeader>
@@ -71,7 +75,7 @@ const AdmissionPage = () => {
         </Section>
 
         {/* 시간표 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[1] = el)}>
+        <Section ref={(el) => { sectionsRef.current[1] = el; }}>
           <SectionHeader>
             <SectionTitle>시간표</SectionTitle>
           </SectionHeader>
@@ -129,7 +133,7 @@ const AdmissionPage = () => {
         </Section>
 
         {/* 커리큘럼 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[2] = el)}>
+        <Section ref={(el) => { sectionsRef.current[2] = el; }}>
           <SectionHeader>
             <SectionTitle>커리큘럼</SectionTitle>
           </SectionHeader>
@@ -227,7 +231,7 @@ const AdmissionPage = () => {
         </Section>
 
         {/* 카타르시스 입시반 학생 특징 */}
-        <Section ref={(el) => (sectionsRef.current[3] = el)}>
+        <Section ref={(el) => { sectionsRef.current[3] = el; }}>
           <SectionHeader>
             <SectionTitle>카타르시스 입시반의 특징</SectionTitle>
           </SectionHeader>
@@ -297,7 +301,7 @@ const AdmissionPage = () => {
         </Section>
 
         {/* 문의 섹션 */}
-        <Section ref={(el) => (sectionsRef.current[4] = el)}>
+        <Section ref={(el) => { sectionsRef.current[4] = el; }}>
           <SectionHeader>
             <SectionTitle>수강 문의</SectionTitle>
           </SectionHeader>
@@ -336,7 +340,7 @@ const PageWrapper = styled.div`
   background: #ffffff;
 `;
 
-const HeroSection = styled.section`
+const HeroSection = styled.section<HeroSectionProps>`
   width: 100%;
   height: 400px;
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
