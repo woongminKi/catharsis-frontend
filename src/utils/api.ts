@@ -114,4 +114,29 @@ export const commentAPI = {
   delete: (id: string): Promise<AxiosResponse> => api.delete(`/comments/${id}`),
 };
 
+// Passer (합격자 현황) APIs
+interface PasserParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface Passer {
+  _id: string;
+  title: string;
+  thumbnailUrl: string;
+  imageUrls: string[];
+  viewCount: number;
+  createdAt: string;
+}
+
+export const passerAPI = {
+  // Get all passers
+  getAll: (params?: PasserParams): Promise<AxiosResponse<ApiResponse<Passer[]>>> =>
+    api.get('/passers', { params }),
+
+  // Get single passer
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Passer>>> =>
+    api.get(`/passers/${id}`),
+};
+
 export default api;
