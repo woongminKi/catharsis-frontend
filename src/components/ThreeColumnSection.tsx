@@ -6,6 +6,7 @@ interface Instructor {
   title: string;
   description: string;
   link: string;
+  imageUrl?: string;
 }
 
 interface Passer {
@@ -16,8 +17,10 @@ interface Passer {
 }
 
 interface InstagramPost {
+  id?: string;
   title: string;
   link: string;
+  imageUrl?: string;
 }
 
 interface ThreeColumnSectionProps {
@@ -36,6 +39,10 @@ interface CarouselButtonProps {
 
 interface IndicatorProps {
   $active: boolean;
+}
+
+interface ImageProps {
+  $imageUrl?: string;
 }
 
 const scrollUp = keyframes`
@@ -143,7 +150,9 @@ const CarouselButton = styled.button<CarouselButtonProps>`
   font-size: 20px;
   color: #333;
   z-index: 2;
-  transition: background 0.3s, transform 0.3s;
+  transition:
+    background 0.3s,
+    transform 0.3s;
 
   &:hover {
     background: white;
@@ -189,10 +198,13 @@ const InstructorCard = styled(Link)`
   background: white;
 `;
 
-const InstructorImage = styled.div`
+const InstructorImage = styled.div<ImageProps>`
   width: 100%;
   flex: 1;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: ${props =>
+    props.$imageUrl
+      ? `url(${props.$imageUrl}) center/cover no-repeat`
+      : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -273,29 +285,42 @@ const InstagramCard = styled.a`
   overflow: hidden;
   text-decoration: none;
   display: block;
+  background: #000;
 
   &:hover {
     .overlay {
       opacity: 1;
     }
+
+    img {
+      transform: scale(1.05);
+    }
   }
 `;
 
-const InstagramImage = styled.div`
+const InstagramImageWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   font-size: 28px;
   font-weight: bold;
-  transition: transform 0.3s;
+`;
 
-  ${InstagramCard}:hover & {
-    transform: scale(1.05);
-  }
+const InstagramImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s;
 `;
 
 const Overlay = styled.div`
@@ -315,7 +340,11 @@ const Overlay = styled.div`
   font-weight: 600;
 `;
 
-const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({ instructors, passers, instagramPosts }) => {
+const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
+  instructors,
+  passers,
+  instagramPosts,
+}) => {
   const [instructorIndex, setInstructorIndex] = useState<number>(0);
   const [instagramIndex, setInstagramIndex] = useState<number>(0);
 
@@ -364,7 +393,9 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({ instructors, pa
                   {instructors.map((instructor, index) => (
                     <CarouselSlide key={index}>
                       <InstructorCard to={instructor.link}>
-                        <InstructorImage>{instructor.title}</InstructorImage>
+                        <InstructorImage $imageUrl={instructor.imageUrl}>
+                          {!instructor.imageUrl && instructor.title}
+                        </InstructorImage>
                         <InstructorInfo>
                           <InstructorName>{instructor.title}</InstructorName>
                           <InstructorDesc>{instructor.description}</InstructorDesc>
@@ -421,12 +452,12 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({ instructors, pa
                 <CarouselTrack $currentIndex={instagramIndex}>
                   {instagramPosts.map((post, index) => (
                     <CarouselSlide key={index}>
-                      <InstagramCard
-                        href={post.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <InstagramImage>{post.title}</InstagramImage>
+                      <InstagramCard href={post.link} target="_blank" rel="noopener noreferrer">
+                        {post.imageUrl ? (
+                          <InstagramImg src={post.imageUrl} alt={post.title} />
+                        ) : (
+                          <InstagramImageWrapper>{post.title}</InstagramImageWrapper>
+                        )}
                         <Overlay className="overlay">Instagram에서 보기</Overlay>
                       </InstagramCard>
                     </CarouselSlide>

@@ -2,10 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-interface PasserData {
+interface SchoolPasser {
+  _id?: string;
+  thumbnailUrl: string;
   school: string;
   count: number;
   link: string;
+  order?: number;
+}
+
+interface SchoolPassersSectionProps {
+  schoolPassers?: SchoolPasser[];
+}
+
+interface PasserImageProps {
+  $imageUrl?: string;
 }
 
 const SectionContainer = styled.section`
@@ -77,10 +88,13 @@ const PasserCard = styled(Link)`
   }
 `;
 
-const PasserImage = styled.div`
+const PasserImage = styled.div<PasserImageProps>`
   width: 100%;
   height: 300px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: ${(props) =>
+    props.$imageUrl
+      ? `url(${props.$imageUrl}) center/cover no-repeat`
+      : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,24 +130,26 @@ const PasserCount = styled.p`
   color: #666;
 `;
 
-const SchoolPassersSection: React.FC = () => {
-  const passersData: PasserData[] = [
-    { school: '한국예술종합학교', count: 25, link: '/passers/karts' },
-    { school: '중앙대학교', count: 15, link: '/passers/cau' },
-    { school: '동국대학교', count: 12, link: '/passers/dgu' },
-    // { school: '서울예술대학교', count: 18, link: '/passers/sau' },
-    // { school: '성균관대학교', count: 10, link: '/passers/skku' },
-    // { school: '한양대학교', count: 8, link: '/passers/hanyang' },
-  ];
+// 기본 데이터
+const defaultPassersData: SchoolPasser[] = [
+  { school: '한국예술종합학교', count: 25, link: '/passers/karts', thumbnailUrl: '' },
+  { school: '중앙대학교', count: 15, link: '/passers/cau', thumbnailUrl: '' },
+  { school: '동국대학교', count: 12, link: '/passers/dgu', thumbnailUrl: '' },
+];
+
+const SchoolPassersSection: React.FC<SchoolPassersSectionProps> = ({ schoolPassers }) => {
+  const displayData = schoolPassers && schoolPassers.length > 0 ? schoolPassers : defaultPassersData;
 
   return (
     <SectionContainer>
       <Container>
         <SectionTitle>학교별 합격자</SectionTitle>
         <PassersGrid>
-          {passersData.map((data, index) => (
-            <PasserCard key={index} to={data.link}>
-              <PasserImage>{data.school.slice(0, 3)}</PasserImage>
+          {displayData.map((data, index) => (
+            <PasserCard key={data._id || index} to={data.link}>
+              <PasserImage $imageUrl={data.thumbnailUrl}>
+                {!data.thumbnailUrl && data.school.slice(0, 3)}
+              </PasserImage>
               <PasserInfo>
                 <SchoolName>{data.school}</SchoolName>
                 <PasserCount>합격자 {data.count}명</PasserCount>

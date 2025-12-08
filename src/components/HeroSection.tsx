@@ -2,31 +2,56 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const HeroContainer = styled.section`
+interface HeroSectionProps {
+  imageUrl?: string;
+  subtitle?: string;
+  title?: string;
+  buttonText?: string;
+  buttonLink?: string;
+}
+
+interface HeroContainerProps {
+  $imageUrl?: string;
+}
+
+const HeroContainer = styled.section<HeroContainerProps>`
   margin-top: 70px;
-  height: 600px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 100%;
+  min-height: ${props => (props.$imageUrl ? 'auto' : '600px')};
+  background-color: #667eea;
+  background: ${props =>
+    props.$imageUrl ? 'transparent' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 0 20px;
 
   @media (max-width: 768px) {
-    height: 500px;
+    min-height: ${props => (props.$imageUrl ? 'auto' : '500px')};
   }
 
   @media (max-width: 480px) {
-    height: 400px;
+    min-height: ${props => (props.$imageUrl ? 'auto' : '400px')};
   }
 `;
 
+const HeroImage = styled.img`
+  width: 100%;
+  height: auto;
+  display: block;
+`;
+
 const HeroContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  z-index: 1;
+  z-index: 2;
   padding: 0 20px;
+  width: 100%;
 `;
 
 const Subtitle = styled.p`
@@ -69,7 +94,9 @@ const CTAButton = styled(Link)`
   text-decoration: none;
   font-weight: 600;
   font-size: 16px;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 
   &:hover {
     transform: translateY(-2px);
@@ -88,16 +115,33 @@ const CTAButton = styled(Link)`
   }
 `;
 
-const HeroSection: React.FC = () => {
+const HeroSection: React.FC<HeroSectionProps> = ({
+  imageUrl,
+  subtitle,
+  title,
+  buttonText,
+  buttonLink,
+}) => {
+  // 빈 문자열도 falsy로 처리
+  const displaySubtitle = subtitle?.trim() || '';
+  const displayTitle = title?.trim() || '';
+  const displayButtonText = buttonText?.trim() || '';
+  const displayButtonLink = buttonLink?.trim() || '';
+
+  // 버튼은 텍스트와 링크가 모두 있을 때만 표시
+  const showButton = displayButtonText && displayButtonLink;
+  const hasContent = displaySubtitle || displayTitle || showButton;
+
   return (
-    <HeroContainer>
-      <HeroContent>
-        <Subtitle>MAKE YOUR STYLE</Subtitle>
-        <Title>
-          입시를 스타일하다, 민액터스
-        </Title>
-        <CTAButton to="/apply">2024 합격자 전체보기</CTAButton>
-      </HeroContent>
+    <HeroContainer $imageUrl={imageUrl}>
+      {imageUrl && <HeroImage src={imageUrl} alt="히어로 이미지" />}
+      {hasContent && (
+        <HeroContent>
+          {displaySubtitle && <Subtitle>{displaySubtitle}</Subtitle>}
+          {displayTitle && <Title>{displayTitle}</Title>}
+          {showButton && <CTAButton to={displayButtonLink}>{displayButtonText}</CTAButton>}
+        </HeroContent>
+      )}
     </HeroContainer>
   );
 };

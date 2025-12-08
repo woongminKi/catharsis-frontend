@@ -346,7 +346,7 @@ const Header: React.FC = () => {
   const menuItems: MenuItem[] = [
     {
       title: '학원 소개',
-      path: '/about',
+      path: '/about/greeting',
       submenu: [
         { title: '인사말', path: '/about/greeting' },
         { title: '카타르시스 특징', path: '/about/features' },
@@ -357,7 +357,7 @@ const Header: React.FC = () => {
     },
     {
       title: '커리큘럼',
-      path: '/curriculum',
+      path: '/curriculum/admission',
       submenu: [
         { title: '입시반', path: '/curriculum/admission' },
         { title: '예비입시반', path: '/curriculum/pre-admission' },
@@ -370,12 +370,12 @@ const Header: React.FC = () => {
     },
     {
       title: '온라인상담',
-      path: '/consultation',
+      path: '/consultation/inquiry',
       submenu: [{ title: '수강 문의', path: '/consultation/inquiry' }],
     },
     {
       title: '커뮤니티',
-      path: '/community',
+      path: '/community/notice',
       submenu: [
         { title: '공지사항', path: '/community/notice' },
         { title: '입시 자료실', path: '/community/archive' },

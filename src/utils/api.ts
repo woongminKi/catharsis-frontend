@@ -164,4 +164,62 @@ export const noticeAPI = {
     api.get(`/notices/${id}`),
 };
 
+// Content (홈페이지 콘텐츠) API
+export interface HeroSection {
+  imageUrl: string;
+  subtitle: string;
+  title: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+export interface SchoolPasser {
+  _id?: string;
+  thumbnailUrl: string;
+  school: string;
+  count: number;
+  link: string;
+  order: number;
+}
+
+export interface YoutubeVideo {
+  _id?: string;
+  thumbnailUrl: string;
+  title: string;
+  description: string;
+  link: string;
+  order: number;
+}
+
+export interface Instructor {
+  _id?: string;
+  imageUrl: string;
+  name: string;
+  description: string;
+  link: string;
+  order: number;
+}
+
+export interface InstagramPost {
+  _id?: string;
+  imageUrl: string;
+  title: string;
+  link: string;
+  order: number;
+}
+
+export interface HomeContent {
+  heroSection: HeroSection;
+  schoolPassers: SchoolPasser[];
+  youtubeVideos: YoutubeVideo[];
+  instructors: Instructor[];
+  instagramPosts: InstagramPost[];
+}
+
+export const contentAPI = {
+  // Get home page content
+  getAll: (): Promise<AxiosResponse<ApiResponse<HomeContent>>> =>
+    api.get('/content'),
+};
+
 export default api;

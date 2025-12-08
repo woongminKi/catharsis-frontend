@@ -1,11 +1,16 @@
-import React, { useEffect, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes, css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 interface SliderItem {
   title: string;
   description: string;
   link: string;
+  thumbnailUrl?: string;
+}
+
+interface SlideImageProps {
+  $imageUrl?: string;
 }
 
 interface AutoScrollSliderProps {
@@ -13,12 +18,16 @@ interface AutoScrollSliderProps {
   items: SliderItem[];
 }
 
+interface SliderTrackProps {
+  $shouldScroll: boolean;
+}
+
 const scroll = keyframes`
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-33.333%);
   }
 `;
 
@@ -42,14 +51,21 @@ const SliderWrapper = styled.div`
   width: 100%;
 `;
 
-const SliderTrack = styled.div`
+const SliderTrack = styled.div<SliderTrackProps>`
   display: flex;
+  flex-wrap: nowrap;
   width: fit-content;
-  animation: ${scroll} 30s linear infinite;
+  justify-content: ${props => (props.$shouldScroll ? 'flex-start' : 'center')};
+  margin: ${props => (props.$shouldScroll ? '0' : '0 auto')};
+  ${props =>
+    props.$shouldScroll &&
+    css`
+      animation: ${scroll} 30s linear infinite;
 
-  &:hover {
-    animation-play-state: paused;
-  }
+      &:hover {
+        animation-play-state: paused;
+      }
+    `}
 `;
 
 const SlideItem = styled(Link)`
@@ -68,10 +84,13 @@ const SlideItem = styled(Link)`
   }
 `;
 
-const SlideImage = styled.div`
+const SlideImage = styled.div<SlideImageProps>`
   width: 100%;
   height: 200px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: ${props =>
+    props.$imageUrl
+      ? `url(${props.$imageUrl}) center/cover no-repeat`
+      : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,24 +117,34 @@ const SlideDescription = styled.p`
 `;
 
 const AutoScrollSlider: React.FC<AutoScrollSliderProps> = ({ title, items }) => {
-  const trackRef = useRef<HTMLDivElement>(null);
+  const [shouldScroll, setShouldScroll] = useState(false);
+  const itemWidth = 380; // 350px + 30px margin
 
   useEffect(() => {
-    if (trackRef.current) {
-      const track = trackRef.current;
-      const clone = track.cloneNode(true);
-      track.parentElement?.appendChild(clone);
-    }
-  }, []);
+    const checkWidth = () => {
+      const totalItemsWidth = items.length * itemWidth;
+      const screenWidth = window.innerWidth;
+      setShouldScroll(totalItemsWidth > screenWidth);
+    };
+
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, [items.length]);
+
+  // 스크롤이 필요하면 3배 복제, 아니면 원본만
+  const displayItems = shouldScroll ? [...items, ...items, ...items] : items;
 
   return (
     <SectionContainer>
       <SectionTitle>{title}</SectionTitle>
       <SliderWrapper>
-        <SliderTrack ref={trackRef}>
-          {items.concat(items).map((item, index) => (
+        <SliderTrack $shouldScroll={shouldScroll}>
+          {displayItems.map((item, index) => (
             <SlideItem key={index} to={item.link}>
-              <SlideImage>{item.title}</SlideImage>
+              <SlideImage $imageUrl={item.thumbnailUrl}>
+                {!item.thumbnailUrl && item.title}
+              </SlideImage>
               <SlideContent>
                 <SlideTitle>{item.title}</SlideTitle>
                 <SlideDescription>{item.description}</SlideDescription>

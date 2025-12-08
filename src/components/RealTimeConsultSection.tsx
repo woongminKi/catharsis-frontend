@@ -6,6 +6,7 @@ interface FormData {
   writerId: string;
   password: string;
   content: string;
+  isSecret: boolean;
 }
 
 interface Errors {
@@ -104,7 +105,9 @@ const Input = styled.input`
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box;
 
   &:focus {
@@ -127,7 +130,9 @@ const TextArea = styled.textarea`
   min-height: 120px;
   resize: vertical;
   font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box;
 
   &:focus {
@@ -151,7 +156,9 @@ const SubmitButton = styled.button`
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
   margin-top: 10px;
 
   &:hover:not(:disabled) {
@@ -205,11 +212,40 @@ const CharCount = styled.span<CharCountProps>`
   margin-top: 4px;
 `;
 
+const CheckboxRow = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+`;
+
+const Checkbox = styled.input`
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #7c3aed;
+`;
+
+const SecretHint = styled.span`
+  font-size: 12px;
+  color: #666;
+  margin-left: 10px;
+`;
+
 const RealTimeConsultSection: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     writerId: '',
     password: '',
     content: '',
+    isSecret: false,
   });
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -222,10 +258,13 @@ const RealTimeConsultSection: React.FC = () => {
       newErrors.writerId = 'ID를 입력해주세요';
     }
 
-    if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해주세요';
-    } else if (formData.password.length < 4) {
-      newErrors.password = '비밀번호는 4자 이상이어야 합니다';
+    // 비밀글일 때만 비밀번호 필수
+    if (formData.isSecret) {
+      if (!formData.password) {
+        newErrors.password = '비밀글은 비밀번호를 입력해주세요';
+      } else if (formData.password.length < 4) {
+        newErrors.password = '비밀번호는 4자 이상이어야 합니다';
+      }
     }
 
     if (!formData.content.trim()) {
@@ -240,11 +279,11 @@ const RealTimeConsultSection: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
 
     // Clear error when user starts typing
     if (errors[name as keyof Errors]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -258,16 +297,19 @@ const RealTimeConsultSection: React.FC = () => {
 
     try {
       await consultationAPI.create({
-        title: `실시간 상담 - ${formData.writerId}`,
+        title: `[실시간 상담] ${formData.writerId}`,
         content: formData.content,
         writerId: formData.writerId,
-        password: formData.password,
-        isSecret: true,
-        boardType: 'REALTIME' as any,
+        password: formData.password || undefined,
+        isSecret: formData.isSecret,
+        boardType: 'INQUIRY' as any,
       });
 
-      setMessage({ type: 'success', text: '상담 문의가 등록되었습니다. 빠른 시일 내에 답변드리겠습니다.' });
-      setFormData({ writerId: '', password: '', content: '' });
+      setMessage({
+        type: 'success',
+        text: '상담 문의가 등록되었습니다. 빠른 시일 내에 답변드리겠습니다.',
+      });
+      setFormData({ writerId: '', password: '', content: '', isSecret: false });
     } catch (error: any) {
       setMessage({
         type: 'error',
@@ -305,19 +347,38 @@ const RealTimeConsultSection: React.FC = () => {
             </InputGroup>
 
             <InputGroup>
-              <Label htmlFor="password">비밀번호</Label>
+              <Label htmlFor="password">
+                비밀번호 {formData.isSecret && <span style={{ color: '#dc3545' }}>*</span>}
+              </Label>
               <Input
                 type="password"
                 id="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="비밀번호 (4자 이상)"
+                placeholder={formData.isSecret ? '비밀번호 (4자 이상) - 필수' : '비밀번호 (선택)'}
                 maxLength={20}
               />
               {errors.password && <ErrorText>{errors.password}</ErrorText>}
             </InputGroup>
           </InputRow>
+
+          <CheckboxRow>
+            <CheckboxLabel>
+              <Checkbox
+                type="checkbox"
+                checked={formData.isSecret}
+                onChange={e => {
+                  setFormData(prev => ({ ...prev, isSecret: e.target.checked }));
+                  if (!e.target.checked) {
+                    setErrors(prev => ({ ...prev, password: undefined }));
+                  }
+                }}
+              />
+              비밀글로 작성
+            </CheckboxLabel>
+            {formData.isSecret && <SecretHint>(비밀번호 입력 필수)</SecretHint>}
+          </CheckboxRow>
 
           <InputGroup>
             <Label htmlFor="content">상담내용</Label>

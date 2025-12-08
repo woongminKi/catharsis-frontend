@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import directorImage from '../../images/main/원장사진.jpg';
 
 interface VisibilityProps {
   $isVisible: boolean;
@@ -14,7 +15,8 @@ const PageContainer = styled.div`
 const HeroSection = styled.section`
   width: 100%;
   height: 400px;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url('/images/hero-greeting.jpg') center/cover no-repeat;
   display: flex;
   align-items: center;
@@ -174,7 +176,7 @@ const GreetingPage: React.FC = () => {
       <ContentSection ref={contentRef}>
         <ContentGrid>
           <ImageWrapper $isVisible={isVisible}>
-            <img src="/images/greeting-directors.jpg" alt="카타르시스 연기학원 원장" />
+            <img src={directorImage} alt="카타르시스 연기학원 원장" />
           </ImageWrapper>
 
           <TextContent $isVisible={isVisible}>
@@ -184,18 +186,16 @@ const GreetingPage: React.FC = () => {
               "즐겁지 않습니다."
             </MainTitle>
 
+            <Paragraph>수많은 학생들은 연기 수업을 두려워합니다.</Paragraph>
+
             <Paragraph>
-              수많은 학생들은 연기 수업을 두려워합니다.
+              어쩔적인 분위기와 선생님의 차별적 태도 때문에 연기 자체를 즐기기 못하고 자존감이
+              낮아지기 때문입니다.
             </Paragraph>
 
             <Paragraph>
-              어쩔적인 분위기와 선생님의 차별적 태도 때문에 연기 자체를 즐기기 못하고 자존감이 낮아지기
-              때문입니다.
-            </Paragraph>
-
-            <Paragraph>
-              높은 경쟁율 속에서 자신의 존재감을 뽐어내야하는 입시시험일때도 물구하고
-              많은 학생들은 자신의 가치를 낮추는 것에 익숙해질 뿐입니다.
+              높은 경쟁율 속에서 자신의 존재감을 뽐어내야하는 입시시험일때도 물구하고 많은 학생들은
+              자신의 가치를 낮추는 것에 익숙해질 뿐입니다.
             </Paragraph>
 
             <Highlight>
@@ -204,17 +204,11 @@ const GreetingPage: React.FC = () => {
               <p>꼭 스파르타만이 합격의 비법일까?</p>
             </Highlight>
 
-            <Paragraph>
-              우리는 학생들과 동등한 위치에서 함께 성장하기로 했습니다.
-            </Paragraph>
+            <Paragraph>우리는 학생들과 동등한 위치에서 함께 성장하기로 했습니다.</Paragraph>
 
-            <Paragraph>
-              차별없이 개개인의 개성을 끌어내겠습니다.
-            </Paragraph>
+            <Paragraph>차별없이 개개인의 개성을 끌어내겠습니다.</Paragraph>
 
-            <Paragraph>
-              학생들과 대화의 문을 열고 소통하겠습니다.
-            </Paragraph>
+            <Paragraph>학생들과 대화의 문을 열고 소통하겠습니다.</Paragraph>
 
             <Paragraph>
               인사라는 안박감과 높은 경쟁률 속에서 때론 친구로 때로는 멘토가 되겠습니다.
