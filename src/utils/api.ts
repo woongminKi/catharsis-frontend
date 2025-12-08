@@ -139,4 +139,29 @@ export const passerAPI = {
     api.get(`/passers/${id}`),
 };
 
+// Notice (공지사항) APIs
+interface NoticeParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface Notice {
+  _id: string;
+  title: string;
+  content: string;
+  thumbnailUrl?: string;
+  viewCount: number;
+  createdAt: string;
+}
+
+export const noticeAPI = {
+  // Get all notices
+  getAll: (params?: NoticeParams): Promise<AxiosResponse<ApiResponse<Notice[]>>> =>
+    api.get('/notices', { params }),
+
+  // Get single notice
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Notice>>> =>
+    api.get(`/notices/${id}`),
+};
+
 export default api;

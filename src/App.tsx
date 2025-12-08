@@ -22,6 +22,10 @@ import InquiryWritePage from './pages/inquiry/InquiryWritePage';
 import PassersListPage from './pages/passers/PassersListPage';
 import PasserDetailPage from './pages/passers/PasserDetailPage';
 
+// Notices pages
+import NoticesListPage from './pages/notices/NoticesListPage';
+import NoticeDetailPage from './pages/notices/NoticeDetailPage';
+
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Pretendard';
@@ -112,6 +116,10 @@ const App: React.FC = () => {
         {/* Passers routes */}
         <Route path="/passers" element={<PassersListPage />} />
         <Route path="/passers/:id" element={<PasserDetailPage />} />
+
+        {/* Notices routes */}
+        <Route path="/community/notice" element={<NoticesListPage />} />
+        <Route path="/community/notice/:id" element={<NoticeDetailPage />} />
       </Routes>
       <ConsultationFooter />
       <FloatingButton />

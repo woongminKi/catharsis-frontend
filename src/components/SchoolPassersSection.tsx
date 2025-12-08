@@ -65,7 +65,9 @@ const PasserCard = styled(Link)`
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   text-decoration: none;
   cursor: pointer;
 
@@ -117,11 +119,11 @@ const PasserCount = styled.p`
 const SchoolPassersSection: React.FC = () => {
   const passersData: PasserData[] = [
     { school: '한국예술종합학교', count: 25, link: '/passers/karts' },
-    { school: '서울예술대학교', count: 18, link: '/passers/sau' },
     { school: '중앙대학교', count: 15, link: '/passers/cau' },
     { school: '동국대학교', count: 12, link: '/passers/dgu' },
-    { school: '성균관대학교', count: 10, link: '/passers/skku' },
-    { school: '한양대학교', count: 8, link: '/passers/hanyang' },
+    // { school: '서울예술대학교', count: 18, link: '/passers/sau' },
+    // { school: '성균관대학교', count: 10, link: '/passers/skku' },
+    // { school: '한양대학교', count: 8, link: '/passers/hanyang' },
   ];
 
   return (
