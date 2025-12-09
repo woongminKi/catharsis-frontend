@@ -238,7 +238,7 @@ const PassersListPage: React.FC = () => {
         <EmptyMessage>등록된 합격자 현황이 없습니다.</EmptyMessage>
       ) : (
         <ListContainer>
-          {passers.map((passer) => (
+          {passers.map(passer => (
             <ListItem key={passer._id} onClick={() => handleRowClick(passer._id)}>
               <ListItemInfo>
                 <ItemCategory>공지</ItemCategory>
@@ -254,9 +254,7 @@ const PassersListPage: React.FC = () => {
         </ListContainer>
       )}
 
-      {pagination.totalPages > 1 && (
-        <PaginationContainer>{renderPagination()}</PaginationContainer>
-      )}
+      {pagination.totalPages > 1 && <PaginationContainer>{renderPagination()}</PaginationContainer>}
     </PageContainer>
   );
 };

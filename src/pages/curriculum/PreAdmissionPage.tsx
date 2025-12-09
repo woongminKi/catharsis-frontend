@@ -12,7 +12,7 @@ const PreAdmissionPage: React.FC = () => {
   useEffect(() => {
     setIsHeroVisible(true);
 
-    const observers = sectionsRef.current.map((section) => {
+    const observers = sectionsRef.current.map(section => {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting && section) {
@@ -31,7 +31,7 @@ const PreAdmissionPage: React.FC = () => {
     });
 
     return () => {
-      observers.forEach((observer) => observer.disconnect());
+      observers.forEach(observer => observer.disconnect());
     };
   }, []);
 
@@ -48,42 +48,47 @@ const PreAdmissionPage: React.FC = () => {
 
       <ContentWrapper>
         {/* 메인 메시지 섹션 */}
-        <IntroSection ref={(el) => { sectionsRef.current[0] = el; }}>
-          <IntroTitle>
-            연기의 첫 걸음마 누구와 함께 하느냐가 정말 중요합니다
-          </IntroTitle>
+        <IntroSection
+          ref={el => {
+            sectionsRef.current[0] = el;
+          }}
+        >
+          <IntroTitle>연기의 첫 걸음마 누구와 함께 하느냐가 정말 중요합니다</IntroTitle>
           <IntroContent>
             <IntroParagraph>
-              카타르시스만의 체계고 가족적인 분위기 속에서 가족을 들르며 다질 수
-              있습니다.
+              카타르시스만의 체계고 가족적인 분위기 속에서 가족을 들르며 다질 수 있습니다.
             </IntroParagraph>
             <IntroParagraph>
-              매년 늦어지는 입시경쟁률과 다양해진 시험내용을 카타르시스만의
-              체계적인 코칭을 통해 미리 준비하세요.
+              매년 늦어지는 입시경쟁률과 다양해진 시험내용을 카타르시스만의 체계적인 코칭을 통해
+              미리 준비하세요.
             </IntroParagraph>
-            <IntroHighlight>
-              예비입시자만 입시반처럼 본인만의 작품을 준비합니다.
-            </IntroHighlight>
+            <IntroHighlight>예비입시자만 입시반처럼 본인만의 작품을 준비합니다.</IntroHighlight>
           </IntroContent>
         </IntroSection>
 
         {/* 모집대상 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[1] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[1] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>모집대상</SectionTitle>
           </SectionHeader>
           <SectionContent>
             <TargetList>
-              <TargetItem>
-                고등학교 1, 2학년 재학생, 검정고시 응시생, 예고전학 희망자
-              </TargetItem>
+              <TargetItem>고등학교 1, 2학년 재학생, 검정고시 응시생, 예고전학 희망자</TargetItem>
               <TargetItem>각부 정원 8명</TargetItem>
             </TargetList>
           </SectionContent>
         </Section>
 
         {/* 예비입시반 수업 정보 */}
-        <Section ref={(el) => { sectionsRef.current[2] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[2] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>예비입시반</SectionTitle>
           </SectionHeader>
@@ -99,15 +104,12 @@ const PreAdmissionPage: React.FC = () => {
                 </tr>
                 <tr>
                   <TableHeader>강의횟수</TableHeader>
-                  <TableCell>
-                    주 연기 2회 | 음악임 1회 | 뮤지컬 1회 | 축석의
-                  </TableCell>
+                  <TableCell>주 연기 2회 | 음악임 1회 | 뮤지컬 1회 | 축석의</TableCell>
                 </tr>
                 <tr>
                   <TableHeader>수업내용</TableHeader>
                   <TableCell>
-                    기초연기, 희극, 즉흥연기, 장면만들기, 특별, 기초보컬,
-                    기초음악임
+                    기초연기, 희극, 즉흥연기, 장면만들기, 특별, 기초보컬, 기초음악임
                   </TableCell>
                 </tr>
               </tbody>
@@ -116,7 +118,11 @@ const PreAdmissionPage: React.FC = () => {
         </Section>
 
         {/* 커리큘럼 상세 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[3] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[3] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>커리큘럼</SectionTitle>
           </SectionHeader>
@@ -214,7 +220,11 @@ const PreAdmissionPage: React.FC = () => {
         </Section>
 
         {/* 예비입시반의 특징 */}
-        <Section ref={(el) => { sectionsRef.current[4] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[4] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>카타르시스 예비입시반의 특징</SectionTitle>
           </SectionHeader>
@@ -225,9 +235,8 @@ const PreAdmissionPage: React.FC = () => {
                 <FeatureText>
                   <FeatureTextTitle>체계적인 기초 교육</FeatureTextTitle>
                   <FeatureTextDesc>
-                    연기의 첫 걸음부터 체계적으로 배우며 탄탄한 기초를
-                    다집니다. 입시에 필요한 모든 기본기를 단계적으로
-                    학습합니다.
+                    연기의 첫 걸음부터 체계적으로 배우며 탄탄한 기초를 다집니다. 입시에 필요한 모든
+                    기본기를 단계적으로 학습합니다.
                   </FeatureTextDesc>
                 </FeatureText>
               </FeatureItem>
@@ -237,8 +246,8 @@ const PreAdmissionPage: React.FC = () => {
                 <FeatureText>
                   <FeatureTextTitle>소수정예 밀착 지도</FeatureTextTitle>
                   <FeatureTextDesc>
-                    한 반 최대 8명으로 구성하여 학생 개개인의 특성과 장단점을
-                    파악하고 맞춤형 지도를 제공합니다.
+                    한 반 최대 8명으로 구성하여 학생 개개인의 특성과 장단점을 파악하고 맞춤형 지도를
+                    제공합니다.
                   </FeatureTextDesc>
                 </FeatureText>
               </FeatureItem>
@@ -248,8 +257,8 @@ const PreAdmissionPage: React.FC = () => {
                 <FeatureText>
                   <FeatureTextTitle>가족같은 분위기</FeatureTextTitle>
                   <FeatureTextDesc>
-                    카타르시스만의 가족적이고 따뜻한 분위기 속에서 편안하게
-                    연기를 배우고 자신감을 키울 수 있습니다.
+                    카타르시스만의 가족적이고 따뜻한 분위기 속에서 편안하게 연기를 배우고 자신감을
+                    키울 수 있습니다.
                   </FeatureTextDesc>
                 </FeatureText>
               </FeatureItem>
@@ -259,8 +268,8 @@ const PreAdmissionPage: React.FC = () => {
                 <FeatureText>
                   <FeatureTextTitle>입시반 연계 시스템</FeatureTextTitle>
                   <FeatureTextDesc>
-                    예비입시반에서도 입시반처럼 본인만의 작품을 준비하여 입시반
-                    진입 시 자연스럽게 연계됩니다.
+                    예비입시반에서도 입시반처럼 본인만의 작품을 준비하여 입시반 진입 시 자연스럽게
+                    연계됩니다.
                   </FeatureTextDesc>
                 </FeatureText>
               </FeatureItem>
@@ -270,8 +279,8 @@ const PreAdmissionPage: React.FC = () => {
                 <FeatureText>
                   <FeatureTextTitle>다양한 커리큘럼</FeatureTextTitle>
                   <FeatureTextDesc>
-                    연기뿐만 아니라 보컬, 음악임, 뮤지컬 등 다양한 분야를
-                    경험하며 자신에게 맞는 길을 찾을 수 있습니다.
+                    연기뿐만 아니라 보컬, 음악임, 뮤지컬 등 다양한 분야를 경험하며 자신에게 맞는
+                    길을 찾을 수 있습니다.
                   </FeatureTextDesc>
                 </FeatureText>
               </FeatureItem>
@@ -281,8 +290,8 @@ const PreAdmissionPage: React.FC = () => {
                 <FeatureText>
                   <FeatureTextTitle>조기 입시 준비의 장점</FeatureTextTitle>
                   <FeatureTextDesc>
-                    고등학교 1, 2학년부터 미리 준비하여 입시에 대한 부담을
-                    줄이고 충분한 시간을 갖고 실력을 쌓을 수 있습니다.
+                    고등학교 1, 2학년부터 미리 준비하여 입시에 대한 부담을 줄이고 충분한 시간을 갖고
+                    실력을 쌓을 수 있습니다.
                   </FeatureTextDesc>
                 </FeatureText>
               </FeatureItem>
@@ -291,7 +300,11 @@ const PreAdmissionPage: React.FC = () => {
         </Section>
 
         {/* 예비입시반 학습 목표 */}
-        <Section ref={(el) => { sectionsRef.current[5] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[5] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>학습 목표</SectionTitle>
           </SectionHeader>
@@ -300,17 +313,14 @@ const PreAdmissionPage: React.FC = () => {
               <GoalItem>
                 <GoalNumber>GOAL 01</GoalNumber>
                 <GoalTitle>연기 기초 체력 완성</GoalTitle>
-                <GoalDesc>
-                  입시에 필요한 기본적인 연기 능력을 갖추고 자신감을 키웁니다.
-                </GoalDesc>
+                <GoalDesc>입시에 필요한 기본적인 연기 능력을 갖추고 자신감을 키웁니다.</GoalDesc>
               </GoalItem>
 
               <GoalItem>
                 <GoalNumber>GOAL 02</GoalNumber>
                 <GoalTitle>개인 작품 확보</GoalTitle>
                 <GoalDesc>
-                  본인만의 독창적인 작품을 만들어 입시반 진입 시 바로 활용할 수
-                  있습니다.
+                  본인만의 독창적인 작품을 만들어 입시반 진입 시 바로 활용할 수 있습니다.
                 </GoalDesc>
               </GoalItem>
 
@@ -318,25 +328,25 @@ const PreAdmissionPage: React.FC = () => {
                 <GoalNumber>GOAL 03</GoalNumber>
                 <GoalTitle>입시 이해도 향상</GoalTitle>
                 <GoalDesc>
-                  연극영화과 입시가 어떻게 진행되는지 이해하고 미리 경험해
-                  봅니다.
+                  연극영화과 입시가 어떻게 진행되는지 이해하고 미리 경험해 봅니다.
                 </GoalDesc>
               </GoalItem>
 
               <GoalItem>
                 <GoalNumber>GOAL 04</GoalNumber>
                 <GoalTitle>자신의 적성 발견</GoalTitle>
-                <GoalDesc>
-                  다양한 수업을 통해 자신에게 맞는 분야와 표현 방식을
-                  찾습니다.
-                </GoalDesc>
+                <GoalDesc>다양한 수업을 통해 자신에게 맞는 분야와 표현 방식을 찾습니다.</GoalDesc>
               </GoalItem>
             </GoalGrid>
           </SectionContent>
         </Section>
 
         {/* 문의 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[6] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[6] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>수강 문의</SectionTitle>
           </SectionHeader>
@@ -378,14 +388,15 @@ const PageWrapper = styled.div`
 const HeroSection = styled.section<HeroSectionProps>`
   width: 100%;
   height: 400px;
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url('/images/pre-admission-hero.jpg') center/cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: ${(props) => (props.$isVisible ? 1 : 0)};
-  transform: ${(props) => (props.$isVisible ? 'scale(1)' : 'scale(1.1)')};
+  opacity: ${props => (props.$isVisible ? 1 : 0)};
+  transform: ${props => (props.$isVisible ? 'scale(1)' : 'scale(1.1)')};
   transition: all 1.2s ease-out;
 
   @media (max-width: 768px) {

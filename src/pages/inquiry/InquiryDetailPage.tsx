@@ -325,10 +325,8 @@ const InquiryDetailPage: React.FC = () => {
         {!needPassword && post.comments && post.comments.length > 0 && (
           <AdminAnswerSection>
             <AdminAnswerTitle>답변</AdminAnswerTitle>
-            {post.comments.map((comment) => (
-              <AdminAnswerContent key={comment._id}>
-                {comment.content}
-              </AdminAnswerContent>
+            {post.comments.map(comment => (
+              <AdminAnswerContent key={comment._id}>{comment.content}</AdminAnswerContent>
             ))}
           </AdminAnswerSection>
         )}

@@ -65,11 +65,14 @@ const PostContent = styled.div`
     margin-bottom: 15px;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     margin: 20px 0 10px;
   }
 
-  ul, ol {
+  ul,
+  ol {
     margin: 10px 0;
     padding-left: 20px;
   }
@@ -180,9 +183,7 @@ const NoticeDetailPage: React.FC = () => {
         </PostHeader>
 
         <PostContent>
-          {notice.thumbnailUrl && (
-            <ThumbnailImage src={notice.thumbnailUrl} alt={notice.title} />
-          )}
+          {notice.thumbnailUrl && <ThumbnailImage src={notice.thumbnailUrl} alt={notice.title} />}
           <div dangerouslySetInnerHTML={{ __html: notice.content }} />
         </PostContent>
 

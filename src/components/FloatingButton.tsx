@@ -17,7 +17,9 @@ const FloatingBtn = styled(Link)`
   cursor: pointer;
   text-decoration: none;
   z-index: 999;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 
   &:hover {
     transform: translateY(-3px);
@@ -61,7 +63,11 @@ const FloatingButton: React.FC = () => {
     <FloatingBtn to="/consultation">
       <ButtonContent>
         <ButtonIcon>💬</ButtonIcon>
-        <ButtonText>실시간<br />상담</ButtonText>
+        <ButtonText>
+          실시간
+          <br />
+          상담
+        </ButtonText>
       </ButtonContent>
     </FloatingBtn>
   );

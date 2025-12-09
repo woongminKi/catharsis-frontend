@@ -216,30 +216,41 @@ const InquiryWritePage: React.FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const quillModules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'script': 'sub' }, { 'script': 'super' }],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'indent': '-1' }, { 'indent': '+1' }],
-      ['blockquote'],
-      [{ 'align': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-  }), []);
+  const quillModules = useMemo(
+    () => ({
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ script: 'sub' }, { script: 'super' }],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ indent: '-1' }, { indent: '+1' }],
+        ['blockquote'],
+        [{ align: [] }],
+        [{ color: [] }, { background: [] }],
+        ['link', 'image', 'video'],
+        ['clean'],
+      ],
+    }),
+    []
+  );
 
   const quillFormats: string[] = [
     'header',
-    'bold', 'italic', 'underline', 'strike',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
     'script',
-    'list', 'bullet', 'indent',
+    'list',
+    'bullet',
+    'indent',
     'blockquote',
     'align',
-    'color', 'background',
-    'link', 'image', 'video',
+    'color',
+    'background',
+    'link',
+    'image',
+    'video',
   ];
 
   const validate = (): boolean => {
@@ -274,26 +285,26 @@ const InquiryWritePage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
 
     if (errors[name as keyof Errors]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleContentChange = (value: string): void => {
-    setFormData((prev) => ({ ...prev, content: value }));
+    setFormData(prev => ({ ...prev, content: value }));
     if (errors.content) {
-      setErrors((prev) => ({ ...prev, content: '' }));
+      setErrors(prev => ({ ...prev, content: '' }));
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fileKey: keyof Files): void => {
     const file = e.target.files?.[0] || null;
-    setFiles((prev) => ({ ...prev, [fileKey]: file }));
+    setFiles(prev => ({ ...prev, [fileKey]: file }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -388,26 +399,14 @@ const InquiryWritePage: React.FC = () => {
         <FileInputRow>
           <FileInputGroup>
             <FileInputButton htmlFor="file1">파일 선택</FileInputButton>
-            <FileInputText>
-              {files.file1 ? files.file1.name : '선택된 파일 없음'}
-            </FileInputText>
-            <HiddenFileInput
-              type="file"
-              id="file1"
-              onChange={(e) => handleFileChange(e, 'file1')}
-            />
+            <FileInputText>{files.file1 ? files.file1.name : '선택된 파일 없음'}</FileInputText>
+            <HiddenFileInput type="file" id="file1" onChange={e => handleFileChange(e, 'file1')} />
           </FileInputGroup>
 
           <FileInputGroup>
             <FileInputButton htmlFor="file2">파일 선택</FileInputButton>
-            <FileInputText>
-              {files.file2 ? files.file2.name : '선택된 파일 없음'}
-            </FileInputText>
-            <HiddenFileInput
-              type="file"
-              id="file2"
-              onChange={(e) => handleFileChange(e, 'file2')}
-            />
+            <FileInputText>{files.file2 ? files.file2.name : '선택된 파일 없음'}</FileInputText>
+            <HiddenFileInput type="file" id="file2" onChange={e => handleFileChange(e, 'file2')} />
           </FileInputGroup>
         </FileInputRow>
 

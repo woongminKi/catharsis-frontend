@@ -12,7 +12,7 @@ const AdmissionPage: React.FC = () => {
   useEffect(() => {
     setIsHeroVisible(true);
 
-    const observers = sectionsRef.current.map((section) => {
+    const observers = sectionsRef.current.map(section => {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting && section) {
@@ -31,7 +31,7 @@ const AdmissionPage: React.FC = () => {
     });
 
     return () => {
-      observers.forEach((observer) => observer.disconnect());
+      observers.forEach(observer => observer.disconnect());
     };
   }, []);
 
@@ -48,7 +48,11 @@ const AdmissionPage: React.FC = () => {
 
       <ContentWrapper>
         {/* 개요 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[0] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[0] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>입시반 개요</SectionTitle>
           </SectionHeader>
@@ -75,7 +79,11 @@ const AdmissionPage: React.FC = () => {
         </Section>
 
         {/* 시간표 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[1] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[1] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>시간표</SectionTitle>
           </SectionHeader>
@@ -133,7 +141,11 @@ const AdmissionPage: React.FC = () => {
         </Section>
 
         {/* 커리큘럼 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[2] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[2] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>커리큘럼</SectionTitle>
           </SectionHeader>
@@ -231,7 +243,11 @@ const AdmissionPage: React.FC = () => {
         </Section>
 
         {/* 카타르시스 입시반 학생 특징 */}
-        <Section ref={(el) => { sectionsRef.current[3] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[3] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>카타르시스 입시반의 특징</SectionTitle>
           </SectionHeader>
@@ -301,7 +317,11 @@ const AdmissionPage: React.FC = () => {
         </Section>
 
         {/* 문의 섹션 */}
-        <Section ref={(el) => { sectionsRef.current[4] = el; }}>
+        <Section
+          ref={el => {
+            sectionsRef.current[4] = el;
+          }}
+        >
           <SectionHeader>
             <SectionTitle>수강 문의</SectionTitle>
           </SectionHeader>
@@ -321,8 +341,8 @@ const AdmissionPage: React.FC = () => {
               </ContactItem>
             </ContactInfo>
             <ConsultationNote>
-              * 자세한 상담은 방문 또는 전화 예약 후 진행됩니다.<br />
-              * 학생 개개인의 상황에 맞는 맞춤 상담을 제공해 드립니다.
+              * 자세한 상담은 방문 또는 전화 예약 후 진행됩니다.
+              <br />* 학생 개개인의 상황에 맞는 맞춤 상담을 제공해 드립니다.
             </ConsultationNote>
           </SectionContent>
         </Section>
@@ -343,14 +363,15 @@ const PageWrapper = styled.div`
 const HeroSection = styled.section<HeroSectionProps>`
   width: 100%;
   height: 400px;
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url('/images/admission-hero.jpg') center/cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: ${(props) => (props.$isVisible ? 1 : 0)};
-  transform: ${(props) => (props.$isVisible ? 'scale(1)' : 'scale(1.1)')};
+  opacity: ${props => (props.$isVisible ? 1 : 0)};
+  transform: ${props => (props.$isVisible ? 'scale(1)' : 'scale(1.1)')};
   transition: all 1.2s ease-out;
 
   @media (max-width: 768px) {

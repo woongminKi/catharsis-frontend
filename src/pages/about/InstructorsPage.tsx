@@ -408,7 +408,12 @@ const InstructorsPage: React.FC = () => {
           <SectionTitle>Leader & Head Coach</SectionTitle>
           <LeaderGrid>
             {leaders.map((instructor, index) => (
-              <LeaderCard key={index} ref={el => { imageRefs.current[index] = el; }}>
+              <LeaderCard
+                key={index}
+                ref={el => {
+                  imageRefs.current[index] = el;
+                }}
+              >
                 <InstructorImage
                   src={instructor.image}
                   alt={instructor.name}
@@ -432,7 +437,9 @@ const InstructorsPage: React.FC = () => {
             {actingInstructors.map((instructor, index) => (
               <InstructorCard
                 key={index}
-                ref={el => { imageRefs.current[leaders.length + index] = el; }}
+                ref={el => {
+                  imageRefs.current[leaders.length + index] = el;
+                }}
               >
                 <InstructorImage
                   src={instructor.image}

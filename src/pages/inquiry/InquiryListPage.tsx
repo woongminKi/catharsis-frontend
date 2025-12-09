@@ -374,7 +374,7 @@ const InquiryListPage: React.FC = () => {
       setSearchParams({
         page: '1',
         searchType,
-        keyword: searchKeyword.trim()
+        keyword: searchKeyword.trim(),
       });
     } else {
       setSearchParams({ page: '1' });
@@ -482,7 +482,9 @@ const InquiryListPage: React.FC = () => {
                       </TitleLink>
                     </Td>
                     <Td $align="center">{item.writerId}</Td>
-                    <Td $align="center" style={{ color: '#999' }}>{formatDate(item.createdAt)}</Td>
+                    <Td $align="center" style={{ color: '#999' }}>
+                      {formatDate(item.createdAt)}
+                    </Td>
                     <Td $align="center">
                       <StatusBadge $status={item.status}>
                         {item.status === 'ANSWERED' ? '답변완료' : '답변대기'}
@@ -495,7 +497,7 @@ const InquiryListPage: React.FC = () => {
           </DesktopTable>
 
           {/* Mobile Cards */}
-          {consultations.map((item) => (
+          {consultations.map(item => (
             <MobileCard key={item._id} onClick={() => handleRowClick(item._id)}>
               <MobileTitle>
                 {item.isSecret && <SecretIcon>🔒</SecretIcon>}

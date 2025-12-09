@@ -125,6 +125,6 @@ const App: React.FC = () => {
       <FloatingButton />
     </BrowserRouter>
   );
-}
+};
 
 export default App;

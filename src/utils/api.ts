@@ -19,7 +19,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
@@ -27,7 +27,7 @@ api.interceptors.request.use(
 // Response interceptor - handle errors
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
-  (error) => {
+  error => {
     if (error.response?.status === 401) {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
@@ -54,7 +54,8 @@ interface CommentData {
 
 // Auth APIs
 export const authAPI = {
-  login: (credentials: LoginCredentials): Promise<AxiosResponse> => api.post('/auth/login', credentials),
+  login: (credentials: LoginCredentials): Promise<AxiosResponse> =>
+    api.post('/auth/login', credentials),
   getMe: (): Promise<AxiosResponse> => api.get('/auth/me'),
   register: (data: RegisterData): Promise<AxiosResponse> => api.post('/auth/register', data),
   logout: (): Promise<AxiosResponse> => api.post('/auth/logout'),
@@ -63,27 +64,37 @@ export const authAPI = {
 // Consultation APIs
 export const consultationAPI = {
   // Create new consultation
-  create: (data: Partial<Consultation>): Promise<AxiosResponse<ApiResponse<Consultation>>> => api.post('/consultations', data),
+  create: (data: Partial<Consultation>): Promise<AxiosResponse<ApiResponse<Consultation>>> =>
+    api.post('/consultations', data),
 
   // Get all consultations
-  getAll: (params?: ConsultationParams): Promise<AxiosResponse<ApiResponse<Consultation[]>>> => api.get('/consultations', { params }),
+  getAll: (params?: ConsultationParams): Promise<AxiosResponse<ApiResponse<Consultation[]>>> =>
+    api.get('/consultations', { params }),
 
   // Get single consultation
-  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Consultation>>> => api.get(`/consultations/${id}`),
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Consultation>>> =>
+    api.get(`/consultations/${id}`),
 
   // Check password for secret post
-  checkPassword: (id: string, password: string): Promise<AxiosResponse<ApiResponse<Consultation>>> =>
+  checkPassword: (
+    id: string,
+    password: string
+  ): Promise<AxiosResponse<ApiResponse<Consultation>>> =>
     api.post(`/consultations/${id}/check-password`, { password }),
 
   // Update consultation
-  update: (id: string, data: Partial<Consultation>): Promise<AxiosResponse<ApiResponse<Consultation>>> => api.patch(`/consultations/${id}`, data),
+  update: (
+    id: string,
+    data: Partial<Consultation>
+  ): Promise<AxiosResponse<ApiResponse<Consultation>>> => api.patch(`/consultations/${id}`, data),
 
   // Delete consultation (soft)
   delete: (id: string, password: string): Promise<AxiosResponse> =>
     api.delete(`/consultations/${id}`, { data: { password } }),
 
   // Get deleted consultations (admin)
-  getDeleted: (params?: ConsultationParams): Promise<AxiosResponse<ApiResponse<Consultation[]>>> => api.get('/consultations/deleted', { params }),
+  getDeleted: (params?: ConsultationParams): Promise<AxiosResponse<ApiResponse<Consultation[]>>> =>
+    api.get('/consultations/deleted', { params }),
 
   // Restore deleted consultation (admin)
   restore: (id: string): Promise<AxiosResponse> => api.post(`/consultations/${id}/restore`),
@@ -92,7 +103,8 @@ export const consultationAPI = {
   forceDelete: (id: string): Promise<AxiosResponse> => api.delete(`/consultations/${id}/force`),
 
   // Bulk restore (admin)
-  bulkRestore: (ids: string[]): Promise<AxiosResponse> => api.post('/consultations/bulk-restore', { ids }),
+  bulkRestore: (ids: string[]): Promise<AxiosResponse> =>
+    api.post('/consultations/bulk-restore', { ids }),
 
   // Bulk force delete (admin)
   bulkForceDelete: (ids: string[]): Promise<AxiosResponse> =>
@@ -102,13 +114,16 @@ export const consultationAPI = {
 // Comment APIs
 export const commentAPI = {
   // Get comments for a post
-  getAll: (postId: string): Promise<AxiosResponse<ApiResponse<Comment[]>>> => api.get(`/consultations/${postId}/comments`),
+  getAll: (postId: string): Promise<AxiosResponse<ApiResponse<Comment[]>>> =>
+    api.get(`/consultations/${postId}/comments`),
 
   // Create comment (admin)
-  create: (postId: string, data: CommentData): Promise<AxiosResponse<ApiResponse<Comment>>> => api.post(`/consultations/${postId}/comments`, data),
+  create: (postId: string, data: CommentData): Promise<AxiosResponse<ApiResponse<Comment>>> =>
+    api.post(`/consultations/${postId}/comments`, data),
 
   // Update comment (admin)
-  update: (id: string, data: CommentData): Promise<AxiosResponse<ApiResponse<Comment>>> => api.patch(`/comments/${id}`, data),
+  update: (id: string, data: CommentData): Promise<AxiosResponse<ApiResponse<Comment>>> =>
+    api.patch(`/comments/${id}`, data),
 
   // Delete comment (admin)
   delete: (id: string): Promise<AxiosResponse> => api.delete(`/comments/${id}`),
@@ -135,8 +150,7 @@ export const passerAPI = {
     api.get('/passers', { params }),
 
   // Get single passer
-  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Passer>>> =>
-    api.get(`/passers/${id}`),
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Passer>>> => api.get(`/passers/${id}`),
 };
 
 // Notice (공지사항) APIs
@@ -160,8 +174,7 @@ export const noticeAPI = {
     api.get('/notices', { params }),
 
   // Get single notice
-  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Notice>>> =>
-    api.get(`/notices/${id}`),
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Notice>>> => api.get(`/notices/${id}`),
 };
 
 // Content (홈페이지 콘텐츠) API
@@ -218,8 +231,7 @@ export interface HomeContent {
 
 export const contentAPI = {
   // Get home page content
-  getAll: (): Promise<AxiosResponse<ApiResponse<HomeContent>>> =>
-    api.get('/content'),
+  getAll: (): Promise<AxiosResponse<ApiResponse<HomeContent>>> => api.get('/content'),
 };
 
 export default api;

@@ -91,7 +91,7 @@ const PasserCard = styled(Link)`
 const PasserImage = styled.div<PasserImageProps>`
   width: 100%;
   height: 300px;
-  background: ${(props) =>
+  background: ${props =>
     props.$imageUrl
       ? `url(${props.$imageUrl}) center/cover no-repeat`
       : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
@@ -138,7 +138,8 @@ const defaultPassersData: SchoolPasser[] = [
 ];
 
 const SchoolPassersSection: React.FC<SchoolPassersSectionProps> = ({ schoolPassers }) => {
-  const displayData = schoolPassers && schoolPassers.length > 0 ? schoolPassers : defaultPassersData;
+  const displayData =
+    schoolPassers && schoolPassers.length > 0 ? schoolPassers : defaultPassersData;
 
   return (
     <SectionContainer>

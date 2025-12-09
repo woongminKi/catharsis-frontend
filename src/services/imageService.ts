@@ -1,7 +1,8 @@
 import { ImageUploadResult, ImageListItem } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-const S3_BASE_URL = process.env.REACT_APP_S3_URL || 'https://catharsis-image.s3.ap-northeast-2.amazonaws.com';
+const S3_BASE_URL =
+  process.env.REACT_APP_S3_URL || 'https://catharsis-image.s3.ap-northeast-2.amazonaws.com';
 
 /**
  * 한글을 NFD (분해형)로 변환
@@ -33,7 +34,10 @@ export const getS3ImageUrl = (path: string): string => {
  * @param {string} folder - S3 폴더 경로
  * @returns {Promise<{key: string, url: string}>}
  */
-export const uploadImage = async (file: File, folder: string = 'images'): Promise<ImageUploadResult> => {
+export const uploadImage = async (
+  file: File,
+  folder: string = 'images'
+): Promise<ImageUploadResult> => {
   const formData = new FormData();
   formData.append('image', file);
   formData.append('folder', folder);
@@ -57,9 +61,12 @@ export const uploadImage = async (file: File, folder: string = 'images'): Promis
  * @param {string} folder - S3 폴더 경로
  * @returns {Promise<Array<{key: string, url: string}>>}
  */
-export const uploadMultipleImages = async (files: File[], folder: string = 'images'): Promise<ImageUploadResult[]> => {
+export const uploadMultipleImages = async (
+  files: File[],
+  folder: string = 'images'
+): Promise<ImageUploadResult[]> => {
   const formData = new FormData();
-  files.forEach((file) => {
+  files.forEach(file => {
     formData.append('images', file);
   });
   formData.append('folder', folder);
@@ -83,7 +90,10 @@ export const uploadMultipleImages = async (files: File[], folder: string = 'imag
  * @param {number} maxKeys - 최대 개수
  * @returns {Promise<Array<{key: string, url: string, size: number, lastModified: string}>>}
  */
-export const getImageList = async (folder: string = 'images', maxKeys: number = 100): Promise<ImageListItem[]> => {
+export const getImageList = async (
+  folder: string = 'images',
+  maxKeys: number = 100
+): Promise<ImageListItem[]> => {
   const response = await fetch(
     `${API_BASE_URL}/api/images/list?folder=${encodeURIComponent(toNFD(folder))}&maxKeys=${maxKeys}`
   );

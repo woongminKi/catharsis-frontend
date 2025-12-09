@@ -238,7 +238,7 @@ const NoticesListPage: React.FC = () => {
         <EmptyMessage>등록된 공지사항이 없습니다.</EmptyMessage>
       ) : (
         <ListContainer>
-          {notices.map((notice) => (
+          {notices.map(notice => (
             <ListItem key={notice._id} onClick={() => handleRowClick(notice._id)}>
               <ListItemInfo>
                 <ItemCategory>공지</ItemCategory>
@@ -254,9 +254,7 @@ const NoticesListPage: React.FC = () => {
         </ListContainer>
       )}
 
-      {pagination.totalPages > 1 && (
-        <PaginationContainer>{renderPagination()}</PaginationContainer>
-      )}
+      {pagination.totalPages > 1 && <PaginationContainer>{renderPagination()}</PaginationContainer>}
     </PageContainer>
   );
 };
