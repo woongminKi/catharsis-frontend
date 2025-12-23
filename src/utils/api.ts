@@ -177,6 +177,30 @@ export const noticeAPI = {
   getOne: (id: string): Promise<AxiosResponse<ApiResponse<Notice>>> => api.get(`/notices/${id}`),
 };
 
+// Resource (입시자료실) APIs
+interface ResourceParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface Resource {
+  _id: string;
+  title: string;
+  content: string;
+  thumbnailUrl?: string;
+  viewCount: number;
+  createdAt: string;
+}
+
+export const resourceAPI = {
+  // Get all resources
+  getAll: (params?: ResourceParams): Promise<AxiosResponse<ApiResponse<Resource[]>>> =>
+    api.get('/resources', { params }),
+
+  // Get single resource
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Resource>>> => api.get(`/resources/${id}`),
+};
+
 // Content (홈페이지 콘텐츠) API
 export interface HeroSection {
   imageUrl: string;

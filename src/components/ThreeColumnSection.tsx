@@ -74,11 +74,11 @@ const Container = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 40px;
 
   @media (max-width: 968px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 60px;
   }
 `;
@@ -86,6 +86,7 @@ const Grid = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+  min-width: 0;
 `;
 
 const ColumnTitle = styled.h2`
@@ -105,7 +106,8 @@ const ColumnTitle = styled.h2`
 `;
 
 const ContentContainer = styled.div`
-  height: 400px;
+  width: 100%;
+  aspect-ratio: 3 / 4;
   position: relative;
   overflow: hidden;
   border-radius: 12px;

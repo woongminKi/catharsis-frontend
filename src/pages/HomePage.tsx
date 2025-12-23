@@ -136,7 +136,8 @@ const HomePage: React.FC = () => {
         buttonText={heroData?.buttonText}
         buttonLink={heroData?.buttonLink}
       />
-      <SchoolPassersSection schoolPassers={schoolPassers} />
+      {/* 학교별 합격자 */}
+      {/* <SchoolPassersSection schoolPassers={schoolPassers} /> */}
       <AutoScrollSlider title="유튭 영상" items={youtubeItems} />
       <ThreeColumnSection
         instructors={instructorItems}
