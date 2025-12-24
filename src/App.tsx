@@ -30,6 +30,9 @@ import NoticeDetailPage from './pages/notices/NoticeDetailPage';
 import ResourcesListPage from './pages/resources/ResourcesListPage';
 import ResourceDetailPage from './pages/resources/ResourceDetailPage';
 
+// Gallery pages
+import GalleryListPage from './pages/gallery/GalleryListPage';
+
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Pretendard';
@@ -128,6 +131,9 @@ const App: React.FC = () => {
         {/* Resources routes */}
         <Route path="/community/archive" element={<ResourcesListPage />} />
         <Route path="/community/archive/:id" element={<ResourceDetailPage />} />
+
+        {/* Gallery routes */}
+        <Route path="/community/gallery" element={<GalleryListPage />} />
       </Routes>
       <ConsultationFooter />
       <FloatingButton />

@@ -201,6 +201,29 @@ export const resourceAPI = {
   getOne: (id: string): Promise<AxiosResponse<ApiResponse<Resource>>> => api.get(`/resources/${id}`),
 };
 
+// Gallery (포토갤러리) APIs
+interface GalleryParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface Gallery {
+  _id: string;
+  title: string;
+  imageUrl: string;
+  viewCount: number;
+  createdAt: string;
+}
+
+export const galleryAPI = {
+  // Get all galleries
+  getAll: (params?: GalleryParams): Promise<AxiosResponse<ApiResponse<Gallery[]>>> =>
+    api.get('/galleries', { params }),
+
+  // Get single gallery
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Gallery>>> => api.get(`/galleries/${id}`),
+};
+
 // Content (홈페이지 콘텐츠) API
 export interface HeroSection {
   imageUrl: string;
