@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 interface Instructor {
@@ -10,10 +10,8 @@ interface Instructor {
 }
 
 interface Passer {
-  name: string;
-  school: string;
-  year: string;
-  link: string;
+  leftText: string;   // 학교 연도
+  rightText: string;  // 이름
 }
 
 interface InstagramPost {
@@ -241,19 +239,20 @@ const PassersScrollContainer = styled.div`
   background: white;
 `;
 
-const PassersScrollList = styled.div`
-  animation: ${scrollUp} 20s linear infinite;
+const PassersScrollList = styled.div<{ $shouldAnimate: boolean }>`
+  ${props => props.$shouldAnimate && css`
+    animation: ${scrollUp} 20s linear infinite;
 
-  &:hover {
-    animation-play-state: paused;
-  }
+    &:hover {
+      animation-play-state: paused;
+    }
+  `}
 `;
 
-const PasserItem = styled(Link)`
+const PasserItem = styled.div`
   display: block;
   padding: 16px 24px;
   border-bottom: 1px solid #eee;
-  text-decoration: none;
   color: #333;
   transition: background 0.3s;
 
@@ -269,14 +268,23 @@ const PasserInfo = styled.div`
   font-size: 15px;
 `;
 
-const PasserName = styled.span`
+const PasserLeftText = styled.span`
   font-weight: 600;
   color: #333;
 `;
 
-const PasserSchool = styled.span`
+const PasserRightText = styled.span`
   color: #666;
-  font-size: 13px;
+  font-size: 14px;
+`;
+
+const EmptyMessage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 15px;
 `;
 
 // 인스타그램 카드 스타일
@@ -430,18 +438,20 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
             <ColumnTitle>역대 합격자</ColumnTitle>
             <ContentContainer>
               <PassersScrollContainer>
-                <PassersScrollList>
-                  {passers.concat(passers).map((passer, index) => (
-                    <PasserItem key={index} to={passer.link}>
-                      <PasserInfo>
-                        <PasserName>{passer.name}</PasserName>
-                        <PasserSchool>
-                          {passer.school} {passer.year}
-                        </PasserSchool>
-                      </PasserInfo>
-                    </PasserItem>
-                  ))}
-                </PassersScrollList>
+                {passers.length > 0 ? (
+                  <PassersScrollList $shouldAnimate={passers.length >= 5}>
+                    {(passers.length >= 5 ? passers.concat(passers) : passers).map((passer, index) => (
+                      <PasserItem key={index}>
+                        <PasserInfo>
+                          <PasserLeftText>{passer.leftText}</PasserLeftText>
+                          <PasserRightText>{passer.rightText}</PasserRightText>
+                        </PasserInfo>
+                      </PasserItem>
+                    ))}
+                  </PassersScrollList>
+                ) : (
+                  <EmptyMessage>데이터가 없습니다</EmptyMessage>
+                )}
               </PassersScrollContainer>
             </ContentContainer>
           </Column>

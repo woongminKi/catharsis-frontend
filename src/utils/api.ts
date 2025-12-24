@@ -268,12 +268,20 @@ export interface InstagramPost {
   order: number;
 }
 
+export interface HistoryPasser {
+  _id?: string;
+  leftText: string;
+  rightText: string;
+  order: number;
+}
+
 export interface HomeContent {
   heroSection: HeroSection;
   schoolPassers: SchoolPasser[];
   youtubeVideos: YoutubeVideo[];
   instructors: Instructor[];
   instagramPosts: InstagramPost[];
+  historyPassers: HistoryPasser[];
 }
 
 export const contentAPI = {

@@ -11,14 +11,8 @@ import {
   YoutubeVideo,
   Instructor as InstructorType,
   InstagramPost as InstagramPostType,
+  HistoryPasser,
 } from '../utils/api';
-
-interface Passer {
-  name: string;
-  school: string;
-  year: string;
-  link: string;
-}
 
 const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -27,18 +21,7 @@ const HomePage: React.FC = () => {
   const [youtubeVideos, setYoutubeVideos] = useState<YoutubeVideo[]>([]);
   const [instructors, setInstructors] = useState<InstructorType[]>([]);
   const [instagramPosts, setInstagramPosts] = useState<InstagramPostType[]>([]);
-
-  // 역대 합격자 데이터 (하드코딩 유지 - 별도 관리 필요시 추가 개발)
-  const passersData: Passer[] = [
-    { name: '이찬민', school: '한국예술종합학교', year: '25학년도', link: '/passer/4' },
-    { name: '염예지', school: '한국예술종합학교', year: '25학년도', link: '/passer/5' },
-    { name: '이자운', school: '한국예술종합학교', year: '24학년도', link: '/passer/6' },
-    { name: '정지원', school: '한국예술종합학교', year: '24학년도', link: '/passer/7' },
-    { name: '오지은', school: '한국예술종합학교', year: '24학년도', link: '/passer/8' },
-    { name: '김선영', school: '한국예술종합학교', year: '24학년도', link: '/passer/9' },
-    { name: '강준원', school: '한국예술종합학교', year: '24학년도', link: '/passer/10' },
-    { name: '강하영', school: '한국예술종합학교', year: '24학년도', link: '/passer/11' },
-  ];
+  const [historyPassers, setHistoryPassers] = useState<HistoryPasser[]>([]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -51,6 +34,7 @@ const HomePage: React.FC = () => {
         setYoutubeVideos(data.youtubeVideos || []);
         setInstructors(data.instructors || []);
         setInstagramPosts(data.instagramPosts || []);
+        setHistoryPassers(data.historyPassers || []);
       } catch (error) {
         console.error('Error fetching content:', error);
       } finally {
@@ -141,7 +125,7 @@ const HomePage: React.FC = () => {
       <AutoScrollSlider title="유튭 영상" items={youtubeItems} />
       <ThreeColumnSection
         instructors={instructorItems}
-        passers={passersData}
+        passers={historyPassers}
         instagramPosts={instagramItems}
       />
       <RealTimeConsultSection />
