@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import Header from './components/Header';
 import FloatingButton from './components/FloatingButton';
@@ -32,6 +32,16 @@ import ResourceDetailPage from './pages/resources/ResourceDetailPage';
 
 // Gallery pages
 import GalleryListPage from './pages/gallery/GalleryListPage';
+
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -103,6 +113,7 @@ const GlobalStyle = createGlobalStyle`
 const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <GlobalStyle />
       <Header />
       <Routes>

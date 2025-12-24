@@ -60,7 +60,7 @@ const ButtonText = styled.div`
 
 const FloatingButton: React.FC = () => {
   return (
-    <FloatingBtn to="/consultation">
+    <FloatingBtn to="/consultation/inquiry">
       <ButtonContent>
         <ButtonIcon>💬</ButtonIcon>
         <ButtonText>

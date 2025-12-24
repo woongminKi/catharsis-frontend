@@ -226,7 +226,7 @@ export const galleryAPI = {
 
 // Content (홈페이지 콘텐츠) API
 export interface HeroSection {
-  imageUrl: string;
+  imageUrls: string[];
   subtitle: string;
   title: string;
   buttonText: string;

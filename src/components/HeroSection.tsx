@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 interface HeroSectionProps {
-  imageUrl?: string;
+  imageUrls?: string[];
   subtitle?: string;
   title?: string;
   buttonText?: string;
@@ -11,16 +11,16 @@ interface HeroSectionProps {
 }
 
 interface HeroContainerProps {
-  $imageUrl?: string;
+  $hasImages?: boolean;
 }
 
 const HeroContainer = styled.section<HeroContainerProps>`
   margin-top: 70px;
   width: 100%;
-  min-height: ${props => (props.$imageUrl ? 'auto' : '600px')};
+  min-height: ${props => (props.$hasImages ? 'auto' : '600px')};
   background-color: #667eea;
   background: ${props =>
-    props.$imageUrl ? 'transparent' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
+    props.$hasImages ? 'transparent' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,18 +28,112 @@ const HeroContainer = styled.section<HeroContainerProps>`
   overflow: hidden;
 
   @media (max-width: 768px) {
-    min-height: ${props => (props.$imageUrl ? 'auto' : '500px')};
+    min-height: ${props => (props.$hasImages ? 'auto' : '500px')};
   }
 
   @media (max-width: 480px) {
-    min-height: ${props => (props.$imageUrl ? 'auto' : '400px')};
+    min-height: ${props => (props.$hasImages ? 'auto' : '400px')};
   }
+`;
+
+const CarouselWrapper = styled.div`
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+`;
+
+const CarouselTrack = styled.div<{ $currentIndex: number }>`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(${props => -props.$currentIndex * 100}%);
+`;
+
+const CarouselSlide = styled.div`
+  width: 100%;
+  min-width: 100%;
+  flex-shrink: 0;
 `;
 
 const HeroImage = styled.img`
   width: 100%;
-  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
   display: block;
+  background-color: #f5f5f5;
+`;
+
+const CarouselButton = styled.button<{ $position: 'left' | 'right' }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  ${props => (props.$position === 'left' ? 'left: 20px;' : 'right: 20px;')}
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #333;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    ${props => (props.$position === 'left' ? 'left: 10px;' : 'right: 10px;')}
+  }
+
+  @media (max-width: 480px) {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+`;
+
+const CarouselDots = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+
+  @media (max-width: 480px) {
+    bottom: 15px;
+    gap: 8px;
+  }
+`;
+
+const CarouselDot = styled.button<{ $active: boolean }>`
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: ${props => (props.$active ? 'white' : 'transparent')};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  @media (max-width: 480px) {
+    width: 10px;
+    height: 10px;
+  }
 `;
 
 const HeroContent = styled.div`
@@ -116,12 +210,51 @@ const CTAButton = styled(Link)`
 `;
 
 const HeroSection: React.FC<HeroSectionProps> = ({
-  imageUrl,
+  imageUrls = [],
   subtitle,
   title,
   buttonText,
   buttonLink,
 }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  const validImageUrls = imageUrls.filter(url => url && url.trim() !== '');
+  const hasMultipleImages = validImageUrls.length > 1;
+  const hasImages = validImageUrls.length > 0;
+
+  // 자동 슬라이드
+  useEffect(() => {
+    if (!hasMultipleImages || !isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % validImageUrls.length);
+    }, 4000); // 4초마다 자동 전환
+
+    return () => clearInterval(interval);
+  }, [hasMultipleImages, isAutoPlaying, validImageUrls.length]);
+
+  const goToPrevious = useCallback(() => {
+    setIsAutoPlaying(false);
+    setCurrentIndex(prev => (prev - 1 + validImageUrls.length) % validImageUrls.length);
+    // 5초 후 자동 재생 재시작
+    setTimeout(() => setIsAutoPlaying(true), 5000);
+  }, [validImageUrls.length]);
+
+  const goToNext = useCallback(() => {
+    setIsAutoPlaying(false);
+    setCurrentIndex(prev => (prev + 1) % validImageUrls.length);
+    // 5초 후 자동 재생 재시작
+    setTimeout(() => setIsAutoPlaying(true), 5000);
+  }, [validImageUrls.length]);
+
+  const goToSlide = useCallback((index: number) => {
+    setIsAutoPlaying(false);
+    setCurrentIndex(index);
+    // 5초 후 자동 재생 재시작
+    setTimeout(() => setIsAutoPlaying(true), 5000);
+  }, []);
+
   // 빈 문자열도 falsy로 처리
   const displaySubtitle = subtitle?.trim() || '';
   const displayTitle = title?.trim() || '';
@@ -133,8 +266,39 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const hasContent = displaySubtitle || displayTitle || showButton;
 
   return (
-    <HeroContainer $imageUrl={imageUrl}>
-      {imageUrl && <HeroImage src={imageUrl} alt="히어로 이미지" />}
+    <HeroContainer $hasImages={hasImages}>
+      {hasImages && (
+        <CarouselWrapper>
+          <CarouselTrack $currentIndex={currentIndex}>
+            {validImageUrls.map((url, index) => (
+              <CarouselSlide key={index}>
+                <HeroImage src={url} alt={`히어로 이미지 ${index + 1}`} />
+              </CarouselSlide>
+            ))}
+          </CarouselTrack>
+
+          {hasMultipleImages && (
+            <>
+              <CarouselButton $position="left" onClick={goToPrevious} aria-label="이전 이미지">
+                &#10094;
+              </CarouselButton>
+              <CarouselButton $position="right" onClick={goToNext} aria-label="다음 이미지">
+                &#10095;
+              </CarouselButton>
+              <CarouselDots>
+                {validImageUrls.map((_, index) => (
+                  <CarouselDot
+                    key={index}
+                    $active={index === currentIndex}
+                    onClick={() => goToSlide(index)}
+                    aria-label={`${index + 1}번 이미지로 이동`}
+                  />
+                ))}
+              </CarouselDots>
+            </>
+          )}
+        </CarouselWrapper>
+      )}
       {hasContent && (
         <HeroContent>
           {displaySubtitle && <Subtitle>{displaySubtitle}</Subtitle>}

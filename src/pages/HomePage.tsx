@@ -130,7 +130,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <HeroSection
-        imageUrl={heroData?.imageUrl}
+        imageUrls={heroData?.imageUrls}
         subtitle={heroData?.subtitle}
         title={heroData?.title}
         buttonText={heroData?.buttonText}
