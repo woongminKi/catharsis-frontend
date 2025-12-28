@@ -104,7 +104,7 @@ const PreAdmissionPage: React.FC = () => {
                 </tr>
                 <tr>
                   <TableHeader>강의횟수</TableHeader>
-                  <TableCell>주 연기 2회 | 음악임 1회 | 뮤지컬 1회 | 축석의</TableCell>
+                  <TableCell>주 연기 2회 | 음악임 1회 | 뮤지컬 1회 | 총 4회</TableCell>
                 </tr>
                 <tr>
                   <TableHeader>수업내용</TableHeader>
@@ -354,7 +354,16 @@ const PreAdmissionPage: React.FC = () => {
             <ContactInfo>
               <ContactItem>
                 <ContactLabel>전화</ContactLabel>
-                <ContactValue>02-1234-5678</ContactValue>
+                <PhoneContainer>
+                  <PhoneRow>
+                    <BranchLabel>강남점</BranchLabel>
+                    <PhoneNumber href="tel:02-511-6663">02.511.6663</PhoneNumber>
+                  </PhoneRow>
+                  <PhoneRow>
+                    <BranchLabel>홍대점</BranchLabel>
+                    <PhoneNumber href="tel:02-333-8889">02.333.8889</PhoneNumber>
+                  </PhoneRow>
+                </PhoneContainer>
               </ContactItem>
               <ContactItem>
                 <ContactLabel>카카오톡</ContactLabel>
@@ -561,6 +570,8 @@ const TargetList = styled.ul`
 `;
 
 const TargetItem = styled.li`
+  display: flex;
+  align-items: center;
   font-size: 16px;
   color: #404040;
   line-height: 2;
@@ -880,5 +891,43 @@ const ConsultationNote = styled.p`
 
   @media (max-width: 768px) {
     font-size: 13px;
+  }
+`;
+
+const PhoneContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const PhoneRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+`;
+
+const BranchLabel = styled.span`
+  font-size: 12px;
+  color: #5e5e5e;
+  background: #f0f0f0;
+  padding: 3px 10px;
+  border-radius: 12px;
+`;
+
+const PhoneNumber = styled.a`
+  font-size: 16px;
+  color: #404040;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #2c5282;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 15px;
   }
 `;

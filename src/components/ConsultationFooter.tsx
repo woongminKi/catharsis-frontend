@@ -306,7 +306,7 @@ const ConsultationFooter: React.FC = () => {
               <br />
               업무시간 : 매일 09:00~22:00
               <br />
-              대표 : 김동길, 이호엽
+              대표 : 김동길, 이호협
               <br />
               사업자번호 : 492-99-00289
               <br />
@@ -330,7 +330,7 @@ const ConsultationFooter: React.FC = () => {
               <BranchName>학원명 : 카타르시스연기학원 강남점</BranchName>
               학원등록번호 : 제14696호
               <br />
-              대표 : 이호엽
+              대표 : 이호협
               <br />
               사업자번호 : 567-94-02096
               <br />

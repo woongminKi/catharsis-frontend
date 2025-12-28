@@ -222,7 +222,7 @@ const GreetingPage: React.FC = () => {
 
             <Paragraph>우리 카타르시스 연기학원이 함께하겠습니다.</Paragraph>
 
-            <Signature>카타르시스 연기학원 원장 이호엽, 김동길</Signature>
+            <Signature>카타르시스 연기학원 원장 이호협, 김동길</Signature>
           </TextContent>
         </ContentGrid>
       </ContentSection>

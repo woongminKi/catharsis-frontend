@@ -59,7 +59,7 @@ const InstructorsPage: React.FC = () => {
       image: getInstructorImage('김동길 연기.jpg'),
     },
     {
-      name: '이호엽',
+      name: '이호협',
       role: '대표원장',
       education: '중앙대학교 연극학과 연기전공',
       image: getInstructorImage('이호협 연기.jpg'),

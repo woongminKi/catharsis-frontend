@@ -249,7 +249,7 @@ const FeaturesPage: React.FC = () => {
           <p>ACTING SCHOOL</p>
         </Logo>
         <DirectorNames>
-          <span>원장 이호엽</span>
+          <span>원장 이호협</span>
           <span>원장 김동길</span>
         </DirectorNames>
       </HeroSection>
