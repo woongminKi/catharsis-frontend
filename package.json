@@ -38,7 +38,9 @@
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--disable-gpu",
-      "--single-process"
+      "--single-process",
+      "--disable-web-security",
+      "--disable-features=IsolateOrigins,site-per-process"
     ],
     "puppeteerExecutablePath": null,
     "puppeteerIgnoreHTTPSErrors": true,
@@ -60,7 +62,10 @@
       "/community/gallery"
     ],
     "inlineCss": true,
-    "cacheAjaxRequests": true
+    "cacheAjaxRequests": true,
+    "navigationTimeout": 60000,
+    "pageTimeout": 60000,
+    "waitFor": 200
   },
   "eslintConfig": {
     "extends": [
