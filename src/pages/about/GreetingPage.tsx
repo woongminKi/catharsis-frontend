@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import directorImage from '../../images/main/원장사진.jpg';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface VisibilityProps {
   $isVisible: boolean;
@@ -156,19 +163,28 @@ const GreetingPage: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    if (contentRef.current) {
-      observer.observe(contentRef.current);
+    const currentRef = contentRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (contentRef.current) {
-        observer.unobserve(contentRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
 
+  const seoData = PAGE_SEO['/about/greeting'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/about/greeting'])} />
       <HeroSection>
         <HeroTitle>인사말</HeroTitle>
       </HeroSection>

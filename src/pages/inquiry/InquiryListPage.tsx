@@ -3,6 +3,13 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { consultationAPI } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface Consultation {
   _id: string;
@@ -13,7 +20,7 @@ interface Consultation {
   createdAt: string;
 }
 
-interface Pagination {
+interface PaginationData {
   currentPage: number;
   totalPages: number;
   totalItems: number;
@@ -47,24 +54,6 @@ const PageTitle = styled.h1`
   font-weight: bold;
   margin-bottom: 30px;
   color: #1a1a1a;
-`;
-
-const TopBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    gap: 15px;
-    align-items: stretch;
-  }
-`;
-
-const TotalCount = styled.span`
-  color: #666;
-  font-size: 14px;
 `;
 
 const WriteButton = styled(Link)`
@@ -123,21 +112,6 @@ const SearchInput = styled.input`
   @media (max-width: 600px) {
     width: 100%;
     flex: 1;
-  }
-`;
-
-const SearchButton = styled.button`
-  padding: 10px 20px;
-  background: #333;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #555;
   }
 `;
 
@@ -312,7 +286,7 @@ const InquiryListPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [consultations, setConsultations] = useState<Consultation[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
+  const [pagination, setPagination] = useState<PaginationData>({
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
@@ -442,8 +416,16 @@ const InquiryListPage: React.FC = () => {
     );
   }
 
+  const seoData = PAGE_SEO['/consultation/inquiry'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/consultation/inquiry'])} />
       <PageTitle>수강문의 게시판</PageTitle>
 
       {consultations.length === 0 ? (

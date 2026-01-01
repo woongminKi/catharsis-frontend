@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { getS3ImageUrl } from '../../services/imageService';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface Facility {
   id: number;
@@ -150,13 +157,14 @@ const FacilitiesPage: React.FC = () => {
       }
     );
 
-    if (contentRef.current) {
-      observer.observe(contentRef.current);
+    const currentRef = contentRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (contentRef.current) {
-        observer.unobserve(contentRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -197,8 +205,16 @@ const FacilitiesPage: React.FC = () => {
     setModalImage(null);
   };
 
+  const seoData = PAGE_SEO['/about/facilities'];
+
   return (
     <Container>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/about/facilities'])} />
       <HeroSection>
         <HeroContent>
           <Title>시설안내</Title>

@@ -104,12 +104,7 @@ const InstagramGrid: React.FC = () => {
         <SectionTitle>학원 인스타 썸네일</SectionTitle>
         <GridContainer>
           {instagramPosts.map(post => (
-            <GridItem
-              key={post.id}
-              href={post.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <GridItem key={post.id} href={post.link} target="_blank" rel="noopener noreferrer">
               <GridImage>{post.title}</GridImage>
               <Overlay className="overlay">Instagram에서 보기</Overlay>
             </GridItem>

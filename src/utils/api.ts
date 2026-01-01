@@ -201,7 +201,8 @@ export const resourceAPI = {
     api.get('/resources', { params }),
 
   // Get single resource
-  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Resource>>> => api.get(`/resources/${id}`),
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<Resource>>> =>
+    api.get(`/resources/${id}`),
 };
 
 // Gallery (포토갤러리) APIs

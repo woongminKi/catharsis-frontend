@@ -3,6 +3,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { noticeAPI, Notice } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface Pagination {
   currentPage: number;
@@ -230,8 +237,16 @@ const NoticesListPage: React.FC = () => {
     );
   }
 
+  const seoData = PAGE_SEO['/community/notice'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/community/notice'])} />
       <PageTitle>공지사항</PageTitle>
 
       {notices.length === 0 ? (

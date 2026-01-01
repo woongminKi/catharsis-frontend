@@ -1,6 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { getS3ImageUrl } from '../../services/imageService';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  createInstructorsListSchema,
+  breadcrumbConfig,
+  InstructorData,
+} from '../../seo';
 
 interface Instructor {
   name: string;
@@ -388,8 +397,29 @@ const InstructorsPage: React.FC = () => {
     },
   ];
 
+  const seoData = PAGE_SEO['/about/instructors'];
+
+  // SEO용 강사 데이터 변환
+  const allInstructorsForSEO: InstructorData[] = [
+    ...leaders.map(i => ({ ...i, department: 'leader' as const })),
+    ...actingInstructors.slice(0, 5).map(i => ({ ...i, department: 'acting' as const })),
+    ...musicalInstructors.slice(0, 5).map(i => ({ ...i, department: 'musical' as const })),
+    ...danceInstructors.slice(0, 5).map(i => ({ ...i, department: 'dance' as const })),
+  ];
+
+  const schemas = [
+    createBreadcrumbSchema(breadcrumbConfig['/about/instructors']),
+    createInstructorsListSchema(allInstructorsForSEO),
+  ];
+
   return (
     <PageWrapper>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={schemas} />
       <HeroSection $isVisible={isHeroVisible}>
         <HeroContent>
           <HeroQuote>

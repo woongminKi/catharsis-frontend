@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  createCourseSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface HeroSectionProps {
   $isVisible: boolean;
@@ -35,8 +43,23 @@ const AdmissionPage: React.FC = () => {
     };
   }, []);
 
+  const seoData = PAGE_SEO['/curriculum/admission'];
+  const courseSchema = createCourseSchema({
+    name: '입시반',
+    description:
+      '고3, 재수생, N수생을 위한 연극영화과 입시 전문 과정. 주 5회 소수정예 수업으로 기초연기부터 면접까지 체계적인 커리큘럼을 제공합니다.',
+    url: 'https://catharsisact.com/curriculum/admission',
+  });
+  const schemas = [createBreadcrumbSchema(breadcrumbConfig['/curriculum/admission']), courseSchema];
+
   return (
     <PageWrapper>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={schemas} />
       <HeroSection $isVisible={isHeroVisible}>
         <HeroOverlay>
           <HeroContent>

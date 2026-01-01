@@ -3,6 +3,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { passerAPI, Passer } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface Pagination {
   currentPage: number;
@@ -230,8 +237,16 @@ const PassersListPage: React.FC = () => {
     );
   }
 
+  const seoData = PAGE_SEO['/passers'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/passers'])} />
       <PageTitle>실시간 합격자 현황</PageTitle>
 
       {passers.length === 0 ? (

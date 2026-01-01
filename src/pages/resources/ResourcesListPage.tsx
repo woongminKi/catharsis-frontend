@@ -3,6 +3,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { resourceAPI, Resource } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface Pagination {
   currentPage: number;
@@ -230,8 +237,16 @@ const ResourcesListPage: React.FC = () => {
     );
   }
 
+  const seoData = PAGE_SEO['/community/archive'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/community/archive'])} />
       <PageTitle>입시자료실</PageTitle>
 
       {resources.length === 0 ? (

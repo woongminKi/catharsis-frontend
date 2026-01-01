@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface FeatureData {
   title: string;
@@ -190,13 +197,14 @@ const FeaturesPage: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    if (contentRef.current) {
-      observer.observe(contentRef.current);
+    const currentRef = contentRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (contentRef.current) {
-        observer.unobserve(contentRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -241,8 +249,16 @@ const FeaturesPage: React.FC = () => {
     },
   ];
 
+  const seoData = PAGE_SEO['/about/features'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/about/features'])} />
       <HeroSection>
         <Logo>
           <h1>CATHARSIS</h1>

@@ -2,6 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { galleryAPI, Gallery } from '../../utils/api';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface Pagination {
   currentPage: number;
@@ -270,11 +277,11 @@ const GalleryListPage: React.FC = () => {
   };
 
   const goToPrev = useCallback((): void => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
   }, []);
 
   const goToNext = useCallback((): void => {
-    setCurrentIndex((prev) => (prev < galleries.length - 1 ? prev + 1 : prev));
+    setCurrentIndex(prev => (prev < galleries.length - 1 ? prev + 1 : prev));
   }, [galleries.length]);
 
   // Handle keyboard navigation
@@ -351,8 +358,16 @@ const GalleryListPage: React.FC = () => {
     );
   }
 
+  const seoData = PAGE_SEO['/community/gallery'];
+
   return (
     <PageContainer>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/community/gallery'])} />
       <PageTitle>포토갤러리</PageTitle>
       <Divider />
 
@@ -376,7 +391,7 @@ const GalleryListPage: React.FC = () => {
       {/* Lightbox */}
       {lightboxOpen && galleries[currentIndex] && (
         <LightboxOverlay onClick={closeLightbox}>
-          <LightboxContent onClick={(e) => e.stopPropagation()}>
+          <LightboxContent onClick={e => e.stopPropagation()}>
             <LightboxCloseButton onClick={closeLightbox}>&times;</LightboxCloseButton>
             <LightboxPrevButton onClick={goToPrev} disabled={currentIndex === 0}>
               &#8249;

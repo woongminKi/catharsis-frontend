@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createBreadcrumbSchema,
+  breadcrumbConfig,
+} from '../../seo';
 
 interface BranchInfo {
   name: string;
@@ -68,13 +75,14 @@ const LocationPage: React.FC = () => {
       }
     );
 
-    if (contentRef.current) {
-      observer.observe(contentRef.current);
+    const currentRef = contentRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (contentRef.current) {
-        observer.unobserve(contentRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -140,8 +148,16 @@ const LocationPage: React.FC = () => {
     window.open(naverMapUrl, '_blank');
   };
 
+  const seoData = PAGE_SEO['/about/location'];
+
   return (
     <Container>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={createBreadcrumbSchema(breadcrumbConfig['/about/location'])} />
       <HeroSection>
         <HeroContent>
           <Title>오시는 길</Title>

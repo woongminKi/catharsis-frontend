@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import HeroSection from '../components/HeroSection';
-import SchoolPassersSection from '../components/SchoolPassersSection';
 import AutoScrollSlider from '../components/AutoScrollSlider';
 import ThreeColumnSection from '../components/ThreeColumnSection';
 import RealTimeConsultSection from '../components/RealTimeConsultSection';
 import {
   contentAPI,
   HeroSection as HeroSectionType,
-  SchoolPasser,
   YoutubeVideo,
   Instructor as InstructorType,
   InstagramPost as InstagramPostType,
   HistoryPasser,
 } from '../utils/api';
+import {
+  SEOHead,
+  JsonLdScript,
+  PAGE_SEO,
+  createOrganizationSchema,
+  createWebSiteSchema,
+  createFAQSchema,
+  createBreadcrumbSchema,
+  academyFAQs,
+  breadcrumbConfig,
+} from '../seo';
 
 const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [heroData, setHeroData] = useState<HeroSectionType | null>(null);
-  const [schoolPassers, setSchoolPassers] = useState<SchoolPasser[]>([]);
   const [youtubeVideos, setYoutubeVideos] = useState<YoutubeVideo[]>([]);
   const [instructors, setInstructors] = useState<InstructorType[]>([]);
   const [instagramPosts, setInstagramPosts] = useState<InstagramPostType[]>([]);
@@ -30,7 +38,6 @@ const HomePage: React.FC = () => {
         const data = response.data.data;
 
         setHeroData(data.heroSection);
-        setSchoolPassers(data.schoolPassers || []);
         setYoutubeVideos(data.youtubeVideos || []);
         setInstructors(data.instructors || []);
         setInstagramPosts(data.instagramPosts || []);
@@ -107,12 +114,27 @@ const HomePage: React.FC = () => {
           },
         ];
 
+  // SEO 스키마 데이터
+  const seoData = PAGE_SEO['/'];
+  const schemas = [
+    createOrganizationSchema(),
+    createWebSiteSchema(),
+    createFAQSchema(academyFAQs),
+    createBreadcrumbSchema(breadcrumbConfig['/']),
+  ];
+
   if (loading) {
     return null; // 또는 로딩 스피너
   }
 
   return (
     <>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+      />
+      <JsonLdScript data={schemas} />
       <HeroSection
         imageUrls={heroData?.imageUrls}
         subtitle={heroData?.subtitle}

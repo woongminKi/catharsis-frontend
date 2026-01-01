@@ -10,8 +10,8 @@ interface Instructor {
 }
 
 interface Passer {
-  leftText: string;   // 학교 연도
-  rightText: string;  // 이름
+  leftText: string; // 학교 연도
+  rightText: string; // 이름
 }
 
 interface InstagramPost {
@@ -240,13 +240,15 @@ const PassersScrollContainer = styled.div`
 `;
 
 const PassersScrollList = styled.div<{ $shouldAnimate: boolean }>`
-  ${props => props.$shouldAnimate && css`
-    animation: ${scrollUp} 20s linear infinite;
+  ${props =>
+    props.$shouldAnimate &&
+    css`
+      animation: ${scrollUp} 20s linear infinite;
 
-    &:hover {
-      animation-play-state: paused;
-    }
-  `}
+      &:hover {
+        animation-play-state: paused;
+      }
+    `}
 `;
 
 const PasserItem = styled.div`
@@ -440,14 +442,16 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
               <PassersScrollContainer>
                 {passers.length > 0 ? (
                   <PassersScrollList $shouldAnimate={passers.length >= 5}>
-                    {(passers.length >= 5 ? passers.concat(passers) : passers).map((passer, index) => (
-                      <PasserItem key={index}>
-                        <PasserInfo>
-                          <PasserLeftText>{passer.leftText}</PasserLeftText>
-                          <PasserRightText>{passer.rightText}</PasserRightText>
-                        </PasserInfo>
-                      </PasserItem>
-                    ))}
+                    {(passers.length >= 5 ? passers.concat(passers) : passers).map(
+                      (passer, index) => (
+                        <PasserItem key={index}>
+                          <PasserInfo>
+                            <PasserLeftText>{passer.leftText}</PasserLeftText>
+                            <PasserRightText>{passer.rightText}</PasserRightText>
+                          </PasserInfo>
+                        </PasserItem>
+                      )
+                    )}
                   </PassersScrollList>
                 ) : (
                   <EmptyMessage>데이터가 없습니다</EmptyMessage>

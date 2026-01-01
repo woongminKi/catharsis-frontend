@@ -183,7 +183,9 @@ const ResourceDetailPage: React.FC = () => {
         </PostHeader>
 
         <PostContent>
-          {resource.thumbnailUrl && <ThumbnailImage src={resource.thumbnailUrl} alt={resource.title} />}
+          {resource.thumbnailUrl && (
+            <ThumbnailImage src={resource.thumbnailUrl} alt={resource.title} />
+          )}
           <div dangerouslySetInnerHTML={{ __html: resource.content }} />
         </PostContent>
 
