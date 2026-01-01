@@ -33,7 +33,15 @@
       "collapseWhitespace": true,
       "removeComments": true
     },
-    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--single-process"
+    ],
+    "puppeteerExecutablePath": null,
+    "puppeteerIgnoreHTTPSErrors": true,
     "skipThirdPartyRequests": true,
     "crawl": false,
     "include": [
