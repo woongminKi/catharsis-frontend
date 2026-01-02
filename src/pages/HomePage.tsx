@@ -136,11 +136,11 @@ const HomePage: React.FC = () => {
       />
       <JsonLdScript data={schemas} />
       <HeroSection
-        imageUrls={heroData?.imageUrls}
-        subtitle={heroData?.subtitle}
-        title={heroData?.title}
-        buttonText={heroData?.buttonText}
-        buttonLink={heroData?.buttonLink}
+        imageUrls={heroData?.imageUrls || []}
+        subtitle={heroData?.subtitle || ''}
+        title={heroData?.title || ''}
+        buttonText={heroData?.buttonText || ''}
+        buttonLink={heroData?.buttonLink || ''}
       />
       {/* 학교별 합격자 */}
       {/* <SchoolPassersSection schoolPassers={schoolPassers} /> */}
