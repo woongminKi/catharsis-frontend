@@ -60,7 +60,7 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled(Link)`
-  font-size: 22px;
+  font-size: 40px;
   font-weight: 700;
   color: #333;
   text-decoration: none;
