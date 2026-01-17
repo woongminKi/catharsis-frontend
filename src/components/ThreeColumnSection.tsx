@@ -239,11 +239,11 @@ const PassersScrollContainer = styled.div`
   background: white;
 `;
 
-const PassersScrollList = styled.div<{ $shouldAnimate: boolean }>`
+const PassersScrollList = styled.div<{ $shouldAnimate: boolean; $itemCount: number }>`
   ${props =>
     props.$shouldAnimate &&
     css`
-      animation: ${scrollUp} 20s linear infinite;
+      animation: ${scrollUp} ${props.$itemCount * 2.5}s linear infinite;
 
       &:hover {
         animation-play-state: paused;
@@ -441,7 +441,10 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
             <ContentContainer>
               <PassersScrollContainer>
                 {passers.length > 0 ? (
-                  <PassersScrollList $shouldAnimate={passers.length >= 5}>
+                  <PassersScrollList
+                    $shouldAnimate={passers.length >= 5}
+                    $itemCount={passers.length}
+                  >
                     {(passers.length >= 5 ? passers.concat(passers) : passers).map(
                       (passer, index) => (
                         <PasserItem key={index}>
@@ -462,7 +465,7 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
 
           {/* 인스타 썸네일 캐러셀 */}
           <Column>
-            <ColumnTitle>학원 인스타 썸네일</ColumnTitle>
+            <ColumnTitle>INSTAGRAM</ColumnTitle>
             <ContentContainer>
               <CarouselWrapper>
                 <CarouselTrack $currentIndex={instagramIndex}>

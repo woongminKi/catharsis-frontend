@@ -101,7 +101,7 @@ const InstagramGrid: React.FC = () => {
   return (
     <SectionContainer>
       <Container>
-        <SectionTitle>학원 인스타 썸네일</SectionTitle>
+        <SectionTitle>INSTAGRAM</SectionTitle>
         <GridContainer>
           {instagramPosts.map(post => (
             <GridItem key={post.id} href={post.link} target="_blank" rel="noopener noreferrer">

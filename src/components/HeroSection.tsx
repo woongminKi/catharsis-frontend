@@ -56,10 +56,10 @@ const CarouselSlide = styled.div`
 
 const HeroImage = styled.img`
   width: 100%;
-  aspect-ratio: 16 / 9;
+  // aspect-ratio: 16 / 9;
   object-fit: contain;
   display: block;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 `;
 
 const CarouselButton = styled.button<{ $position: 'left' | 'right' }>`
@@ -221,7 +221,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   // imageUrls가 undefined이거나 배열이 아닐 경우 빈 배열로 처리
   const safeImageUrls = Array.isArray(imageUrls) ? imageUrls : [];
-  const validImageUrls = safeImageUrls.filter(url => url && typeof url === 'string' && url.trim() !== '');
+  const validImageUrls = safeImageUrls.filter(
+    url => url && typeof url === 'string' && url.trim() !== ''
+  );
   const hasMultipleImages = validImageUrls.length > 1;
   const hasImages = validImageUrls.length > 0;
 

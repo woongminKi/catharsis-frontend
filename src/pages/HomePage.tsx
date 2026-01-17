@@ -144,7 +144,7 @@ const HomePage: React.FC = () => {
       />
       {/* 학교별 합격자 */}
       {/* <SchoolPassersSection schoolPassers={schoolPassers} /> */}
-      <AutoScrollSlider title="유튭 영상" items={youtubeItems} />
+      <AutoScrollSlider title="합격자 실기 영상" items={youtubeItems} />
       <ThreeColumnSection
         instructors={instructorItems}
         passers={historyPassers}
