@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { noticeAPI, Notice } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import { SEOHead, JsonLdScript } from '../../seo/components';
+import { createArticleSchema, createBreadcrumbSchema } from '../../seo/schemas';
 
 const PageContainer = styled.div`
   max-width: 1000px;
@@ -119,6 +121,8 @@ const LoadingMessage = styled.div`
   color: #666;
 `;
 
+const SITE_URL = 'https://catharsisact.com';
+
 const NoticeDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -148,6 +152,34 @@ const NoticeDetailPage: React.FC = () => {
     fetchNotice();
   }, [id, navigate]);
 
+  const seoData = useMemo(() => {
+    if (!notice) return null;
+
+    const plainTextContent = notice.content.replace(/<[^>]*>/g, '').slice(0, 150);
+    const description = plainTextContent || notice.title;
+    const pageUrl = `${SITE_URL}/community/notice/${id}`;
+
+    return {
+      title: notice.title,
+      description: `${description}...`,
+      ogImage: notice.thumbnailUrl || undefined,
+      articleSchema: createArticleSchema({
+        title: notice.title,
+        description,
+        url: pageUrl,
+        imageUrl: notice.thumbnailUrl,
+        datePublished: notice.createdAt,
+        dateModified: notice.createdAt,
+      }),
+      breadcrumbSchema: createBreadcrumbSchema([
+        { name: '홈', url: SITE_URL },
+        { name: '커뮤니티', url: `${SITE_URL}/community` },
+        { name: '공지사항', url: `${SITE_URL}/community/notice` },
+        { name: notice.title, url: pageUrl },
+      ]),
+    };
+  }, [notice, id]);
+
   if (loading) {
     return (
       <PageContainer>
@@ -168,6 +200,19 @@ const NoticeDetailPage: React.FC = () => {
 
   return (
     <PageContainer>
+      {seoData && (
+        <>
+          <SEOHead
+            title={seoData.title}
+            description={seoData.description}
+            ogImage={seoData.ogImage}
+            ogType="article"
+            keywords="공지사항, 카타르시스, 연기학원, 연기입시"
+          />
+          <JsonLdScript data={[seoData.articleSchema, seoData.breadcrumbSchema]} />
+        </>
+      )}
+
       <PageTitle>공지사항</PageTitle>
 
       <PostContainer>

@@ -8,3 +8,5 @@ export { createPersonSchema, createInstructorsListSchema } from './PersonSchema'
 export type { InstructorData } from './PersonSchema';
 export { createCourseSchema } from './CourseSchema';
 export type { CourseData } from './CourseSchema';
+export { createArticleSchema, createNewsArticleSchema } from './ArticleSchema';
+export type { ArticleData } from './ArticleSchema';

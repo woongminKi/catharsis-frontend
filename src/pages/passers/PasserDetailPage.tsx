@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { passerAPI, Passer } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import { SEOHead, JsonLdScript } from '../../seo/components';
+import { createNewsArticleSchema, createBreadcrumbSchema } from '../../seo/schemas';
 
 const PageContainer = styled.div`
   max-width: 1000px;
@@ -95,6 +97,8 @@ const LoadingMessage = styled.div`
   color: #666;
 `;
 
+const SITE_URL = 'https://catharsisact.com';
+
 const PasserDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -124,6 +128,32 @@ const PasserDetailPage: React.FC = () => {
     fetchPasser();
   }, [id, navigate]);
 
+  const seoData = useMemo(() => {
+    if (!passer) return null;
+
+    const pageUrl = `${SITE_URL}/passers/${id}`;
+    const imageUrl = passer.thumbnailUrl || (passer.imageUrls && passer.imageUrls[0]);
+
+    return {
+      title: passer.title,
+      description: `${passer.title} - 카타르시스 연기학원 합격자 소식입니다.`,
+      ogImage: imageUrl || undefined,
+      newsArticleSchema: createNewsArticleSchema({
+        title: passer.title,
+        description: `${passer.title} - 카타르시스 연기학원 합격자 소식`,
+        url: pageUrl,
+        imageUrl,
+        datePublished: passer.createdAt,
+        dateModified: passer.createdAt,
+      }),
+      breadcrumbSchema: createBreadcrumbSchema([
+        { name: '홈', url: SITE_URL },
+        { name: '실시간 합격자 현황', url: `${SITE_URL}/passers` },
+        { name: passer.title, url: pageUrl },
+      ]),
+    };
+  }, [passer, id]);
+
   if (loading) {
     return (
       <PageContainer>
@@ -144,6 +174,19 @@ const PasserDetailPage: React.FC = () => {
 
   return (
     <PageContainer>
+      {seoData && (
+        <>
+          <SEOHead
+            title={seoData.title}
+            description={seoData.description}
+            ogImage={seoData.ogImage}
+            ogType="article"
+            keywords="합격자, 연극영화과, 대학합격, 연기입시, 카타르시스"
+          />
+          <JsonLdScript data={[seoData.newsArticleSchema, seoData.breadcrumbSchema]} />
+        </>
+      )}
+
       <PageTitle>실시간 합격자 현황</PageTitle>
 
       <PostContainer>

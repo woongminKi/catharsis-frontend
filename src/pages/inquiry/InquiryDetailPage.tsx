@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { consultationAPI } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
+import { SEOHead } from '../../seo/components';
 
 interface Comment {
   _id: string;
@@ -306,6 +307,12 @@ const InquiryDetailPage: React.FC = () => {
 
   return (
     <PageContainer>
+      <SEOHead
+        title="수강문의"
+        description="카타르시스 연기학원 수강문의 게시판입니다."
+        noIndex={true}
+      />
+
       <PageTitle>수강문의 게시판</PageTitle>
 
       <PostContainer>
