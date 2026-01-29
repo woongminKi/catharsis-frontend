@@ -124,8 +124,8 @@ const PreAdmissionPage: React.FC = () => {
                 <tr>
                   <TableHeader>수업시간</TableHeader>
                   <TableCell>
-                    <div>AM 11:00 ~ PM 01:00 특기</div>
-                    <div>PM 02:00 ~ PM 05:30 연기</div>
+                    <div>AM 09:00 ~ PM 12:00 연기</div>
+                    <div>PM 12:00 ~ PM 15:00 특기</div>
                   </TableCell>
                 </tr>
                 <tr>
@@ -633,7 +633,6 @@ const TableHeader = styled.td`
   text-align: left;
   border: 1px solid #404040;
   width: 200px;
-  vertical-align: top;
 
   @media (max-width: 768px) {
     width: 120px;

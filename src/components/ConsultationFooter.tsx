@@ -330,7 +330,7 @@ const ConsultationFooter: React.FC = () => {
               <BranchName>학원명 : 카타르시스연기학원 강남점</BranchName>
               학원등록번호 : 제14696호
               <br />
-              대표 : 이호협
+              대표 : 이호협, 김동길
               <br />
               사업자번호 : 567-94-02096
               <br />

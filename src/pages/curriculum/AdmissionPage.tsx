@@ -87,11 +87,11 @@ const AdmissionPage: React.FC = () => {
               </ContentItem>
               <ContentItem>
                 <ItemLabel>수업 시간</ItemLabel>
-                <ItemValue>주 5회 (월~금) / 1일 4시간</ItemValue>
+                <ItemValue>주 5회 / 1회 3시간</ItemValue>
               </ContentItem>
               <ContentItem>
                 <ItemLabel>정원</ItemLabel>
-                <ItemValue>한 반 최대 8명 (소수정예)</ItemValue>
+                <ItemValue>한 반 최대 7~8명</ItemValue>
               </ContentItem>
               <ContentItem>
                 <ItemLabel>기간</ItemLabel>
@@ -124,36 +124,28 @@ const AdmissionPage: React.FC = () => {
               </thead>
               <tbody>
                 <tr>
-                  <TableCell className="time">14:00 - 15:00</TableCell>
-                  <TableCell>기초연기</TableCell>
-                  <TableCell>특기 준비</TableCell>
-                  <TableCell>기초연기</TableCell>
-                  <TableCell>특기 준비</TableCell>
-                  <TableCell>모의실기</TableCell>
+                  <TableCell className="time">11:00 - 14:00</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
                 </tr>
                 <tr>
-                  <TableCell className="time">15:00 - 16:00</TableCell>
-                  <TableCell>작품연기</TableCell>
-                  <TableCell>발성/발음</TableCell>
-                  <TableCell>작품연기</TableCell>
-                  <TableCell>발성/발음</TableCell>
-                  <TableCell>모의실기</TableCell>
+                  <TableCell className="time">15:00 - 18:00</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
                 </tr>
                 <tr>
-                  <TableCell className="time">16:00 - 17:00</TableCell>
-                  <TableCell>즉흥연기</TableCell>
-                  <TableCell>개인별 작품</TableCell>
-                  <TableCell>즉흥연기</TableCell>
-                  <TableCell>개인별 작품</TableCell>
-                  <TableCell>피드백</TableCell>
-                </tr>
-                <tr>
-                  <TableCell className="time">17:00 - 18:00</TableCell>
-                  <TableCell>면접 준비</TableCell>
-                  <TableCell>카메라 연기</TableCell>
-                  <TableCell>면접 준비</TableCell>
-                  <TableCell>카메라 연기</TableCell>
-                  <TableCell>상담</TableCell>
+                  <TableCell className="time">19:00 - 22:00</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
+                  <TableCell>연기 / 특기</TableCell>
                 </tr>
               </tbody>
             </ScheduleTable>

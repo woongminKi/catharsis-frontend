@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 interface MenuItem {
   title: string;
@@ -40,6 +41,7 @@ const HeaderContainer = styled.header`
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  overflow: visible;
 `;
 
 const Nav = styled.nav`
@@ -56,24 +58,30 @@ const Nav = styled.nav`
     justify-content: space-between;
     padding: 0 20px;
     position: relative;
+    height: 60px;
   }
 `;
 
 const Logo = styled(Link)`
-  font-size: 40px;
-  font-weight: 700;
-  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  letter-spacing: 1px;
-  text-align: center;
   z-index: 1001;
-  white-space: nowrap;
+
+  img {
+    height: 80px;
+    width: auto;
+  }
 
   @media (max-width: 968px) {
-    font-size: 18px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+
+    img {
+      height: 40px;
+    }
   }
 `;
 
@@ -82,6 +90,7 @@ const SocialIcons = styled.div`
   gap: 16px;
   justify-content: flex-end;
   align-items: center;
+  align-self: center;
 
   @media (max-width: 968px) {
     display: none;
@@ -122,6 +131,7 @@ const DesktopNavMenu = styled.ul`
   margin: 0;
   padding: 0;
   justify-content: flex-start;
+  align-items: center;
 
   @media (max-width: 968px) {
     display: none;
@@ -431,7 +441,7 @@ const Header: React.FC = () => {
 
           {/* 로고 */}
           <Logo to="/" onClick={closeMobileMenu}>
-            카타르시스 연기학원
+            <img src={logo} alt="카타르시스 연기학원" />
           </Logo>
 
           {/* 소셜 미디어 아이콘 */}
