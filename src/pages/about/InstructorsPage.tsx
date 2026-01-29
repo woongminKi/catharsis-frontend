@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { getS3ImageUrl } from '../../services/imageService';
-import { contentAPI, Instructor as APIInstructor } from '../../utils/api';
 import {
   SEOHead,
   JsonLdScript,
@@ -33,67 +32,9 @@ const getInstructorImage = (filename: string): string => getS3ImageUrl(`강사 �
 const InstructorsPage: React.FC = () => {
   const [isHeroVisible, setIsHeroVisible] = useState<boolean>(false);
   const [visibleImages, setVisibleImages] = useState<Set<number>>(new Set());
-  const [leaders, setLeaders] = useState<Instructor[]>([]);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // 기본 leaders 데이터 (API 로딩 전 또는 실패 시 폴백)
-  const defaultLeaders: Instructor[] = [
-    {
-      name: '김동길',
-      role: '대표원장',
-      education: '중앙대학교 연극학과 연기전공',
-      image: getInstructorImage('김동길 연기.jpg'),
-    },
-    {
-      name: '이호협',
-      role: '대표원장',
-      education: '중앙대학교 연극학과 연기전공',
-      image: getInstructorImage('이호협 연기.jpg'),
-    },
-    {
-      name: '유현도',
-      role: '홍대점 대표원장',
-      education: '중앙대학교 연극학과 연기전공',
-      image: getInstructorImage('유현도 연기.jpg'),
-    },
-  ];
-
-  // API에서 강사 데이터를 변환하는 함수
-  const convertAPIInstructor = (apiInstructor: APIInstructor): Instructor => {
-    // name 필드에서 이름과 역할 분리 (예: "이호협 대표원장" → 이름: "이호협", 역할: "대표원장")
-    const nameParts = apiInstructor.name.split(' ');
-    const name = nameParts[0] || apiInstructor.name;
-    const role = nameParts.slice(1).join(' ') || '';
-
-    return {
-      name,
-      role,
-      education: apiInstructor.description,
-      image: apiInstructor.imageUrl,
-    };
-  };
-
   useEffect(() => {
-    // API에서 강사 데이터 가져오기
-    const fetchInstructors = async () => {
-      try {
-        const response = await contentAPI.getAll();
-        const instructors = response.data.data?.instructors || [];
-
-        if (instructors.length > 0) {
-          // API 데이터를 InstructorsPage 형식으로 변환
-          const convertedLeaders = instructors.map(convertAPIInstructor);
-          setLeaders(convertedLeaders);
-        } else {
-          setLeaders(defaultLeaders);
-        }
-      } catch (error) {
-        console.error('강사 데이터 로딩 실패:', error);
-        setLeaders(defaultLeaders);
-      }
-    };
-
-    fetchInstructors();
     setIsHeroVisible(true);
 
     // Intersection Observer for lazy loading images
@@ -117,6 +58,28 @@ const InstructorsPage: React.FC = () => {
       imageObserver.disconnect();
     };
   }, []);
+
+  // Instructor data organized by role - following the screenshot order
+  const leaders: Instructor[] = [
+    {
+      name: '김동길',
+      role: '대표원장',
+      education: '중앙대학교 연극학과 연기전공',
+      image: getInstructorImage('김동길 연기.jpg'),
+    },
+    {
+      name: '이호협',
+      role: '대표원장',
+      education: '중앙대학교 연극학과 연기전공',
+      image: getInstructorImage('이호협 연기.jpg'),
+    },
+    {
+      name: '유현도',
+      role: '홍대점 대표원장',
+      education: '중앙대학교 연극학과 연기전공',
+      image: getInstructorImage('유현도 연기.jpg'),
+    },
+  ];
 
   const actingInstructors: Instructor[] = [
     {
