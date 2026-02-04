@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import GreetingPage from './pages/about/GreetingPage';
 import FeaturesPage from './pages/about/FeaturesPage';
 import InstructorsPage from './pages/about/InstructorsPage';
+import InstructorDetailPage from './pages/about/InstructorDetailPage';
 import FacilitiesPage from './pages/about/FacilitiesPage';
 import LocationPage from './pages/about/LocationPage';
 import AdmissionPage from './pages/curriculum/AdmissionPage';
@@ -121,6 +122,7 @@ const App: React.FC = () => {
         <Route path="/about/greeting" element={<GreetingPage />} />
         <Route path="/about/features" element={<FeaturesPage />} />
         <Route path="/about/instructors" element={<InstructorsPage />} />
+        <Route path="/about/instructors/:id" element={<InstructorDetailPage />} />
         <Route path="/about/facilities" element={<FacilitiesPage />} />
         <Route path="/about/location" element={<LocationPage />} />
         <Route path="/curriculum/admission" element={<AdmissionPage />} />

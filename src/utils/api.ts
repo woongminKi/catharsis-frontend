@@ -293,4 +293,38 @@ export const contentAPI = {
   getAll: (): Promise<AxiosResponse<ApiResponse<HomeContent>>> => api.get('/content'),
 };
 
+// Instructor (강사) APIs
+interface InstructorParams {
+  category?: 'leader' | 'acting' | 'musical' | 'dance';
+}
+
+export interface DetailSection {
+  title: string;
+  items: string[];
+}
+
+export interface InstructorDetail {
+  _id: string;
+  name: string;
+  position: string;
+  education: string;
+  category: 'leader' | 'acting' | 'musical' | 'dance';
+  profileImages: string[];
+  detailSections: DetailSection[];
+  viewCount: number;
+  order: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export const instructorAPI = {
+  // Get all instructors
+  getAll: (params?: InstructorParams): Promise<AxiosResponse<ApiResponse<InstructorDetail[]>>> =>
+    api.get('/instructors', { params }),
+
+  // Get single instructor
+  getOne: (id: string): Promise<AxiosResponse<ApiResponse<InstructorDetail>>> =>
+    api.get(`/instructors/${id}`),
+};
+
 export default api;
