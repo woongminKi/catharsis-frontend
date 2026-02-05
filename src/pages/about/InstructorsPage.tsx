@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getS3ImageUrl } from '../../services/imageService';
 import { instructorAPI, InstructorDetail } from '../../utils/api';
 import {
   SEOHead,
@@ -13,14 +12,6 @@ import {
   InstructorData,
 } from '../../seo';
 
-interface Instructor {
-  _id?: string;
-  name: string;
-  role: string;
-  education: string;
-  image: string;
-}
-
 interface HeroSectionProps {
   $isVisible: boolean;
 }
@@ -29,17 +20,14 @@ interface InstructorImageProps {
   $visible: boolean;
 }
 
-// 강사 이미지 경로 헬퍼 함수
-const getInstructorImage = (filename: string): string => getS3ImageUrl(`강사 사진/${filename}`);
-
 const InstructorsPage: React.FC = () => {
   const navigate = useNavigate();
   const [isHeroVisible, setIsHeroVisible] = useState<boolean>(false);
   const [visibleImages, setVisibleImages] = useState<Set<number>>(new Set());
+  const [leaderInstructorsFromDB, setLeaderInstructorsFromDB] = useState<InstructorDetail[]>([]);
   const [actingInstructorsFromDB, setActingInstructorsFromDB] = useState<InstructorDetail[]>([]);
   const [musicalInstructorsFromDB, setMusicalInstructorsFromDB] = useState<InstructorDetail[]>([]);
   const [danceInstructorsFromDB, setDanceInstructorsFromDB] = useState<InstructorDetail[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -48,19 +36,18 @@ const InstructorsPage: React.FC = () => {
     // DB에서 강사 목록 가져오기 (카테고리별)
     const fetchInstructors = async () => {
       try {
-        setLoading(true);
-        const [actingRes, musicalRes, danceRes] = await Promise.all([
+        const [leaderRes, actingRes, musicalRes, danceRes] = await Promise.all([
+          instructorAPI.getAll({ category: 'leader' }),
           instructorAPI.getAll({ category: 'acting' }),
           instructorAPI.getAll({ category: 'musical' }),
           instructorAPI.getAll({ category: 'dance' }),
         ]);
+        setLeaderInstructorsFromDB(leaderRes.data.data);
         setActingInstructorsFromDB(actingRes.data.data);
         setMusicalInstructorsFromDB(musicalRes.data.data);
         setDanceInstructorsFromDB(danceRes.data.data);
       } catch (error) {
         console.error('Error fetching instructors from DB:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchInstructors();
@@ -87,40 +74,29 @@ const InstructorsPage: React.FC = () => {
     return () => {
       imageObserver.disconnect();
     };
-  }, [actingInstructorsFromDB, musicalInstructorsFromDB, danceInstructorsFromDB]);
+  }, [
+    leaderInstructorsFromDB,
+    actingInstructorsFromDB,
+    musicalInstructorsFromDB,
+    danceInstructorsFromDB,
+  ]);
 
   // 강사 카드 클릭 핸들러
   const handleInstructorClick = (id: string) => {
     navigate(`/about/instructors/${id}`);
   };
 
-  // Leader & Head Coach (하드코딩 유지)
-  const leaders: Instructor[] = [
-    {
-      name: '김동길',
-      role: '대표원장',
-      education: '중앙대학교 연극학과 연기전공',
-      image: getInstructorImage('김동길 연기.jpg'),
-    },
-    {
-      name: '이호협',
-      role: '대표원장',
-      education: '중앙대학교 연극학과 연기전공',
-      image: getInstructorImage('이호협 연기.jpg'),
-    },
-    {
-      name: '유현도',
-      role: '홍대점 대표원장',
-      education: '중앙대학교 연극학과 연기전공',
-      image: getInstructorImage('유현도 연기.jpg'),
-    },
-  ];
-
   const seoData = PAGE_SEO['/about/instructors'];
 
   // SEO용 강사 데이터 변환
   const allInstructorsForSEO: InstructorData[] = [
-    ...leaders.map(i => ({ ...i, department: 'leader' as const })),
+    ...leaderInstructorsFromDB.slice(0, 5).map(i => ({
+      name: i.name,
+      role: i.position,
+      education: i.education,
+      image: i.profileImages[0] || '',
+      department: 'leader' as const,
+    })),
     ...actingInstructorsFromDB.slice(0, 5).map(i => ({
       name: i.name,
       role: i.position,
@@ -170,27 +146,28 @@ const InstructorsPage: React.FC = () => {
       </HeroSection>
 
       <ContentWrapper>
-        {/* Leader & Head Coach Section - 하드코딩 유지, 클릭 비활성화 */}
+        {/* Leader & Head Coach Section - DB에서 동적으로 가져옴 */}
         <Section>
           <SectionTitle>Leader & Head Coach</SectionTitle>
           <LeaderGrid>
-            {leaders.map((instructor, index) => (
+            {leaderInstructorsFromDB.map((instructor, index) => (
               <LeaderCard
-                key={index}
+                key={instructor._id}
                 ref={el => {
                   imageRefs.current[index] = el;
                 }}
-                $clickable={false}
+                onClick={() => handleInstructorClick(instructor._id)}
+                $clickable={true}
               >
                 <InstructorImage
-                  src={instructor.image}
+                  src={instructor.profileImages[0] || ''}
                   alt={instructor.name}
                   loading={index < 4 ? 'eager' : 'lazy'}
                   $visible={visibleImages.has(index) || index < 4}
                 />
                 <InstructorInfo>
                   <InstructorName>{instructor.name}</InstructorName>
-                  <InstructorRole>{instructor.role}</InstructorRole>
+                  <InstructorRole>{instructor.position}</InstructorRole>
                   <InstructorEducation>{instructor.education}</InstructorEducation>
                 </InstructorInfo>
               </LeaderCard>
@@ -206,7 +183,7 @@ const InstructorsPage: React.FC = () => {
               <InstructorCard
                 key={instructor._id}
                 ref={el => {
-                  imageRefs.current[leaders.length + index] = el;
+                  imageRefs.current[leaderInstructorsFromDB.length + index] = el;
                 }}
                 onClick={() => handleInstructorClick(instructor._id)}
                 $clickable={true}
@@ -215,7 +192,7 @@ const InstructorsPage: React.FC = () => {
                   src={instructor.profileImages[0] || ''}
                   alt={instructor.name}
                   loading="lazy"
-                  $visible={visibleImages.has(leaders.length + index)}
+                  $visible={visibleImages.has(leaderInstructorsFromDB.length + index)}
                 />
                 <InstructorInfo>
                   <InstructorName>{instructor.name}</InstructorName>
@@ -231,28 +208,32 @@ const InstructorsPage: React.FC = () => {
         <Section>
           <SectionTitle>Musical Coach</SectionTitle>
           <InstructorGrid>
-            {musicalInstructorsFromDB.map((instructor, index) => (
-              <InstructorCard
-                key={instructor._id}
-                ref={el => {
-                  imageRefs.current[leaders.length + actingInstructorsFromDB.length + index] = el;
-                }}
-                onClick={() => handleInstructorClick(instructor._id)}
-                $clickable={true}
-              >
-                <InstructorImage
-                  src={instructor.profileImages[0] || ''}
-                  alt={instructor.name}
-                  loading="lazy"
-                  $visible={visibleImages.has(leaders.length + actingInstructorsFromDB.length + index)}
-                />
-                <InstructorInfo>
-                  <InstructorName>{instructor.name}</InstructorName>
-                  <InstructorRole>{instructor.position}</InstructorRole>
-                  <InstructorEducation>{instructor.education}</InstructorEducation>
-                </InstructorInfo>
-              </InstructorCard>
-            ))}
+            {musicalInstructorsFromDB.map((instructor, index) => {
+              const imageIndex =
+                leaderInstructorsFromDB.length + actingInstructorsFromDB.length + index;
+              return (
+                <InstructorCard
+                  key={instructor._id}
+                  ref={el => {
+                    imageRefs.current[imageIndex] = el;
+                  }}
+                  onClick={() => handleInstructorClick(instructor._id)}
+                  $clickable={true}
+                >
+                  <InstructorImage
+                    src={instructor.profileImages[0] || ''}
+                    alt={instructor.name}
+                    loading="lazy"
+                    $visible={visibleImages.has(imageIndex)}
+                  />
+                  <InstructorInfo>
+                    <InstructorName>{instructor.name}</InstructorName>
+                    <InstructorRole>{instructor.position}</InstructorRole>
+                    <InstructorEducation>{instructor.education}</InstructorEducation>
+                  </InstructorInfo>
+                </InstructorCard>
+              );
+            })}
           </InstructorGrid>
         </Section>
 
@@ -260,32 +241,35 @@ const InstructorsPage: React.FC = () => {
         <Section>
           <SectionTitle>Dance Coach</SectionTitle>
           <InstructorGrid>
-            {danceInstructorsFromDB.map((instructor, index) => (
-              <InstructorCard
-                key={instructor._id}
-                ref={el => {
-                  imageRefs.current[
-                    leaders.length + actingInstructorsFromDB.length + musicalInstructorsFromDB.length + index
-                  ] = el;
-                }}
-                onClick={() => handleInstructorClick(instructor._id)}
-                $clickable={true}
-              >
-                <InstructorImage
-                  src={instructor.profileImages[0] || ''}
-                  alt={instructor.name}
-                  loading="lazy"
-                  $visible={visibleImages.has(
-                    leaders.length + actingInstructorsFromDB.length + musicalInstructorsFromDB.length + index
-                  )}
-                />
-                <InstructorInfo>
-                  <InstructorName>{instructor.name}</InstructorName>
-                  <InstructorRole>{instructor.position}</InstructorRole>
-                  <InstructorEducation>{instructor.education}</InstructorEducation>
-                </InstructorInfo>
-              </InstructorCard>
-            ))}
+            {danceInstructorsFromDB.map((instructor, index) => {
+              const imageIndex =
+                leaderInstructorsFromDB.length +
+                actingInstructorsFromDB.length +
+                musicalInstructorsFromDB.length +
+                index;
+              return (
+                <InstructorCard
+                  key={instructor._id}
+                  ref={el => {
+                    imageRefs.current[imageIndex] = el;
+                  }}
+                  onClick={() => handleInstructorClick(instructor._id)}
+                  $clickable={true}
+                >
+                  <InstructorImage
+                    src={instructor.profileImages[0] || ''}
+                    alt={instructor.name}
+                    loading="lazy"
+                    $visible={visibleImages.has(imageIndex)}
+                  />
+                  <InstructorInfo>
+                    <InstructorName>{instructor.name}</InstructorName>
+                    <InstructorRole>{instructor.position}</InstructorRole>
+                    <InstructorEducation>{instructor.education}</InstructorEducation>
+                  </InstructorInfo>
+                </InstructorCard>
+              );
+            })}
           </InstructorGrid>
         </Section>
       </ContentWrapper>
