@@ -82,13 +82,14 @@ const PreAdmissionPage: React.FC = () => {
           <IntroTitle>연기의 첫 걸음마 누구와 함께 하느냐가 정말 중요합니다</IntroTitle>
           <IntroContent>
             <IntroParagraph>
-              카타르시스만의 체계고 가족적인 분위기 속에서 가족을 들르며 다질 수 있습니다.
+              카타르시스만의 체계적이고 가족적인 분위기 속에서 수업을 들으며 실력을 다질 수
+              있습니다.
             </IntroParagraph>
             <IntroParagraph>
-              매년 늦어지는 입시경쟁률과 다양해진 시험내용을 카타르시스만의 체계적인 코칭을 통해
+              매년 높아지는 입시경쟁률과 다양해진 시험내용을 카타르시스만의 체계적인 코칭을 통해
               미리 준비하세요.
             </IntroParagraph>
-            <IntroHighlight>예비입시자만 입시반처럼 본인만의 작품을 준비합니다.</IntroHighlight>
+            <IntroHighlight>예비입시반이지만 입시반처럼 본인만의 작품을 준비합니다.</IntroHighlight>
           </IntroContent>
         </IntroSection>
 
