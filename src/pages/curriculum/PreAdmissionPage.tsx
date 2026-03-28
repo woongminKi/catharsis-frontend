@@ -105,7 +105,7 @@ const PreAdmissionPage: React.FC = () => {
           <SectionContent>
             <TargetList>
               <TargetItem>고등학교 1, 2학년 재학생, 검정고시 응시생, 예고전학 희망자</TargetItem>
-              <TargetItem>각부 정원 8명</TargetItem>
+              <TargetItem>한 반 정원 8명</TargetItem>
             </TargetList>
           </SectionContent>
         </Section>

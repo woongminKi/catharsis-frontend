@@ -264,17 +264,13 @@ const FeaturesPage: React.FC = () => {
           <h1>CATHARSIS</h1>
           <p>ACTING SCHOOL</p>
         </Logo>
-        <DirectorNames>
-          <span>원장 이호협</span>
-          <span>원장 김동길</span>
-        </DirectorNames>
       </HeroSection>
 
       <ContentSection>
         <TitleSection>
           <MainTitle>카타르시스 특징</MainTitle>
           <Description>
-            카타르시스 연기학원은 '짧 멕터 연기학원(2015)'에서 출발하여 2017년 소수정예연기학원으로
+            카타르시스 연기학원은 '찢 액팅 연기학원(2015)'에서 출발하여 2017년 소수정예연기학원으로
             다시 탄생해 수많은 합격생을 배출한 입시 명문학원입니다.
           </Description>
         </TitleSection>

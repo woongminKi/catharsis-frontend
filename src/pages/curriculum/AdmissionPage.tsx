@@ -91,7 +91,7 @@ const AdmissionPage: React.FC = () => {
               </ContentItem>
               <ContentItem>
                 <ItemLabel>정원</ItemLabel>
-                <ItemValue>한 반 최대 7~8명</ItemValue>
+                <ItemValue>한 반 정원 8명</ItemValue>
               </ContentItem>
               <ContentItem>
                 <ItemLabel>기간</ItemLabel>
