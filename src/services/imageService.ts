@@ -1,31 +1,54 @@
 import { ImageUploadResult, ImageListItem } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-const S3_BASE_URL =
-  process.env.REACT_APP_S3_URL || 'https://catharsis-image.s3.ap-northeast-2.amazonaws.com';
+
+// AWS 계정 정지로 죽은 옛 S3 버킷 prefix들
+// DB에 박힌 옛 URL을 로컬 public/images로 우회시키기 위한 매핑
+const LEGACY_S3_PREFIXES = [
+  'https://catharsis-image.s3.ap-northeast-2.amazonaws.com',
+  'http://catharsis-image.s3.ap-northeast-2.amazonaws.com',
+];
+
+const toNFD = (str: string): string => str.normalize('NFD');
 
 /**
- * 한글을 NFD (분해형)로 변환
- * Mac에서 S3에 업로드된 파일은 NFD 형식으로 저장됨
- * @param {string} str - 변환할 문자열
- * @returns {string} NFD로 변환된 문자열
+ * 옛 S3 URL을 public/images로 우회시킴.
+ * - 매칭되는 로컬 이미지가 있으면 표시됨
+ * - 없으면 깨진 채로 노출 (학원에서 원본 받아 보완 대상)
  */
-const toNFD = (str: string): string => {
-  return str.normalize('NFD');
+export const rewriteImageUrl = (url?: string | null): string => {
+  if (!url) return '';
+  for (const prefix of LEGACY_S3_PREFIXES) {
+    if (url.startsWith(prefix)) {
+      return '/images' + url.slice(prefix.length);
+    }
+  }
+  return url;
 };
 
 /**
- * S3 이미지 URL 생성 (NFD 인코딩 적용)
+ * Quill HTML 본문 안의 옛 S3 URL을 일괄 치환
+ */
+export const rewriteImagesInHtml = (html?: string | null): string => {
+  if (!html) return '';
+  let result = html;
+  for (const prefix of LEGACY_S3_PREFIXES) {
+    result = result.split(prefix).join('/images');
+  }
+  return result;
+};
+
+/**
+ * 이미지 URL 생성 (상대경로 → /images로 라우팅, http URL은 리라이트 적용)
+ * 옛 S3가 죽어서 로컬 public/images 기반으로 통합.
  * @param {string} path - 이미지 경로 (예: '강사 사진/김동길 연기.jpg')
- * @returns {string} 전체 S3 URL
  */
 export const getS3ImageUrl = (path: string): string => {
+  if (!path) return '';
   if (path.startsWith('http')) {
-    return path;
+    return rewriteImageUrl(path);
   }
-  // 한글을 NFD로 변환 후 URL 인코딩
-  const nfdPath = toNFD(path);
-  return `${S3_BASE_URL}/${encodeURIComponent(nfdPath).replace(/%2F/g, '/')}`;
+  return `/images/${encodeURIComponent(path).replace(/%2F/g, '/')}`;
 };
 
 /**

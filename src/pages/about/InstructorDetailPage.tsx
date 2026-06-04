@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { instructorAPI, InstructorDetail } from '../../utils/api';
+import { rewriteImageUrl } from '../../services/imageService';
 
 const InstructorDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,7 +83,7 @@ const InstructorDetailPage: React.FC = () => {
             {instructor.profileImages.length > 0 ? (
               <>
                 <ProfileImage
-                  src={instructor.profileImages[currentImageIndex]}
+                  src={rewriteImageUrl(instructor.profileImages[currentImageIndex])}
                   alt={instructor.name}
                 />
                 {instructor.profileImages.length > 1 && (

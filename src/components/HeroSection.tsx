@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { rewriteImageUrl } from '../services/imageService';
 
 interface HeroSectionProps {
   imageUrls?: string[];
@@ -276,7 +277,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <CarouselTrack $currentIndex={currentIndex}>
             {validImageUrls.map((url, index) => (
               <CarouselSlide key={index}>
-                <HeroImage src={url} alt={`히어로 이미지 ${index + 1}`} />
+                <HeroImage src={rewriteImageUrl(url)} alt={`히어로 이미지 ${index + 1}`} />
               </CarouselSlide>
             ))}
           </CarouselTrack>
