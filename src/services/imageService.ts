@@ -12,7 +12,24 @@ const LEGACY_S3_PREFIXES = [
 const toNFD = (str: string): string => str.normalize('NFD');
 
 /**
+ * URL의 path 부분을 NFD → NFC 정규화.
+ * Mac에서 S3로 업로드한 한글 키는 NFD인데 Vercel CDN은 NFC 매칭이라 둘이 안 맞음.
+ * decode → normalize('NFC') → encode 로 변환.
+ */
+const normalizePathToNFC = (path: string): string => {
+  try {
+    const decoded = decodeURIComponent(path);
+    const nfc = decoded.normalize('NFC');
+    // encodeURI는 path 구분자(/)를 유지하면서 인코딩
+    return encodeURI(nfc);
+  } catch {
+    return path;
+  }
+};
+
+/**
  * 옛 S3 URL을 public/images로 우회시킴.
+ * - DB의 NFD-encoded URL을 NFC로 정규화해서 Vercel이 파일을 찾을 수 있게 함
  * - 매칭되는 로컬 이미지가 있으면 표시됨
  * - 없으면 깨진 채로 노출 (학원에서 원본 받아 보완 대상)
  */
@@ -20,7 +37,7 @@ export const rewriteImageUrl = (url?: string | null): string => {
   if (!url) return '';
   for (const prefix of LEGACY_S3_PREFIXES) {
     if (url.startsWith(prefix)) {
-      return '/images' + url.slice(prefix.length);
+      return '/images' + normalizePathToNFC(url.slice(prefix.length));
     }
   }
   return url;
@@ -31,9 +48,12 @@ export const rewriteImageUrl = (url?: string | null): string => {
  */
 export const rewriteImagesInHtml = (html?: string | null): string => {
   if (!html) return '';
+  // 옛 S3 URL을 모두 찾아서 각각 NFC 정규화 (단순 split.join은 인코딩 정규화 못 함)
   let result = html;
   for (const prefix of LEGACY_S3_PREFIXES) {
-    result = result.split(prefix).join('/images');
+    const escaped = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escaped + '([^"\'\\s)<>]*)', 'g');
+    result = result.replace(regex, (_match, path) => '/images' + normalizePathToNFC(path));
   }
   return result;
 };
