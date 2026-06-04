@@ -92,6 +92,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
-    "react-snap": "^1.23.0"
+    "react-snap": "^1.23.0",
+    "typescript": "4.9.5"
   }
 }
