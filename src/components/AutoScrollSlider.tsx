@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { rewriteImageUrl } from '../services/imageService';
 
 interface SliderItem {
   title: string;
@@ -143,7 +142,7 @@ const AutoScrollSlider: React.FC<AutoScrollSliderProps> = ({ title, items }) => 
         <SliderTrack $shouldScroll={shouldScroll}>
           {displayItems.map((item, index) => (
             <SlideItem key={index} to={item.link}>
-              <SlideImage $imageUrl={rewriteImageUrl(item.thumbnailUrl)}>
+              <SlideImage $imageUrl={item.thumbnailUrl}>
                 {!item.thumbnailUrl && item.title}
               </SlideImage>
               <SlideContent>

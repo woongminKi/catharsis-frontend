@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { resourceAPI, Resource } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
-import { rewriteImageUrl, rewriteImagesInHtml } from '../../services/imageService';
 import { SEOHead, JsonLdScript } from '../../seo/components';
 import { createArticleSchema, createBreadcrumbSchema } from '../../seo/schemas';
 
@@ -230,9 +229,9 @@ const ResourceDetailPage: React.FC = () => {
 
         <PostContent>
           {resource.thumbnailUrl && (
-            <ThumbnailImage src={rewriteImageUrl(resource.thumbnailUrl)} alt={resource.title} />
+            <ThumbnailImage src={resource.thumbnailUrl} alt={resource.title} />
           )}
-          <div dangerouslySetInnerHTML={{ __html: rewriteImagesInHtml(resource.content) }} />
+          <div dangerouslySetInnerHTML={{ __html: resource.content }} />
         </PostContent>
 
         <ButtonGroup>

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { instructorAPI, InstructorDetail } from '../../utils/api';
-import { rewriteImageUrl } from '../../services/imageService';
 import {
   SEOHead,
   JsonLdScript,
@@ -161,7 +160,7 @@ const InstructorsPage: React.FC = () => {
                 $clickable={true}
               >
                 <InstructorImage
-                  src={rewriteImageUrl(instructor.profileImages[0])}
+                  src={instructor.profileImages[0] || ''}
                   alt={instructor.name}
                   loading={index < 4 ? 'eager' : 'lazy'}
                   $visible={visibleImages.has(index) || index < 4}
@@ -190,7 +189,7 @@ const InstructorsPage: React.FC = () => {
                 $clickable={true}
               >
                 <InstructorImage
-                  src={rewriteImageUrl(instructor.profileImages[0])}
+                  src={instructor.profileImages[0] || ''}
                   alt={instructor.name}
                   loading="lazy"
                   $visible={visibleImages.has(leaderInstructorsFromDB.length + index)}
@@ -222,7 +221,7 @@ const InstructorsPage: React.FC = () => {
                   $clickable={true}
                 >
                   <InstructorImage
-                    src={rewriteImageUrl(instructor.profileImages[0])}
+                    src={instructor.profileImages[0] || ''}
                     alt={instructor.name}
                     loading="lazy"
                     $visible={visibleImages.has(imageIndex)}
@@ -258,7 +257,7 @@ const InstructorsPage: React.FC = () => {
                   $clickable={true}
                 >
                   <InstructorImage
-                    src={rewriteImageUrl(instructor.profileImages[0])}
+                    src={instructor.profileImages[0] || ''}
                     alt={instructor.name}
                     loading="lazy"
                     $visible={visibleImages.has(imageIndex)}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { rewriteImageUrl } from '../services/imageService';
 
 interface Instructor {
   title: string;
@@ -406,7 +405,7 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
                   {instructors.map((instructor, index) => (
                     <CarouselSlide key={index}>
                       <InstructorCard to={instructor.link}>
-                        <InstructorImage $imageUrl={rewriteImageUrl(instructor.imageUrl)}>
+                        <InstructorImage $imageUrl={instructor.imageUrl}>
                           {!instructor.imageUrl && instructor.title}
                         </InstructorImage>
                         <InstructorInfo>
@@ -474,7 +473,7 @@ const ThreeColumnSection: React.FC<ThreeColumnSectionProps> = ({
                     <CarouselSlide key={index}>
                       <InstagramCard href={post.link} target="_blank" rel="noopener noreferrer">
                         {post.imageUrl ? (
-                          <InstagramImg src={rewriteImageUrl(post.imageUrl)} alt={post.title} />
+                          <InstagramImg src={post.imageUrl} alt={post.title} />
                         ) : (
                           <InstagramImageWrapper>{post.title}</InstagramImageWrapper>
                         )}

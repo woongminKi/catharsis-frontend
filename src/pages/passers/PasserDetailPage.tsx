@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { passerAPI, Passer } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
-import { rewriteImageUrl } from '../../services/imageService';
 import { SEOHead, JsonLdScript } from '../../seo/components';
 import { createNewsArticleSchema, createBreadcrumbSchema } from '../../seo/schemas';
 
@@ -206,10 +205,10 @@ const PasserDetailPage: React.FC = () => {
           <ImageContainer>
             {passer.imageUrls && passer.imageUrls.length > 0 ? (
               passer.imageUrls.map((url, index) => (
-                <PostImage key={index} src={rewriteImageUrl(url)} alt={`${passer.title} - ${index + 1}`} />
+                <PostImage key={index} src={url} alt={`${passer.title} - ${index + 1}`} />
               ))
             ) : (
-              <PostImage src={rewriteImageUrl(passer.thumbnailUrl)} alt={passer.title} />
+              <PostImage src={passer.thumbnailUrl} alt={passer.title} />
             )}
           </ImageContainer>
         </PostContent>

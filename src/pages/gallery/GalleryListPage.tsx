@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { galleryAPI, Gallery } from '../../utils/api';
-import { rewriteImageUrl } from '../../services/imageService';
 import {
   SEOHead,
   JsonLdScript,
@@ -379,7 +378,7 @@ const GalleryListPage: React.FC = () => {
           {galleries.map((gallery, index) => (
             <GalleryItem key={gallery._id} onClick={() => openLightbox(index)}>
               <GalleryImageWrapper>
-                <GalleryImage src={rewriteImageUrl(gallery.imageUrl)} alt={gallery.title} loading="lazy" />
+                <GalleryImage src={gallery.imageUrl} alt={gallery.title} loading="lazy" />
               </GalleryImageWrapper>
               <GalleryTitle>{gallery.title}</GalleryTitle>
             </GalleryItem>
@@ -398,7 +397,7 @@ const GalleryListPage: React.FC = () => {
               &#8249;
             </LightboxPrevButton>
             <LightboxImage
-              src={rewriteImageUrl(galleries[currentIndex].imageUrl)}
+              src={galleries[currentIndex].imageUrl}
               alt={galleries[currentIndex].title}
             />
             <LightboxTitle>{galleries[currentIndex].title}</LightboxTitle>

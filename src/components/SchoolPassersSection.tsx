@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { rewriteImageUrl } from '../services/imageService';
 
 interface SchoolPasser {
   _id?: string;
@@ -149,7 +148,7 @@ const SchoolPassersSection: React.FC<SchoolPassersSectionProps> = ({ schoolPasse
         <PassersGrid>
           {displayData.map((data, index) => (
             <PasserCard key={data._id || index} to={data.link}>
-              <PasserImage $imageUrl={rewriteImageUrl(data.thumbnailUrl)}>
+              <PasserImage $imageUrl={data.thumbnailUrl}>
                 {!data.thumbnailUrl && data.school.slice(0, 3)}
               </PasserImage>
               <PasserInfo>

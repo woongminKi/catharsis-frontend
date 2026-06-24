@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { noticeAPI, Notice } from '../../utils/api';
 import { formatDate } from '../../utils/dateFormat';
-import { rewriteImageUrl, rewriteImagesInHtml } from '../../services/imageService';
 import { SEOHead, JsonLdScript } from '../../seo/components';
 import { createArticleSchema, createBreadcrumbSchema } from '../../seo/schemas';
 
@@ -229,8 +228,8 @@ const NoticeDetailPage: React.FC = () => {
         </PostHeader>
 
         <PostContent>
-          {notice.thumbnailUrl && <ThumbnailImage src={rewriteImageUrl(notice.thumbnailUrl)} alt={notice.title} />}
-          <div dangerouslySetInnerHTML={{ __html: rewriteImagesInHtml(notice.content) }} />
+          {notice.thumbnailUrl && <ThumbnailImage src={notice.thumbnailUrl} alt={notice.title} />}
+          <div dangerouslySetInnerHTML={{ __html: notice.content }} />
         </PostContent>
 
         <ButtonGroup>
