@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
+import { initClickTracking } from './utils/analytics';
 
 const container = document.getElementById('root') as HTMLElement;
 
@@ -25,6 +26,9 @@ if (container.hasChildNodes()) {
 } else {
   createRoot(container).render(app);
 }
+
+// 모든 a/button 클릭 수집 (문의 전환 경로 포함) — 위임 리스너 1개, React 렌더링과 무관하게 동작
+initClickTracking();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

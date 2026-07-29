@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { consultationAPI } from '../../utils/api';
+import { trackEvent } from '../../utils/analytics';
 
 interface FormData {
   writerId: string;
@@ -310,7 +311,11 @@ const InquiryWritePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    if (!validate()) return;
+    if (!validate()) {
+      // 작성까지 했으나 입력 검증에 막혀 이탈하는 문의 — 놓친 상담 건수로 집계한다.
+      trackEvent('inquiry_invalid');
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -320,9 +325,13 @@ const InquiryWritePage: React.FC = () => {
         boardType: 'INQUIRY',
       });
 
+      trackEvent('inquiry_submit', { is_secret: formData.isSecret });
       alert('게시글이 등록되었습니다.');
       navigate('/consultation/inquiry');
     } catch (error: any) {
+      trackEvent('inquiry_error', {
+        message: error.response?.data?.message ?? 'unknown',
+      });
       alert(error.response?.data?.message || '등록 중 오류가 발생했습니다.');
     } finally {
       setIsSubmitting(false);
