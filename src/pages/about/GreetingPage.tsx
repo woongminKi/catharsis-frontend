@@ -233,7 +233,7 @@ const GreetingPage: React.FC = () => {
             <Highlight>
               <p>'배우'라는 가치있는 것에 도전하는 당신!</p>
               <p>끝없는 자신과의 싸움에 뛰어든 당신!</p>
-              <p>관객들의 마음을 정화시길 준비가 되어있는 당신!!</p>
+              <p>관객들의 마음을 정화시킬 준비가 되어있는 당신!!</p>
             </Highlight>
 
             <Paragraph>우리 카타르시스 연기학원이 함께하겠습니다.</Paragraph>
